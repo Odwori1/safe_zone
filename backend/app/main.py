@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from app.core.logging import setup_logging
 from app.core.rate_limiting import rate_limit_middleware
 from app.database.database import init_db, close_db
-from app.api.endpoints import health, auth, profiles, posts, comments, journals
+from app.api.endpoints import health, auth, profiles, posts, comments, journals, mood, crisis
 
 # Setup logging at module level
 logger = setup_logging()
@@ -55,6 +55,10 @@ app.include_router(posts.router, prefix="/api/v1/posts", tags=["posts"])
 app.include_router(comments.router, prefix="/api/v1/comments", tags=["comments"])
 
 app.include_router(journals.router, prefix="/api/v1/journals", tags=["journals"])
+
+app.include_router(mood.router, prefix="/api/v1/mood", tags=["mood"])
+
+app.include_router(crisis.router, prefix="/api/v1/crisis", tags=["crisis"])
 
 @app.get("/")
 async def root():
