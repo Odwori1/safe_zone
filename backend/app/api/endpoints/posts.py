@@ -1,0 +1,268 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List, Optional
+from uuid import UUID
+from app.schemas.post import PostCreate, PostResponse, PostUpdate, PostFeedResponse, ModerationAction
+from app.schemas.user import User
+from app.core.security import get_current_user
+from app.crud.post import post_crud
+from app.crud.feed import get_post_feed, get_posts_count, get_moderation_queue, get_moderation_queue_count, update_moderation_status
+
+router = APIRouter()
+
+@router.post("/", response_model=PostResponse)
+async def create_new_post(
+    post: PostCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Create a new post
+    """
+    try:
+        result = await post_crud.create(current_user.id, post)
+        if result:
+            # Convert asyncpg.Record to dict and handle anonymous posts
+            post_data = dict(result)
+            if post_data.get('is_anonymous'):
+                post_data['username'] = None
+                post_data['user_avatar'] = None
+            return PostResponse(**post_data)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create post"
+            )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating post: {str(e)}"
+        )
+
+@router.get("/", response_model=List[PostResponse])
+async def read_posts(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Retrieve posts (with RLS ensuring users only see their own + public posts)
+    """
+    try:
+        posts = await post_crud.get_feed(current_user.id, limit, skip)
+        return [PostResponse(**dict(post)) for post in posts]
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving posts: {str(e)}"
+        )
+
+@router.get("/{post_id}", response_model=PostResponse)
+async def read_post(
+    post_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get a specific post by ID
+    """
+    try:
+        post = await post_crud.get(UUID(post_id))
+        if not post:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Post not found"
+            )
+        return PostResponse(**dict(post))
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving post: {str(e)}"
+        )
+
+@router.put("/{post_id}", response_model=PostResponse)
+async def update_existing_post(
+    post_id: str,
+    post_update: PostUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Update a post
+    """
+    try:
+        # First check if post exists and user owns it
+        existing_post = await post_crud.get(UUID(post_id))
+        if not existing_post:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Post not found"
+            )
+        
+        # RLS will prevent updating if user doesn't own the post
+        updated_post = await post_crud.update(UUID(post_id), current_user.id, post_update)
+        if updated_post:
+            return PostResponse(**dict(updated_post))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to update post"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error updating post: {str(e)}"
+        )
+
+@router.delete("/{post_id}")
+async def delete_existing_post(
+    post_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Delete a post
+    """
+    try:
+        # First check if post exists
+        existing_post = await post_crud.get(UUID(post_id))
+        if not existing_post:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Post not found"
+            )
+        
+        # RLS will prevent deletion if user doesn't own the post
+        success = await post_crud.delete(UUID(post_id), current_user.id)
+        if success:
+            return {"message": "Post deleted successfully"}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to delete post"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error deleting post: {str(e)}"
+        )
+
+@router.get("/feed/", response_model=PostFeedResponse)
+async def read_post_feed(
+    page: int = 1,
+    limit: int = 20,
+    visibility: Optional[str] = None,
+    content_type: Optional[str] = None,
+    mood: Optional[str] = None,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get post feed with pagination and filtering
+    """
+    try:
+        skip = (page - 1) * limit
+        posts = await get_post_feed(
+            user_id=current_user.id,
+            skip=skip,
+            limit=limit,
+            visibility=visibility,
+            content_type=content_type,
+            mood=mood
+        )
+        total = await get_posts_count(
+            user_id=current_user.id,
+            visibility=visibility,
+            content_type=content_type,
+            mood=mood
+        )
+        
+        return PostFeedResponse(
+            posts=posts,
+            total=total,
+            page=page,
+            has_next=(skip + len(posts)) < total
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving post feed: {str(e)}"
+        )
+
+@router.get("/moderation/queue/", response_model=PostFeedResponse)
+async def read_moderation_queue(
+    page: int = 1,
+    limit: int = 20,
+    status: str = "pending",
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get moderation queue (admin only)
+    """
+    # TODO: Add admin role check
+    # For now, we'll implement basic functionality
+    try:
+        skip = (page - 1) * limit
+        posts = await get_moderation_queue(
+            skip=skip,
+            limit=limit,
+            status=status
+        )
+        total = await get_moderation_queue_count(status)
+        
+        return PostFeedResponse(
+            posts=posts,
+            total=total,
+            page=page,
+            has_next=(skip + len(posts)) < total
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving moderation queue: {str(e)}"
+        )
+
+@router.post("/{post_id}/moderate/")
+async def moderate_post(
+    post_id: str,
+    moderation: ModerationAction,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Moderate a post (admin only)
+    """
+    # TODO: Add admin role check
+    # For now, we'll implement basic functionality
+    try:
+        # Map action to moderation status
+        status_map = {
+            "approve": "approved",
+            "reject": "rejected",
+            "flag": "flagged"
+        }
+        
+        if moderation.action not in status_map:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid action. Use 'approve', 'reject', or 'flag'"
+            )
+        
+        success = await update_moderation_status(
+            post_id=UUID(post_id),
+            status=status_map[moderation.action]
+        )
+        
+        if success:
+            return {"message": f"Post {moderation.action}d successfully"}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Post not found or update failed"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error moderating post: {str(e)}"
+        )

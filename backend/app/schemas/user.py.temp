@@ -1,0 +1,4 @@
+
+class User(UserInDB):
+    """Main User schema for dependencies and general use"""
+    pass
