@@ -44,7 +44,8 @@ async def get_post_feed(
         query += f" AND p.mood = ${param_count}"
         params.append(mood)
 
-    query += " ORDER BY p.created_at DESC LIMIT $2 OFFSET $3"
+    # Fix parameter numbering - LIMIT and OFFSET come after all filters
+    query += f" ORDER BY p.created_at DESC LIMIT ${param_count + 1} OFFSET ${param_count + 2}"
     params.extend([limit, skip])
 
     # Use the correct database method

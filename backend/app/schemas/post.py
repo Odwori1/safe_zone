@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, field_validator, model_validator, ConfigDict
-from typing import Optional, List, Any
+from typing import Optional, List, Any, Dict
 from uuid import UUID
 from datetime import datetime
 from enum import Enum
@@ -26,12 +26,14 @@ class ModerationStatus(str, Enum):
     FLAGGED = "flagged"
 
 class PostContentType(str, Enum):
-    """Post content types"""
+    """Post content types - EXTENDED for Phase 3"""
     TEXT = "text"
     JOURNAL = "journal"  # For private journal entries
+    AUDIO = "audio"      # Phase 3: Audio posts
+    VIDEO = "video"      # Phase 3: Video posts
 
 class PostBase(BaseModel):
-    """Base post schema"""
+    """Base post schema - EXTENDED for audio and video support"""
     model_config = ConfigDict(from_attributes=True)
 
     content: str = Field(..., min_length=1, max_length=5000)
@@ -39,6 +41,19 @@ class PostBase(BaseModel):
     mood: Optional[str] = Field(None, max_length=50)
     visibility: PostVisibility = PostVisibility.PUBLIC
     is_anonymous: bool = False
+
+    # Phase 3: Audio-specific fields (OPTIONAL - only for audio posts)
+    audio_url: Optional[str] = Field(None, max_length=500, description="URL to audio file")
+    audio_duration: Optional[int] = Field(None, ge=1, le=3600, description="Audio duration in seconds")
+    file_size: Optional[int] = Field(None, ge=1, description="File size in bytes")
+    mime_type: Optional[str] = Field(None, max_length=100, description="MIME type of the file")
+
+    # Phase 3: Video-specific fields (OPTIONAL - only for video posts)
+    video_url: Optional[str] = Field(None, max_length=500, description="URL to video file")
+    video_duration: Optional[int] = Field(None, ge=1, le=3600, description="Video duration in seconds")
+    thumbnail_url: Optional[str] = Field(None, max_length=500, description="URL to video thumbnail")
+    video_width: Optional[int] = Field(None, ge=1, le=3840, description="Video width in pixels")
+    video_height: Optional[int] = Field(None, ge=1, le=2160, description="Video height in pixels")
 
     @field_validator('content')
     @classmethod
@@ -56,18 +71,47 @@ class PostBase(BaseModel):
             raise ValueError('Mood must be less than 50 characters')
         return v
 
+    @field_validator('audio_url')
+    @classmethod
+    def validate_audio_url(cls, v: Optional[str], info) -> Optional[str]:
+        """Validate audio URL when content_type is AUDIO"""
+        if info.data.get('content_type') == PostContentType.AUDIO and not v:
+            raise ValueError('Audio URL is required for audio posts')
+        return v
+
+    @field_validator('video_url')
+    @classmethod
+    def validate_video_url(cls, v: Optional[str], info) -> Optional[str]:
+        """Validate video URL when content_type is VIDEO"""
+        if info.data.get('content_type') == PostContentType.VIDEO and not v:
+            raise ValueError('Video URL is required for video posts')
+        return v
+
 class PostCreate(PostBase):
-    """Schema for creating a post"""
+    """Schema for creating a post - EXTENDED for audio and video"""
     pass
 
 class PostUpdate(BaseModel):
-    """Schema for updating a post"""
+    """Schema for updating a post - EXTENDED for audio and video"""
     model_config = ConfigDict(from_attributes=True)
 
     content: Optional[str] = Field(None, min_length=1, max_length=5000)
     mood: Optional[str] = Field(None, max_length=50)
     visibility: Optional[PostVisibility] = None
     status: Optional[PostStatus] = None
+
+    # Phase 3: Audio-specific update fields
+    audio_url: Optional[str] = Field(None, max_length=500)
+    audio_duration: Optional[int] = Field(None, ge=1, le=3600)
+    file_size: Optional[int] = Field(None, ge=1)
+    mime_type: Optional[str] = Field(None, max_length=100)
+
+    # Phase 3: Video-specific update fields
+    video_url: Optional[str] = Field(None, max_length=500)
+    video_duration: Optional[int] = Field(None, ge=1, le=3600)
+    thumbnail_url: Optional[str] = Field(None, max_length=500)
+    video_width: Optional[int] = Field(None, ge=1, le=3840)
+    video_height: Optional[int] = Field(None, ge=1, le=2160)
 
     @field_validator('content')
     @classmethod
@@ -78,7 +122,7 @@ class PostUpdate(BaseModel):
         return v.strip() if v else v
 
 class PostInDB(TimeStampedSchema):
-    """Post schema as stored in database"""
+    """Post schema as stored in database - EXTENDED for audio and video"""
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID
@@ -91,8 +135,21 @@ class PostInDB(TimeStampedSchema):
     status: PostStatus
     moderation_status: ModerationStatus
 
+    # Phase 3: Audio-specific fields
+    audio_url: Optional[str] = None
+    audio_duration: Optional[int] = None
+    file_size: Optional[int] = None
+    mime_type: Optional[str] = None
+
+    # Phase 3: Video-specific fields
+    video_url: Optional[str] = None
+    video_duration: Optional[int] = None
+    thumbnail_url: Optional[str] = None
+    video_width: Optional[int] = None
+    video_height: Optional[int] = None
+
 class PostResponse(PostInDB):
-    """Post schema for API responses"""
+    """Post schema for API responses - EXTENDED for audio and video"""
     username: Optional[str] = None  # Only show if not anonymous
     user_avatar: Optional[str] = None
 
@@ -141,3 +198,56 @@ class ModerationAction(BaseModel):
     """Schema for moderation actions"""
     action: str = Field(..., description="approve, reject, or flag")
     reason: Optional[str] = Field(None, max_length=500, description="Moderation reason")
+
+# ========== PHASE 3: NEW FILE UPLOAD SCHEMAS ==========
+
+class FileUploadCreate(BaseModel):
+    """Schema for creating a file upload record"""
+    filename: str = Field(..., min_length=1, max_length=255)
+    original_filename: str = Field(..., min_length=1, max_length=255)
+    file_url: str = Field(..., min_length=1, max_length=500)
+    file_size: int = Field(..., ge=1)
+    mime_type: str = Field(..., min_length=1, max_length=100)
+    duration: Optional[int] = Field(None, ge=1, le=3600)
+
+class FileUploadResponse(TimeStampedSchema):
+    """Schema for file upload response"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    user_id: UUID
+    post_id: Optional[UUID] = None
+    filename: str
+    original_filename: str
+    file_url: str
+    file_size: int
+    mime_type: str
+    duration: Optional[int] = None
+    upload_status: str
+
+class AudioUploadRequest(BaseModel):
+    """Schema for audio upload request"""
+    filename: str = Field(..., min_length=1, max_length=255, description="Name for the audio file")
+    duration: Optional[int] = Field(None, ge=1, le=3600, description="Audio duration in seconds")
+
+class AudioUploadResponse(BaseModel):
+    """Schema for audio upload response"""
+    upload_url: str = Field(..., description="URL for uploading the audio file")
+    file_id: UUID = Field(..., description="ID of the file upload record")
+    fields: Dict[str, str] = Field(..., description="Form fields for upload")
+    url: str = Field(..., description="URL where the file will be accessible")
+
+class VideoUploadRequest(BaseModel):
+    """Schema for video upload request"""
+    filename: str = Field(..., min_length=1, max_length=255, description="Name for the video file")
+    duration: Optional[int] = Field(None, ge=1, le=3600, description="Video duration in seconds")
+    width: Optional[int] = Field(None, ge=1, le=3840, description="Video width in pixels")
+    height: Optional[int] = Field(None, ge=1, le=2160, description="Video height in pixels")
+
+class VideoUploadResponse(BaseModel):
+    """Schema for video upload response"""
+    upload_url: str = Field(..., description="URL for uploading the video file")
+    file_id: UUID = Field(..., description="ID of the file upload record")
+    fields: Dict[str, str] = Field(..., description="Form fields for upload")
+    url: str = Field(..., description="URL where the file will be accessible")
+    thumbnail_url: Optional[str] = Field(None, description="URL for video thumbnail")

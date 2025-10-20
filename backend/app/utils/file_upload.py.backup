@@ -1,0 +1,150 @@
+"""
+File upload utilities for Phase 3: Media Support
+Following the existing architecture patterns
+"""
+
+import uuid
+import os
+from typing import Optional, Dict, Any
+from datetime import datetime, timedelta
+import logging
+
+logger = logging.getLogger("safe_zone.file_upload")
+
+class FileUploadHandler:
+    """
+    Handler for file uploads - currently local storage
+    Can be extended to S3 in future iterations
+    """
+    
+    def __init__(self):
+        self.upload_dir = "uploads"
+        self.allowed_audio_types = [
+            'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 
+            'audio/x-m4a', 'audio/aac', 'audio/webm'
+        ]
+        self.max_audio_size = 50 * 1024 * 1024  # 50MB
+        self.max_duration = 10 * 60  # 10 minutes
+        
+    async def generate_upload_url(self, user_id: str, filename: str, 
+                                file_type: str, duration: Optional[int] = None) -> Dict[str, Any]:
+        """
+        Generate upload URL and metadata for file upload
+        Currently using local file system, can be extended to S3
+        """
+        try:
+            # Validate file type
+            if not self._is_valid_audio_type(file_type):
+                raise ValueError(f"Unsupported file type: {file_type}")
+            
+            # Generate unique filename
+            file_ext = self._get_file_extension(filename, file_type)
+            unique_filename = f"{uuid.uuid4()}{file_ext}"
+            
+            # Create upload directory if it doesn't exist
+            os.makedirs(self.upload_dir, exist_ok=True)
+            
+            # Local file path (will be replaced with S3 URL in future)
+            file_path = os.path.join(self.upload_dir, unique_filename)
+            file_url = f"/{self.upload_dir}/{unique_filename}"
+            
+            # For now, we'll use local file system
+            # In Phase 3, Item 3 (S3 integration) this will be replaced with S3 presigned URLs
+            upload_data = {
+                "upload_url": f"/api/v1/uploads/{unique_filename}",  # Local upload endpoint
+                "file_id": str(uuid.uuid4()),
+                "fields": {
+                    "filename": unique_filename,
+                    "file_path": file_path
+                },
+                "url": file_url,
+                "method": "PUT"  # For local uploads, we'll use PUT
+            }
+            
+            logger.info(f"Generated upload URL for user {user_id}: {unique_filename}")
+            return upload_data
+            
+        except Exception as e:
+            logger.error(f"Error generating upload URL: {e}")
+            raise
+    
+    async def validate_audio_file(self, file_path: str, mime_type: str, 
+                                file_size: int, duration: Optional[int] = None) -> bool:
+        """
+        Validate audio file constraints
+        """
+        try:
+            # Check file size
+            if file_size > self.max_audio_size:
+                raise ValueError(f"File too large: {file_size} bytes. Maximum: {self.max_audio_size}")
+            
+            # Check duration if provided
+            if duration and duration > self.max_duration:
+                raise ValueError(f"Audio too long: {duration} seconds. Maximum: {self.max_duration}")
+            
+            # Check MIME type
+            if not self._is_valid_audio_type(mime_type):
+                raise ValueError(f"Invalid audio type: {mime_type}")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Audio file validation failed: {e}")
+            raise
+    
+    def _is_valid_audio_type(self, mime_type: str) -> bool:
+        """Check if MIME type is supported for audio"""
+        return mime_type.lower() in self.allowed_audio_types
+    
+    def _get_file_extension(self, filename: str, mime_type: str) -> str:
+        """Get appropriate file extension based on MIME type"""
+        extension_map = {
+            'audio/mpeg': '.mp3',
+            'audio/mp3': '.mp3',
+            'audio/wav': '.wav',
+            'audio/ogg': '.ogg',
+            'audio/x-m4a': '.m4a',
+            'audio/aac': '.aac',
+            'audio/webm': '.webm'
+        }
+        
+        # Try to get extension from MIME type first
+        extension = extension_map.get(mime_type.lower())
+        
+        # Fallback to original filename extension
+        if not extension:
+            _, extension = os.path.splitext(filename)
+            if not extension:
+                extension = '.audio'
+        
+        return extension
+    
+    def get_file_metadata(self, file_path: str) -> Dict[str, Any]:
+        """
+        Extract basic file metadata
+        In production, you might want to use libraries like mutagen for audio metadata
+        """
+        try:
+            file_stats = os.stat(file_path)
+            return {
+                "file_size": file_stats.st_size,
+                "created_at": datetime.fromtimestamp(file_stats.st_ctime),
+                "modified_at": datetime.fromtimestamp(file_stats.st_mtime)
+            }
+        except Exception as e:
+            logger.error(f"Error getting file metadata: {e}")
+            return {}
+    
+    async def cleanup_orphaned_files(self, older_than_hours: int = 24):
+        """
+        Clean up orphaned files that were uploaded but never associated with a post
+        """
+        try:
+            # This would be implemented to clean up files without associated posts
+            # For now, it's a placeholder for future implementation
+            logger.info("File cleanup would run here in production")
+        except Exception as e:
+            logger.error(f"Error during file cleanup: {e}")
+
+# Global file upload handler instance
+file_upload_handler = FileUploadHandler()

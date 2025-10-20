@@ -136,14 +136,14 @@ class CRUDPost:
         async with database.pool.acquire() as conn:
             return await conn.fetchrow(
                 """
-                INSERT INTO file_uploads 
+                INSERT INTO file_uploads
                 (user_id, filename, original_filename, file_url, file_size, mime_type, duration)
                 VALUES ($1, $2, $3, $4, $5, $6, $7)
                 RETURNING *
                 """,
-                user_id, upload_data.filename, upload_data.original_filename,
-                upload_data.file_url, upload_data.file_size, upload_data.mime_type,
-                upload_data.duration
+                user_id, upload_data["filename"], upload_data["original_filename"],
+                upload_data["file_url"], upload_data["file_size"], upload_data["mime_type"],
+                upload_data["duration"]
             )
 
     async def update_file_upload_with_post(self, file_id: UUID, post_id: UUID) -> bool:
@@ -161,6 +161,28 @@ class CRUDPost:
             return await conn.fetch(
                 "SELECT * FROM file_uploads WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2",
                 user_id, limit
+            )
+
+    # Phase 3: Video-specific methods
+    async def get_video_posts(self, user_id: UUID, limit: int = 20, offset: int = 0) -> List[asyncpg.Record]:
+        """Get video posts for user"""
+        async with database.pool.acquire() as conn:
+            return await conn.fetch(
+                """
+                SELECT p.*,
+                       CASE WHEN p.is_anonymous THEN NULL ELSE u.username END as username,
+                       CASE WHEN p.is_anonymous THEN NULL ELSE u.profile_picture END as user_avatar
+                FROM posts p
+                LEFT JOIN users u ON p.user_id = u.id
+                WHERE p.status = 'active'
+                AND p.moderation_status = 'approved'
+                AND p.content_type = 'video'
+                AND (p.visibility = 'public' OR p.user_id = $1)
+                AND u.is_active = true
+                ORDER BY p.created_at DESC
+                LIMIT $2 OFFSET $3
+                """,
+                user_id, limit, offset
             )
 
 # Create instance
