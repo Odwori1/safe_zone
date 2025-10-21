@@ -210,20 +210,33 @@ class FileUploadCreate(BaseModel):
     mime_type: str = Field(..., min_length=1, max_length=100)
     duration: Optional[int] = Field(None, ge=1, le=3600)
 
-class FileUploadResponse(TimeStampedSchema):
-    """Schema for file upload response"""
-    model_config = ConfigDict(from_attributes=True)
 
-    id: UUID
-    user_id: UUID
-    post_id: Optional[UUID] = None
-    filename: str
-    original_filename: str
-    file_url: str
-    file_size: int
-    mime_type: str
-    duration: Optional[int] = None
-    upload_status: str
+
+# ========== PHASE 3, ITEM 3: SECURE S3 FILE SCHEMAS ==========
+
+class FileUploadRequest(BaseModel):
+    """Schema for secure file upload request"""
+    filename: str = Field(..., min_length=1, max_length=255, description="Original filename")
+    file_type: str = Field(..., description="File type: video, audio, or image")
+    mime_type: str = Field(..., description="MIME type of the file")
+    file_size: int = Field(..., ge=1, description="File size in bytes")
+    duration: Optional[int] = Field(None, ge=1, le=3600, description="Duration in seconds for media files")
+    width: Optional[int] = Field(None, ge=1, le=3840, description="Width in pixels for images/video")
+    height: Optional[int] = Field(None, ge=1, le=2160, description="Height in pixels for images/video")
+
+class FileUploadResponse(BaseModel):
+    """Schema for secure file upload response"""
+    upload_url: str = Field(..., description="Presigned URL for direct S3 upload")
+    file_id: UUID = Field(..., description="ID of the file metadata record")
+    s3_key: str = Field(..., description="Secure S3 key for the file")
+    expires_in: int = Field(..., description="URL expiration time in seconds")
+
+class FileAccessResponse(BaseModel):
+    """Schema for secure file access response"""
+    download_url: str = Field(..., description="Presigned URL for direct S3 download")
+    file_type: str = Field(..., description="Type of file: video, audio, or image")
+    expires_in: int = Field(..., description="URL expiration time in seconds")
+
 
 class AudioUploadRequest(BaseModel):
     """Schema for audio upload request"""

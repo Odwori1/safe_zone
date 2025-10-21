@@ -10,7 +10,7 @@ class Settings:
     db_port: int = int(os.getenv("DB_PORT", "5432"))
     db_name: str = os.getenv("DB_NAME", "safe_zone")
     db_user: str = os.getenv("DB_USER", "safe_zone_user")
-    db_password: str = os.getenv("DB_PASSWORD", "safe_zone_password_2024")
+    db_password: str = os.getenv("DB_PASSWORD", "0791486006@safezone")  # Correct password
 
     # Security
     environment: str = os.getenv("ENVIRONMENT", "development")
@@ -28,10 +28,17 @@ class Settings:
 
     # Logging
     log_level: str = os.getenv("LOG_LEVEL", "INFO")
-    
+
     # Timezone & Internationalization (NEW)
     default_timezone: str = os.getenv("DEFAULT_TIMEZONE", "UTC")
     supported_locales: List[str] = os.getenv("SUPPORTED_LOCALES", "en-US,es-ES,fr-FR,de-DE").split(",")
+
+    # S3 File Storage (Phase 3, Item 3)
+    aws_access_key_id: str = os.getenv("AWS_ACCESS_KEY_ID", "")
+    aws_secret_access_key: str = os.getenv("AWS_SECRET_ACCESS_KEY", "")
+    aws_region: str = os.getenv("AWS_REGION", "us-east-1")
+    s3_bucket: str = os.getenv("S3_BUCKET", "safe-zone-media")
+    s3_presigned_expiry: int = int(os.getenv("S3_PRESIGNED_EXPIRY", "3600"))
 
     @property
     def database_url(self) -> str:
