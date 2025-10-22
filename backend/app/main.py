@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from app.core.logging import setup_logging
 from app.core.rate_limiting import rate_limit_middleware
 from app.database.database import init_db, close_db
-from app.api.endpoints import health, auth, profiles, posts, comments, journals, mood, crisis, uploads, files
+from app.api.endpoints import health, auth, profiles, posts, comments, journals, mood, crisis, uploads, files, websocket, live_audio_rooms
 
 # Setup logging at module level
 logger = setup_logging()
@@ -51,17 +51,14 @@ app.include_router(health.router, prefix="/api/v1", tags=["health"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["authentication"])
 app.include_router(profiles.router, prefix="/api/v1/profiles", tags=["profiles"])
 app.include_router(posts.router, prefix="/api/v1/posts", tags=["posts"])
-
 app.include_router(comments.router, prefix="/api/v1/comments", tags=["comments"])
-
 app.include_router(journals.router, prefix="/api/v1/journals", tags=["journals"])
-
 app.include_router(mood.router, prefix="/api/v1/mood", tags=["mood"])
-
 app.include_router(crisis.router, prefix="/api/v1/crisis", tags=["crisis"])
-
 app.include_router(uploads.router, prefix="/api/v1/uploads", tags=["uploads"])
 app.include_router(files.router, prefix="/api/v1/files", tags=["files"])
+app.include_router(websocket.router, prefix="/api/v1", tags=["websocket"])
+app.include_router(live_audio_rooms.router, prefix="/api/v1/audio", tags=["live-audio-rooms"])
 
 @app.get("/")
 async def root():

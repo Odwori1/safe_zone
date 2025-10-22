@@ -1,0 +1,101 @@
+"""
+Messaging Schemas for Phase 3, Item 4 - FIXED VERSION
+Following existing schema patterns from post.py
+"""
+
+from pydantic import BaseModel, Field, ConfigDict
+from typing import Optional, List, Dict, Any
+from uuid import UUID
+from datetime import datetime
+from enum import Enum
+
+class MessageContentType(str, Enum):
+    """Message content types"""
+    TEXT = "text"
+    AUDIO = "audio"
+    VIDEO = "video"
+    FILE = "file"
+
+class ModerationStatus(str, Enum):
+    """Moderation status options"""
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+class ConversationCreate(BaseModel):
+    """Schema for creating a conversation"""
+    is_group: bool = False
+    title: Optional[str] = Field(None, max_length=100)
+    participant_ids: Optional[List[UUID]] = None
+
+class MessageCreate(BaseModel):
+    """Schema for creating a message"""
+    conversation_id: UUID
+    content: str = Field(..., min_length=1, max_length=5000)
+    content_type: MessageContentType = MessageContentType.TEXT
+    file_metadata_id: Optional[UUID] = None
+
+class MessageResponse(BaseModel):
+    """Schema for message API responses"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    conversation_id: UUID
+    sender_id: UUID
+    content: str
+    content_type: MessageContentType
+    file_metadata_id: Optional[UUID] = None
+    created_at: datetime
+    updated_at: datetime
+    deleted: bool = False
+    moderated: bool = False
+    moderation_status: ModerationStatus = ModerationStatus.PENDING
+    
+    # User info (joined from users table)
+    username: Optional[str] = None
+
+class ConversationResponse(BaseModel):
+    """Schema for conversation API responses"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    is_group: bool
+    title: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+    
+    # Additional fields from queries
+    last_message_content: Optional[str] = None
+    last_message_at: Optional[datetime] = None
+    last_message_sender_id: Optional[UUID] = None
+    message_count: int = 0
+    participant_count: int = 0
+
+class ConversationParticipant(BaseModel):
+    """Schema for conversation participant"""
+    model_config = ConfigDict(from_attributes=True)
+
+    user_id: UUID
+    conversation_id: UUID
+    role: str = "member"
+    joined_at: datetime
+    
+    # User info
+    username: str
+    email: str
+
+class ConversationWithParticipants(ConversationResponse):
+    """Conversation with full participant list"""
+    participants: List[ConversationParticipant] = []
+
+class MessageListResponse(BaseModel):
+    """Response for message list"""
+    messages: List[MessageResponse]
+    total: int
+    has_more: bool
+
+class ConversationListResponse(BaseModel):
+    """Response for conversation list"""
+    conversations: List[ConversationResponse]
+    total: int
+    has_more: bool
