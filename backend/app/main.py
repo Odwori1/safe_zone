@@ -78,3 +78,31 @@ if __name__ == "__main__":
         reload=True,
         log_level="info",
     )
+
+# Enhanced Moderation Endpoints - Phase 3, Item 6
+from app.api.endpoints.enhanced_moderation import router as enhanced_moderation_router
+app.include_router(enhanced_moderation_router, prefix="/api/v1/moderation", tags=["enhanced-moderation"])
+
+# Professional Directory Endpoints - Phase 3, Item 7
+from app.api.endpoints.professional_directory import router as professional_directory_router
+app.include_router(professional_directory_router, prefix="/api/v1/professional", tags=["professional-directory"])
+
+# AI Personalization Endpoints - Phase 4, Item 1
+from app.api.endpoints.ai_personalization import router as ai_personalization_router
+from app.api.endpoints.advanced_safety_systems import router as advanced_safety_systems_router
+app.include_router(advanced_safety_systems_router, prefix="/api/v1/safety", tags=["advanced-safety-systems"])
+app.include_router(ai_personalization_router, prefix="/api/v1/ai", tags=["ai-personalization"])
+from app.api.endpoints.enhanced_ux_community import router as enhanced_ux_community_router
+app.include_router(enhanced_ux_community_router, prefix="/api/v1/ux-community", tags=["enhanced-ux-community"])
+from app.api.endpoints.final_phase_features import router as final_phase_features_router
+app.include_router(final_phase_features_router, prefix="/api/v1/final-phase", tags=["final-phase-features"])
+
+# Import Phase 6 Missing Features
+from app.api.endpoints.phase6_missing_features import router as phase6_missing_features_router
+
+# Include Phase 6 Missing Features router
+app.include_router(
+    phase6_missing_features_router,
+    prefix="/api/v1/phase6",
+    tags=["Phase 6 - Missing Features"]
+)

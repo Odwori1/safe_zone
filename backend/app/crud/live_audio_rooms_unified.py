@@ -66,6 +66,7 @@ class LiveAudioRoomsCRUD:
                 print(f"Leave room error: {e}")
                 return False
 
+    # Add other methods with unified pattern...
     async def get_room(self, room_id: UUID, user_id: UUID) -> Optional[asyncpg.Record]:
         """Get room with UNIFIED RLS context"""
         async with database.pool.acquire() as conn:
@@ -133,68 +134,6 @@ class LiveAudioRoomsCRUD:
             )
 
             return participant
-
-    async def get_room_participants(
-        self,
-        room_id: UUID,
-        user_id: UUID
-    ) -> List[asyncpg.Record]:
-        """Get room participants with UNIFIED RLS context"""
-        async with database.pool.acquire() as conn:
-            await conn.execute("SELECT set_config('app.current_user_id', $1, false)", str(user_id))
-
-            participants = await conn.fetch(
-                """
-                SELECT p.*, u.username, u.email
-                FROM live_audio_room_participants p
-                JOIN users u ON p.user_id = u.id
-                WHERE p.room_id = $1 AND p.left_at IS NULL
-                ORDER BY
-                    CASE p.role
-                        WHEN 'host' THEN 1
-                        WHEN 'moderator' THEN 2
-                        WHEN 'speaker' THEN 3
-                        ELSE 4
-                    END,
-                    p.joined_at
-                """,
-                room_id
-            )
-            return participants
-
-    async def get_active_rooms(
-        self,
-        room_type: Optional[str] = None,
-        limit: int = 50,
-        offset: int = 0
-    ) -> List[asyncpg.Record]:
-        """Get active rooms (no user context needed for public rooms)"""
-        async with database.pool.acquire() as conn:
-            if room_type:
-                rooms = await conn.fetch(
-                    """
-                    SELECT lr.*, u.username as host_username
-                    FROM live_audio_rooms lr
-                    JOIN users u ON lr.created_by = u.id
-                    WHERE lr.is_active = true AND lr.room_type = $1
-                    ORDER BY lr.current_participants DESC, lr.created_at DESC
-                    LIMIT $2 OFFSET $3
-                    """,
-                    room_type, limit, offset
-                )
-            else:
-                rooms = await conn.fetch(
-                    """
-                    SELECT lr.*, u.username as host_username
-                    FROM live_audio_rooms lr
-                    JOIN users u ON lr.created_by = u.id
-                    WHERE lr.is_active = true
-                    ORDER BY lr.current_participants DESC, lr.created_at DESC
-                    LIMIT $1 OFFSET $2
-                    """,
-                    limit, offset
-                )
-            return rooms
 
 # Global instance with unified pattern
 live_audio_rooms_crud = LiveAudioRoomsCRUD()
