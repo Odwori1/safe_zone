@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Create posts table for basic post creation - BLUEPRINT: Basic post creation (text)
+UPDATED: Use app.current_user_id to match rest of system
 """
 import asyncio
 import sys
@@ -10,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app.database.database import database
 
 async def create_posts_schema():
-    """Create posts table with RLS for security - SIMPLIFIED VERSION"""
+    """Create posts table with RLS for security - UPDATED FOR CONSISTENCY"""
     try:
         await database.connect()
         print("✅ Database connected")
@@ -67,34 +68,34 @@ async def create_posts_schema():
             await conn.execute("ALTER TABLE posts ENABLE ROW LEVEL SECURITY;")
             print("✅ RLS enabled")
 
-            # Create RLS policies using JWT claims instead of auth.uid()
+            # Create RLS policies using app.current_user_id (CONSISTENT WITH SYSTEM)
             await conn.execute("""
                 -- Users can view public posts and their own posts
                 CREATE POLICY "users_view_public_posts" ON posts
                     FOR SELECT USING (
                         visibility = 'public' 
-                        OR user_id = current_setting('request.jwt.claim.sub', true)::uuid
+                        OR user_id = current_setting('app.current_user_id', true)::uuid
                     );
                 
                 -- Users can insert their own posts
                 CREATE POLICY "users_insert_own_posts" ON posts
                     FOR INSERT WITH CHECK (
-                        user_id = current_setting('request.jwt.claim.sub', true)::uuid
+                        user_id = current_setting('app.current_user_id', true)::uuid
                     );
                 
                 -- Users can update their own posts
                 CREATE POLICY "users_update_own_posts" ON posts
                     FOR UPDATE USING (
-                        user_id = current_setting('request.jwt.claim.sub', true)::uuid
+                        user_id = current_setting('app.current_user_id', true)::uuid
                     );
                 
                 -- Users can delete their own posts
                 CREATE POLICY "users_delete_own_posts" ON posts
                     FOR DELETE USING (
-                        user_id = current_setting('request.jwt.claim.sub', true)::uuid
+                        user_id = current_setting('app.current_user_id', true)::uuid
                     );
             """)
-            print("✅ RLS policies created using JWT claims")
+            print("✅ RLS policies created using app.current_user_id (consistent)")
 
             # Verify table structure
             columns = await conn.fetch("""
@@ -107,7 +108,7 @@ async def create_posts_schema():
             for col in columns:
                 print(f"   - {col['column_name']} ({col['data_type']})")
 
-        print("🎉 Posts schema created successfully!")
+        print("🎉 Posts schema created successfully with consistent RLS!")
 
     except Exception as e:
         print(f"❌ Posts schema creation failed: {e}")

@@ -1,0 +1,186 @@
+import asyncpg
+from typing import Optional, List
+from uuid import UUID
+from app.database.database import database
+
+class CRUDComment:
+    async def get(self, comment_id: UUID, requesting_user_id: UUID) -> Optional[asyncpg.Record]:
+        """Get comment by ID - FIXED with RLS context"""
+        async with database.pool.acquire() as conn:
+            # ✅ FIXED: Use set_config instead of set_current_user_id
+            await conn.execute(
+                "SELECT set_config('app.current_user_id', $1, false)",
+                str(requesting_user_id)
+            )
+            return await conn.fetchrow(
+                "SELECT * FROM comments WHERE id = $1 AND status != 'deleted'",
+                comment_id
+            )
+
+    async def get_by_post(self, post_id: UUID, requesting_user_id: UUID, limit: int = 50, offset: int = 0) -> List[asyncpg.Record]:
+        """Get comments for a post - FIXED with RLS context"""
+        async with database.pool.acquire() as conn:
+            # ✅ FIXED: Use set_config instead of set_current_user_id
+            await conn.execute(
+                "SELECT set_config('app.current_user_id', $1, false)",
+                str(requesting_user_id)
+            )
+            return await conn.fetch(
+                """
+                SELECT c.*, u.username, u.profile_picture as user_avatar
+                FROM comments c
+                LEFT JOIN users u ON c.user_id = u.id
+                WHERE c.post_id = $1 AND c.status != 'deleted'
+                ORDER BY c.created_at ASC
+                LIMIT $2 OFFSET $3
+                """,
+                post_id, limit, offset
+            )
+
+    async def get_by_user(self, user_id: UUID, requesting_user_id: UUID, limit: int = 50, offset: int = 0) -> List[asyncpg.Record]:
+        """Get comments by user - FIXED with RLS context"""
+        async with database.pool.acquire() as conn:
+            # ✅ FIXED: Use set_config instead of set_current_user_id
+            await conn.execute(
+                "SELECT set_config('app.current_user_id', $1, false)",
+                str(requesting_user_id)
+            )
+            return await conn.fetch(
+                """
+                SELECT c.*, u.username, u.profile_picture as user_avatar
+                FROM comments c
+                LEFT JOIN users u ON c.user_id = u.id
+                WHERE c.user_id = $1 AND c.status != 'deleted'
+                ORDER BY c.created_at DESC
+                LIMIT $2 OFFSET $3
+                """,
+                user_id, limit, offset
+            )
+
+    async def create(self, user_id: UUID, post_id: UUID, comment_in, requesting_user_id: UUID) -> asyncpg.Record:
+        """Create new comment - FIXED with RLS context"""
+        async with database.pool.acquire() as conn:
+            # ✅ FIXED: Use set_config instead of set_current_user_id
+            await conn.execute(
+                "SELECT set_config('app.current_user_id', $1, false)",
+                str(requesting_user_id)
+            )
+            return await conn.fetchrow(
+                """
+                INSERT INTO comments (user_id, post_id, content, parent_comment_id)
+                VALUES ($1, $2, $3, $4)
+                RETURNING *
+                """,
+                user_id, post_id, comment_in.content, comment_in.parent_comment_id
+            )
+
+    async def update(self, comment_id: UUID, user_id: UUID, comment_in, requesting_user_id: UUID) -> Optional[asyncpg.Record]:
+        """Update comment - only by owner - FIXED with RLS context"""
+        # Handle both Pydantic models and regular objects
+        if hasattr(comment_in, 'dict'):
+            update_data = comment_in.dict(exclude_unset=True)
+        elif hasattr(comment_in, '__dict__'):
+            update_data = comment_in.__dict__
+        else:
+            update_data = comment_in
+
+        if not update_data:
+            return await self.get(comment_id, requesting_user_id)
+
+        update_fields = []
+        values = []
+        index = 1
+
+        # Handle both dict and object iteration
+        if hasattr(update_data, 'items'):
+            items = update_data.items()
+        else:
+            # For regular objects, get attributes that aren't private
+            items = [(k, v) for k, v in update_data.__dict__.items() if not k.startswith('_')]
+
+        for field, value in items:
+            if value is not None and field != 'parent_comment_id':  # Skip None values and specific fields
+                update_fields.append(f"{field} = ${index}")
+                values.append(value)
+                index += 1
+
+        if not update_fields:
+            return await self.get(comment_id, requesting_user_id)
+
+        values.extend([comment_id, user_id])
+        query = f"""
+            UPDATE comments
+            SET {', '.join(update_fields)}, updated_at = NOW()
+            WHERE id = ${index} AND user_id = ${index + 1}
+            RETURNING *
+        """
+
+        async with database.pool.acquire() as conn:
+            # ✅ FIXED: Use set_config instead of set_current_user_id
+            await conn.execute(
+                "SELECT set_config('app.current_user_id', $1, false)",
+                str(requesting_user_id)
+            )
+            return await conn.fetchrow(query, *values)
+
+    async def delete(self, comment_id: UUID, user_id: UUID, requesting_user_id: UUID) -> bool:
+        """Soft delete comment - only by owner - FIXED with RLS context"""
+        async with database.pool.acquire() as conn:
+            # ✅ FIXED: Use set_config instead of set_current_user_id
+            await conn.execute(
+                "SELECT set_config('app.current_user_id', $1, false)",
+                str(requesting_user_id)
+            )
+            result = await conn.execute(
+                "UPDATE comments SET status = 'deleted' WHERE id = $1 AND user_id = $2",
+                comment_id, user_id
+            )
+            return "UPDATE 1" in result
+
+    async def count_post_comments(self, post_id: UUID, requesting_user_id: UUID) -> int:
+        """Count comments for a post - FIXED with RLS context"""
+        async with database.pool.acquire() as conn:
+            # ✅ FIXED: Use set_config instead of set_current_user_id
+            await conn.execute(
+                "SELECT set_config('app.current_user_id', $1, false)",
+                str(requesting_user_id)
+            )
+            return await conn.fetchval(
+                "SELECT COUNT(*) FROM comments WHERE post_id = $1 AND status != 'deleted'",
+                post_id
+            )
+
+    async def count_user_comments(self, user_id: UUID, requesting_user_id: UUID) -> int:
+        """Count user's comments - FIXED with RLS context"""
+        async with database.pool.acquire() as conn:
+            # ✅ FIXED: Use set_config instead of set_current_user_id
+            await conn.execute(
+                "SELECT set_config('app.current_user_id', $1, false)",
+                str(requesting_user_id)
+            )
+            return await conn.fetchval(
+                "SELECT COUNT(*) FROM comments WHERE user_id = $1 AND status != 'deleted'",
+                user_id
+            )
+
+    async def get_replies(self, comment_id: UUID, requesting_user_id: UUID) -> List[asyncpg.Record]:
+        """Get replies for a comment - FIXED with RLS context"""
+        async with database.pool.acquire() as conn:
+            # ✅ FIXED: Use set_config for RLS context
+            await conn.execute(
+                "SELECT set_config('app.current_user_id', $1, false)",
+                str(requesting_user_id)
+            )
+            return await conn.fetch(
+                """
+                SELECT c.*, u.username, u.profile_picture as user_avatar
+                FROM comments c
+                LEFT JOIN users u ON c.user_id = u.id
+                WHERE c.parent_comment_id = $1 AND c.status != 'deleted'
+                ORDER BY c.created_at ASC
+                """,
+                comment_id
+            )
+
+# Create instance
+comment_crud = CRUDComment()

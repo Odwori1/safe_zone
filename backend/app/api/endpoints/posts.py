@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List, Optional
 from uuid import UUID
-from app.schemas.post import PostCreate, PostResponse, PostUpdate, PostFeedResponse, ModerationAction
+from app.schemas.post import PostCreate, PostResponse, PostUpdate
 from app.schemas.user import User
 from app.core.security import get_current_user
-from app.crud.post_audio import post_crud
-from app.crud.feed import get_post_feed, get_posts_count, get_moderation_queue, get_moderation_queue_count, update_moderation_status
+from app.crud.post import post_crud
 
 router = APIRouter()
 
@@ -15,12 +14,11 @@ async def create_new_post(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Create a new post - UPDATED for audio support
+    Create a new post
     """
     try:
         result = await post_crud.create(current_user.id, post)
         if result:
-            # Convert asyncpg.Record to dict and handle anonymous posts
             post_data = dict(result)
             if post_data.get('is_anonymous'):
                 post_data['username'] = None
@@ -41,60 +39,51 @@ async def create_new_post(
 async def read_posts(
     skip: int = 0,
     limit: int = 100,
+    mood: Optional[str] = None,
+    visibility: Optional[str] = None,
+    user_id: Optional[str] = None,
+    search: Optional[str] = None,
     current_user: User = Depends(get_current_user)
 ):
     """
-    Retrieve posts (with RLS ensuring users only see their own + public posts)
-    - UPDATED for audio support
+    Retrieve posts with optional filters and search
     """
     try:
-        posts = await post_crud.get_feed(current_user.id, limit, skip)
-        return [PostResponse(**dict(post)) for post in posts]
+        # Convert user_id string to UUID if provided
+        user_id_uuid = None
+        if user_id:
+            try:
+                user_id_uuid = UUID(user_id)
+            except ValueError:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid user ID format"
+                )
+
+        posts = await post_crud.get_feed(
+            current_user.id, 
+            limit=limit, 
+            offset=skip,
+            mood=mood,
+            visibility=visibility,
+            user_id_filter=user_id_uuid,
+            search=search
+        )
+        
+        response_posts = []
+        for post in posts:
+            post_data = dict(post)
+            if post_data.get('is_anonymous'):
+                post_data['username'] = None
+                post_data['user_avatar'] = None
+            response_posts.append(PostResponse(**post_data))
+        return response_posts
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error retrieving posts: {str(e)}"
         )
 
-@router.get("/audio", response_model=List[PostResponse])
-async def read_audio_posts(
-    skip: int = 0,
-    limit: int = 20,
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Retrieve audio posts only
-    Phase 3, Item 1: Audio Post Support
-    """
-    try:
-        posts = await post_crud.get_audio_posts(current_user.id, limit, skip)
-        return [PostResponse(**dict(post)) for post in posts]
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving audio posts: {str(e)}"
-        )
-@router.get("/video", response_model=List[PostResponse])
-async def read_video_posts(
-    skip: int = 0,
-    limit: int = 20,
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Retrieve video posts only
-    Phase 3, Item 2: Video Post Support
-    """
-    try:
-        posts = await post_crud.get_video_posts(current_user.id, limit, skip)
-        return [PostResponse(**dict(post)) for post in posts]
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving video posts: {str(e)}"
-        )
-
-
-# All other existing endpoints remain the same with audio support
 @router.get("/{post_id}", response_model=PostResponse)
 async def read_post(
     post_id: str,
@@ -110,9 +99,18 @@ async def read_post(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Post not found"
             )
-        return PostResponse(**dict(post))
-    except HTTPException:
-        raise
+
+        post_data = dict(post)
+        if post_data.get('is_anonymous'):
+            post_data['username'] = None
+            post_data['user_avatar'] = None
+
+        return PostResponse(**post_data)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid post ID format"
+        )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -120,16 +118,15 @@ async def read_post(
         )
 
 @router.put("/{post_id}", response_model=PostResponse)
-async def update_existing_post(
+async def update_post(
     post_id: str,
     post_update: PostUpdate,
     current_user: User = Depends(get_current_user)
 ):
     """
-    Update a post
+    Update a post - only by owner
     """
     try:
-        # First check if post exists and user owns it
         existing_post = await post_crud.get(UUID(post_id))
         if not existing_post:
             raise HTTPException(
@@ -137,17 +134,30 @@ async def update_existing_post(
                 detail="Post not found"
             )
 
-        # RLS will prevent updating if user doesn't own the post
+        if existing_post['user_id'] != current_user.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not authorized to update this post"
+            )
+
         updated_post = await post_crud.update(UUID(post_id), current_user.id, post_update)
-        if updated_post:
-            return PostResponse(**dict(updated_post))
-        else:
+        if not updated_post:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Failed to update post"
             )
-    except HTTPException:
-        raise
+
+        post_data = dict(updated_post)
+        if post_data.get('is_anonymous'):
+            post_data['username'] = None
+            post_data['user_avatar'] = None
+
+        return PostResponse(**post_data)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid post ID format"
+        )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -155,12 +165,53 @@ async def update_existing_post(
         )
 
 @router.delete("/{post_id}")
-async def delete_existing_post(
+async def delete_post(
     post_id: str,
     current_user: User = Depends(get_current_user)
 ):
     """
-    Delete a post
+    Delete a post - only by owner
+    """
+    try:
+        existing_post = await post_crud.get(UUID(post_id))
+        if not existing_post:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Post not found"
+            )
+
+        if existing_post['user_id'] != current_user.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not authorized to delete this post"
+            )
+
+        success = await post_crud.delete(UUID(post_id), current_user.id)
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to delete post"
+            )
+
+        return {"message": "Post deleted successfully"}
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid post ID format"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error deleting post: {str(e)}"
+        )
+
+@router.post("/{post_id}/like")
+async def like_post(
+    post_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Like a post
     """
     try:
         # First check if post exists
@@ -171,139 +222,83 @@ async def delete_existing_post(
                 detail="Post not found"
             )
 
-        # RLS will prevent deletion if user doesn't own the post
-        success = await post_crud.delete(UUID(post_id), current_user.id)
+        # Check if user already liked this post
+        already_liked = await post_crud.has_user_liked(UUID(post_id), current_user.id)
+        if already_liked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="You have already liked this post"
+            )
+
+        # Add like
+        success = await post_crud.add_like(UUID(post_id), current_user.id)
         if success:
-            return {"message": "Post deleted successfully"}
+            return {"message": "Post liked successfully"}
         else:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Failed to delete post"
+                detail="Failed to like post"
             )
-    except HTTPException:
-        raise
-    except Exception as e:
+
+    except ValueError:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error deleting post: {str(e)}"
-        )
-
-@router.get("/feed/", response_model=PostFeedResponse)
-async def read_post_feed(
-    page: int = 1,
-    limit: int = 20,
-    visibility: Optional[str] = None,
-    content_type: Optional[str] = None,
-    mood: Optional[str] = None,
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Get post feed with pagination and filtering
-    - UPDATED to support audio content type
-    """
-    try:
-        skip = (page - 1) * limit
-        posts = await get_post_feed(
-            user_id=current_user.id,
-            skip=skip,
-            limit=limit,
-            visibility=visibility,
-            content_type=content_type,
-            mood=mood
-        )
-        total = await get_posts_count(
-            user_id=current_user.id,
-            visibility=visibility,
-            content_type=content_type,
-            mood=mood
-        )
-
-        return PostFeedResponse(
-            posts=posts,
-            total=total,
-            page=page,
-            has_next=(skip + len(posts)) < total
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid post ID format"
         )
     except Exception as e:
+        # Include the full error details for debugging
+        error_detail = f"Error liking post: {str(e)}"
+        print(f"❌ LIKE ERROR: {error_detail}")  # Log to backend console
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving post feed: {str(e)}"
+            detail=error_detail
         )
 
-# Moderation endpoints remain the same
-@router.get("/moderation/queue/", response_model=PostFeedResponse)
-async def read_moderation_queue(
-    page: int = 1,
-    limit: int = 20,
-    status: str = "pending",
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Get moderation queue (admin only)
-    """
-    # TODO: Add admin role check
-    try:
-        skip = (page - 1) * limit
-        posts = await get_moderation_queue(
-            skip=skip,
-            limit=limit,
-            status=status
-        )
-        total = await get_moderation_queue_count(status)
-
-        return PostFeedResponse(
-            posts=posts,
-            total=total,
-            page=page,
-            has_next=(skip + len(posts)) < total
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving moderation queue: {str(e)}"
-        )
-
-@router.post("/{post_id}/moderate/")
-async def moderate_post(
+@router.post("/{post_id}/unlike")
+async def unlike_post(
     post_id: str,
-    moderation: ModerationAction,
     current_user: User = Depends(get_current_user)
 ):
     """
-    Moderate a post (admin only)
+    Unlike a post
     """
-    # TODO: Add admin role check
     try:
-        # Map action to moderation status
-        status_map = {
-            "approve": "approved",
-            "reject": "rejected",
-            "flag": "flagged"
-        }
-
-        if moderation.action not in status_map:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid action. Use 'approve', 'reject', or 'flag'"
-            )
-
-        success = await update_moderation_status(
-            post_id=UUID(post_id),
-            status=status_map[moderation.action]
-        )
-
-        if success:
-            return {"message": f"Post {moderation.action}d successfully"}
-        else:
+        # First check if post exists
+        existing_post = await post_crud.get(UUID(post_id))
+        if not existing_post:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Post not found or update failed"
+                detail="Post not found"
             )
-    except HTTPException:
-        raise
+
+        # Check if user has liked this post
+        already_liked = await post_crud.has_user_liked(UUID(post_id), current_user.id)
+        if not already_liked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="You have not liked this post"
+            )
+
+        # Remove like
+        success = await post_crud.remove_like(UUID(post_id), current_user.id)
+        if success:
+            return {"message": "Post unliked successfully"}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to unlike post"
+            )
+
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid post ID format"
+        )
     except Exception as e:
+        # Include the full error details for debugging
+        error_detail = f"Error unliking post: {str(e)}"
+        print(f"❌ UNLIKE ERROR: {error_detail}")  # Log to backend console
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error moderating post: {str(e)}"
+            detail=error_detail
         )
-

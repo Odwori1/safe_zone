@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from typing import List, Optional
 from uuid import UUID
 from app.schemas.comment import CommentCreate, CommentResponse, CommentUpdate, CommentFeedResponse
 from app.schemas.user import User
 from app.core.security import get_current_user
 from app.crud.comment import comment_crud
+import asyncpg
 
 router = APIRouter()
 
@@ -17,7 +18,13 @@ async def create_new_comment(
     Create a new comment
     """
     try:
-        result = await comment_crud.create(current_user.id, comment)
+        # FIXED: Pass all required parameters to CRUD
+        result = await comment_crud.create(
+            user_id=current_user.id,
+            post_id=comment.post_id,
+            comment_in=comment,
+            requesting_user_id=current_user.id
+        )
         if result:
             # Convert asyncpg.Record to dict and handle anonymous comments
             comment_data = dict(result)
@@ -39,8 +46,8 @@ async def create_new_comment(
 @router.get("/post/{post_id}", response_model=CommentFeedResponse)
 async def read_post_comments(
     post_id: str,
-    page: int = 1,
-    limit: int = 50,
+    page: int = Query(1, ge=1),
+    limit: int = Query(50, ge=1, le=100),
     current_user: User = Depends(get_current_user)
 ):
     """
@@ -48,18 +55,33 @@ async def read_post_comments(
     """
     try:
         skip = (page - 1) * limit
-        comments = await comment_crud.get_by_post(UUID(post_id), limit, skip)
-        
+
+        # FIXED: Pass requesting_user_id parameter
+        comments = await comment_crud.get_by_post(
+            post_id=UUID(post_id),
+            requesting_user_id=current_user.id,
+            limit=limit,
+            offset=skip
+        )
+
         # Get replies for each comment
         comments_with_replies = []
         for comment in comments:
             comment_dict = dict(comment)
-            replies = await comment_crud.get_replies(comment_dict['id'])
+            # FIXED: Pass requesting_user_id for replies
+            replies = await comment_crud.get_replies(
+                comment_id=comment_dict['id'],
+                requesting_user_id=current_user.id
+            )
             comment_dict['replies'] = [CommentResponse(**dict(reply)) for reply in replies]
             comments_with_replies.append(CommentResponse(**comment_dict))
-        
-        total = await comment_crud.count_post_comments(UUID(post_id))
-        
+
+        # FIXED: Pass requesting_user_id for count
+        total = await comment_crud.count_post_comments(
+            post_id=UUID(post_id),
+            requesting_user_id=current_user.id
+        )
+
         return CommentFeedResponse(
             comments=comments_with_replies,
             total=total,
@@ -81,18 +103,26 @@ async def read_comment(
     Get a specific comment by ID
     """
     try:
-        comment = await comment_crud.get(UUID(comment_id))
+        # FIXED: Pass requesting_user_id parameter
+        comment = await comment_crud.get(
+            comment_id=UUID(comment_id),
+            requesting_user_id=current_user.id
+        )
         if not comment:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Comment not found"
             )
-        
+
         # Get replies for this comment
         comment_dict = dict(comment)
-        replies = await comment_crud.get_replies(comment_dict['id'])
+        # FIXED: Pass requesting_user_id for replies
+        replies = await comment_crud.get_replies(
+            comment_id=comment_dict['id'],
+            requesting_user_id=current_user.id
+        )
         comment_dict['replies'] = [CommentResponse(**dict(reply)) for reply in replies]
-        
+
         return CommentResponse(**comment_dict)
     except HTTPException:
         raise
@@ -113,15 +143,25 @@ async def update_existing_comment(
     """
     try:
         # First check if comment exists and user owns it
-        existing_comment = await comment_crud.get(UUID(comment_id))
+        # FIXED: Pass requesting_user_id parameter
+        existing_comment = await comment_crud.get(
+            comment_id=UUID(comment_id),
+            requesting_user_id=current_user.id
+        )
         if not existing_comment:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Comment not found"
             )
-        
+
         # RLS will prevent updating if user doesn't own the comment
-        updated_comment = await comment_crud.update(UUID(comment_id), current_user.id, comment_update)
+        # FIXED: Pass all required parameters
+        updated_comment = await comment_crud.update(
+            comment_id=UUID(comment_id),
+            user_id=current_user.id,
+            comment_in=comment_update,
+            requesting_user_id=current_user.id
+        )
         if updated_comment:
             comment_dict = dict(updated_comment)
             if comment_dict.get('is_anonymous'):
@@ -151,15 +191,24 @@ async def delete_existing_comment(
     """
     try:
         # First check if comment exists
-        existing_comment = await comment_crud.get(UUID(comment_id))
+        # FIXED: Pass requesting_user_id parameter
+        existing_comment = await comment_crud.get(
+            comment_id=UUID(comment_id),
+            requesting_user_id=current_user.id
+        )
         if not existing_comment:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Comment not found"
             )
-        
+
         # RLS will prevent deletion if user doesn't own the comment
-        success = await comment_crud.delete(UUID(comment_id), current_user.id)
+        # FIXED: Pass requesting_user_id parameter
+        success = await comment_crud.delete(
+            comment_id=UUID(comment_id),
+            user_id=current_user.id,
+            requesting_user_id=current_user.id
+        )
         if success:
             return {"message": "Comment deleted successfully"}
         else:
@@ -173,4 +222,114 @@ async def delete_existing_comment(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error deleting comment: {str(e)}"
+        )
+
+# ===========================================
+# COMMENT LIKES ENDPOINTS - NEWLY ADDED
+# ===========================================
+
+@router.post("/{comment_id}/like")
+async def like_comment(
+    comment_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Like a comment
+    """
+    try:
+        # First check if comment exists
+        existing_comment = await comment_crud.get(
+            comment_id=UUID(comment_id),
+            requesting_user_id=current_user.id
+        )
+        if not existing_comment:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Comment not found"
+            )
+
+        # Check if user already liked this comment
+        already_liked = await comment_crud.has_user_liked(UUID(comment_id), current_user.id)
+        if already_liked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="You have already liked this comment"
+            )
+
+        # Add like
+        success = await comment_crud.add_like(UUID(comment_id), current_user.id)
+        if success:
+            return {"message": "Comment liked successfully"}
+        else:
+            # This happens when add_like returns False (unique constraint violation)
+            # Even though we checked already_liked, there might be a race condition
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="You have already liked this comment"
+            )
+
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid comment ID format"
+        )
+    except asyncpg.exceptions.UniqueViolationError:
+        # Handle database-level unique constraint violation
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You have already liked this comment"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error liking comment: {str(e)}"
+        )
+
+@router.post("/{comment_id}/unlike")
+async def unlike_comment(
+    comment_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Unlike a comment
+    """
+    try:
+        # First check if comment exists
+        existing_comment = await comment_crud.get(
+            comment_id=UUID(comment_id),
+            requesting_user_id=current_user.id
+        )
+        if not existing_comment:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Comment not found"
+            )
+
+        # Check if user has liked this comment
+        already_liked = await comment_crud.has_user_liked(UUID(comment_id), current_user.id)
+        if not already_liked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="You have not liked this comment"
+            )
+
+        # Remove like
+        success = await comment_crud.remove_like(UUID(comment_id), current_user.id)
+        if success:
+            return {"message": "Comment unliked successfully"}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to unlike comment"
+            )
+
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid comment ID format"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error unliking comment: {str(e)}"
         )

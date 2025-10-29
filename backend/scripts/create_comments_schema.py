@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Create comments table for basic commenting system - BLUEPRINT: Basic commenting system
+UPDATED: Use app.current_user_id to match rest of system
 """
 import asyncio
 import sys
@@ -10,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app.database.database import database
 
 async def create_comments_schema():
-    """Create comments table with RLS for security"""
+    """Create comments table with RLS for security - UPDATED FOR CONSISTENCY"""
     try:
         await database.connect()
         print("✅ Database connected")
@@ -67,7 +68,7 @@ async def create_comments_schema():
             await conn.execute("ALTER TABLE comments ENABLE ROW LEVEL SECURITY;")
             print("✅ RLS enabled")
 
-            # Create RLS policies using JWT claims
+            # Create RLS policies using app.current_user_id (CONSISTENT WITH SYSTEM)
             await conn.execute("""
                 -- Users can view comments on posts they can see
                 CREATE POLICY "users_view_comments" ON comments
@@ -75,29 +76,29 @@ async def create_comments_schema():
                         EXISTS (
                             SELECT 1 FROM posts 
                             WHERE posts.id = comments.post_id 
-                            AND (posts.visibility = 'public' OR posts.user_id = current_setting('request.jwt.claim.sub', true)::uuid)
+                            AND (posts.visibility = 'public' OR posts.user_id = current_setting('app.current_user_id', true)::uuid)
                         )
                     );
 
                 -- Users can insert their own comments
                 CREATE POLICY "users_insert_own_comments" ON comments
                     FOR INSERT WITH CHECK (
-                        user_id = current_setting('request.jwt.claim.sub', true)::uuid
+                        user_id = current_setting('app.current_user_id', true)::uuid
                     );
 
                 -- Users can update their own comments
                 CREATE POLICY "users_update_own_comments" ON comments
                     FOR UPDATE USING (
-                        user_id = current_setting('request.jwt.claim.sub', true)::uuid
+                        user_id = current_setting('app.current_user_id', true)::uuid
                     );
 
                 -- Users can delete their own comments
                 CREATE POLICY "users_delete_own_comments" ON comments
                     FOR DELETE USING (
-                        user_id = current_setting('request.jwt.claim.sub', true)::uuid
+                        user_id = current_setting('app.current_user_id', true)::uuid
                     );
             """)
-            print("✅ RLS policies created using JWT claims")
+            print("✅ RLS policies created using app.current_user_id (consistent)")
 
             # Verify table structure
             columns = await conn.fetch("""
@@ -110,7 +111,7 @@ async def create_comments_schema():
             for col in columns:
                 print(f"   - {col['column_name']} ({col['data_type']})")
 
-        print("🎉 Comments schema created successfully!")
+        print("🎉 Comments schema created successfully with consistent RLS!")
 
     except Exception as e:
         print(f"❌ Comments schema creation failed: {e}")

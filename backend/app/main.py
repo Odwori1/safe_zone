@@ -7,7 +7,8 @@ from app.core.logging import setup_logging
 from app.core.rate_limiting import rate_limit_middleware
 from app.database.database import init_db, close_db
 from app.api.endpoints import health, auth, profiles, posts, comments, journals, mood, crisis, uploads, files, websocket, live_audio_rooms
-
+# Add with other router includes
+from app.api.endpoints import users
 # Setup logging at module level
 logger = setup_logging()
 
@@ -59,6 +60,7 @@ app.include_router(uploads.router, prefix="/api/v1/uploads", tags=["uploads"])
 app.include_router(files.router, prefix="/api/v1/files", tags=["files"])
 app.include_router(websocket.router, prefix="/api/v1", tags=["websocket"])
 app.include_router(live_audio_rooms.router, prefix="/api/v1/audio", tags=["live-audio-rooms"])
+app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
 
 @app.get("/")
 async def root():
@@ -105,4 +107,14 @@ app.include_router(
     phase6_missing_features_router,
     prefix="/api/v1/phase6",
     tags=["Phase 6 - Missing Features"]
+)
+
+# Import Missing Phase 1 Features
+from app.api.endpoints.missing_phase1_features import router as missing_phase1_features_router
+
+# Include Missing Phase 1 Features router
+app.include_router(
+    missing_phase1_features_router,
+    prefix="/api/v1",
+    tags=["Phase 1 & 2 - Missing Features"]
 )

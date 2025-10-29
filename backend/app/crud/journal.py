@@ -6,13 +6,15 @@ from app.schemas.post import PostContentType, PostVisibility
 
 class CRUDJournal:
     async def create_entry(self, user_id: UUID, journal_in) -> asyncpg.Record:
-        """Create a new private journal entry"""
+        """Create a new private journal entry - FIXED to set user context for RLS"""
         async with database.pool.acquire() as conn:
+            # CRITICAL: Set user context for RLS policies
+            await conn.execute("SELECT set_current_user_id($1);", str(user_id))
             return await conn.fetchrow(
                 """
                 INSERT INTO posts (user_id, content, content_type, mood, visibility, is_anonymous)
                 VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING *
+                RETURNING id, content, mood, created_at, updated_at
                 """,
                 user_id, journal_in.content, PostContentType.JOURNAL, 
                 journal_in.mood, PostVisibility.PRIVATE, False
@@ -21,9 +23,12 @@ class CRUDJournal:
     async def get_entry(self, entry_id: UUID, user_id: UUID) -> Optional[asyncpg.Record]:
         """Get a specific journal entry (only if user owns it)"""
         async with database.pool.acquire() as conn:
+            # Set user context for RLS
+            await conn.execute("SELECT set_current_user_id($1);", str(user_id))
             return await conn.fetchrow(
                 """
-                SELECT * FROM posts 
+                SELECT id, content, mood, created_at, updated_at
+                FROM posts 
                 WHERE id = $1 AND user_id = $2 AND content_type = 'journal' AND status != 'deleted'
                 """,
                 entry_id, user_id
@@ -32,6 +37,8 @@ class CRUDJournal:
     async def get_user_entries(self, user_id: UUID, limit: int = 50, offset: int = 0) -> List[asyncpg.Record]:
         """Get all journal entries for a user"""
         async with database.pool.acquire() as conn:
+            # Set user context for RLS
+            await conn.execute("SELECT set_current_user_id($1);", str(user_id))
             return await conn.fetch(
                 """
                 SELECT id, content, mood, created_at, updated_at
@@ -71,11 +78,15 @@ class CRUDJournal:
         """
 
         async with database.pool.acquire() as conn:
+            # Set user context for RLS
+            await conn.execute("SELECT set_current_user_id($1);", str(user_id))
             return await conn.fetchrow(query, *values)
 
     async def delete_entry(self, entry_id: UUID, user_id: UUID) -> bool:
         """Soft delete a journal entry - only by owner"""
         async with database.pool.acquire() as conn:
+            # Set user context for RLS
+            await conn.execute("SELECT set_current_user_id($1);", str(user_id))
             result = await conn.execute(
                 "UPDATE posts SET status = 'deleted' WHERE id = $1 AND user_id = $2 AND content_type = 'journal'",
                 entry_id, user_id
@@ -85,6 +96,8 @@ class CRUDJournal:
     async def count_user_entries(self, user_id: UUID) -> int:
         """Count user's active journal entries"""
         async with database.pool.acquire() as conn:
+            # Set user context for RLS
+            await conn.execute("SELECT set_current_user_id($1);", str(user_id))
             return await conn.fetchval(
                 "SELECT COUNT(*) FROM posts WHERE user_id = $1 AND content_type = 'journal' AND status = 'active'",
                 user_id
@@ -93,6 +106,9 @@ class CRUDJournal:
     async def get_journal_stats(self, user_id: UUID) -> dict:
         """Get journal statistics for user"""
         async with database.pool.acquire() as conn:
+            # Set user context for RLS
+            await conn.execute("SELECT set_current_user_id($1);", str(user_id))
+            
             # Total entries
             total = await conn.fetchval(
                 "SELECT COUNT(*) FROM posts WHERE user_id = $1 AND content_type = 'journal' AND status = 'active'",

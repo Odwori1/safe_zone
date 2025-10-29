@@ -150,3 +150,24 @@ class PublicUserProfile(BaseModel):
     is_helper: bool
     helper_specialties: Optional[str] = None
     created_at: datetime
+
+class UserSearchResult(BaseModel):
+    """Schema for user search results"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    username: str
+    full_name: Optional[str] = None
+    bio: Optional[str] = None
+    profile_picture: Optional[str] = None
+    is_helper: bool
+    helper_specialties: Optional[str] = None
+    is_verified: bool  # ADD THIS
+    is_active: bool  # ADD THIS FIELD
+    created_at: datetime
+
+class UserSearchResults(BaseModel):
+    """Schema for paginated user search results"""
+    users: List[UserSearchResult]
+    total: int
+    has_more: bool
