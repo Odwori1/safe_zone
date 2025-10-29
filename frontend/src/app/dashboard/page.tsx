@@ -3,8 +3,8 @@
 import { useAuth } from '@/hooks/use-auth';
 import ProtectedRoute from '@/components/auth/protected-route';
 import { PostsFeed, CreatePostForm } from '@/components/posts';
-import { Users } from 'lucide-react'; // ADD THIS IMPORT
-import Link from 'next/link'; // ADD THIS IMPORT
+import { Users, BookOpen } from 'lucide-react'; // ADD BookOpen IMPORT
+import Link from 'next/link';
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
@@ -82,7 +82,20 @@ export default function DashboardPage() {
               <div className="bg-white rounded-lg border shadow-sm p-6">
                 <h3 className="font-semibold mb-4 text-lg">Quick Actions</h3>
                 <div className="space-y-3">
-                  {/* ADD FIND USERS BUTTON */}
+                  {/* ADD JOURNAL BUTTON */}
+                  <Link href="/dashboard/journals">
+                    <button className="w-full text-left p-3 rounded-lg border border-gray-300 hover:border-purple-500 hover:bg-purple-50 transition-colors group">
+                      <div className="flex items-center gap-3">
+                        <BookOpen className="h-5 w-5 text-purple-600 group-hover:text-purple-700" />
+                        <div>
+                          <span className="font-medium">📔 Personal Journal</span>
+                          <p className="text-sm text-gray-600 mt-1">Write private reflections</p>
+                        </div>
+                      </div>
+                    </button>
+                  </Link>
+
+                  {/* FIND USERS BUTTON */}
                   <Link href="/dashboard/users">
                     <button className="w-full text-left p-3 rounded-lg border border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-colors group">
                       <div className="flex items-center gap-3">
@@ -94,7 +107,8 @@ export default function DashboardPage() {
                       </div>
                     </button>
                   </Link>
-                  
+
+                  {/* OTHER ACTIONS */}
                   <button className="w-full text-left p-3 rounded-lg border border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-colors">
                     <span className="font-medium">📊 Analytics</span>
                     <p className="text-sm text-gray-600 mt-1">Track your engagement and insights</p>
