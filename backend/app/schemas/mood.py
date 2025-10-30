@@ -1,5 +1,9 @@
-from pydantic import BaseModel, Field, field_validator, ConfigDict
-from typing import Optional, List, Dict, Any
+"""
+Enhanced Mood Tracking Schemas
+"""
+
+from pydantic import BaseModel, validator, Field, ConfigDict
+from typing import List, Optional, Dict, Any
 from uuid import UUID
 from datetime import datetime
 from enum import Enum
@@ -27,7 +31,7 @@ class MoodBase(BaseModel):
     intensity: Optional[MoodIntensity] = Field(None, description="Mood intensity from 1-10")
     notes: Optional[str] = Field(None, max_length=1000, description="Optional notes about the mood")
 
-    @field_validator('mood')
+    @validator('mood')
     @classmethod
     def validate_mood(cls, v: str) -> str:
         """Validate mood is not empty"""
@@ -35,7 +39,7 @@ class MoodBase(BaseModel):
             raise ValueError('Mood cannot be empty')
         return v.strip()
 
-    @field_validator('intensity')
+    @validator('intensity')
     @classmethod
     def validate_intensity(cls, v: Optional[int]) -> Optional[int]:
         """Validate intensity is between 1-10"""
@@ -43,39 +47,121 @@ class MoodBase(BaseModel):
             raise ValueError('Intensity must be between 1 and 10')
         return v
 
-class MoodEntryCreate(MoodBase):
-    """Schema for creating a mood entry"""
-    pass
+class MoodEntryCreate(BaseModel):
+    """Schema for creating a mood entry with extended fields"""
+    mood: str
+    intensity: Optional[int] = None
+    notes: Optional[str] = None
+    source_type: Optional[str] = 'standalone'
+    source_id: Optional[UUID] = None
+    triggers: Optional[List[str]] = []
+    activities: Optional[List[str]] = []
+    physical_symptoms: Optional[List[str]] = []
+    social_context: Optional[str] = None
+    sleep_quality: Optional[int] = None
+    energy_level: Optional[int] = None
+    location: Optional[str] = None
+    weather: Optional[str] = None
+    duration_minutes: Optional[int] = None
+    medication_taken: Optional[bool] = False
+    medication_notes: Optional[str] = None
+
+    @validator('intensity')
+    def validate_intensity(cls, v):
+        if v is not None and (v < 1 or v > 10):
+            raise ValueError('Intensity must be between 1 and 10')
+        return v
+
+    @validator('source_type')
+    def validate_source_type(cls, v):
+        if v not in ['post', 'journal', 'standalone']:
+            raise ValueError('Source type must be post, journal, or standalone')
+        return v
 
 class MoodEntryUpdate(BaseModel):
     """Schema for updating a mood entry"""
-    model_config = ConfigDict(from_attributes=True)
+    mood: Optional[str] = Field(None, min_length=1, max_length=50, description="Mood description")
+    intensity: Optional[int] = Field(None, ge=1, le=10, description="Mood intensity from 1-10")
+    notes: Optional[str] = Field(None, max_length=1000, description="Optional notes about the mood")
+    triggers: Optional[List[str]] = None
+    activities: Optional[List[str]] = None
+    physical_symptoms: Optional[List[str]] = None
+    social_context: Optional[str] = None
+    sleep_quality: Optional[int] = Field(None, ge=1, le=10)
+    energy_level: Optional[int] = Field(None, ge=1, le=10)
+    location: Optional[str] = None
+    weather: Optional[str] = None
+    duration_minutes: Optional[int] = Field(None, ge=1)
+    medication_taken: Optional[bool] = None
+    medication_notes: Optional[str] = None
 
-    mood: Optional[str] = Field(None, min_length=1, max_length=50)
-    intensity: Optional[MoodIntensity] = None
-    notes: Optional[str] = Field(None, max_length=1000)
-
-    @field_validator('mood')
-    @classmethod
-    def validate_mood(cls, v: Optional[str]) -> Optional[str]:
-        """Validate mood is not empty"""
+    @validator('mood')
+    def validate_mood(cls, v):
         if v is not None and not v.strip():
             raise ValueError('Mood cannot be empty')
         return v.strip() if v else v
 
-class MoodEntryInDB(TimeStampedSchema):
-    """Mood entry schema as stored in database"""
-    model_config = ConfigDict(from_attributes=True)
+    @validator('intensity')
+    def validate_intensity(cls, v):
+        if v is not None and (v < 1 or v > 10):
+            raise ValueError('Intensity must be between 1 and 10')
+        return v
 
+class MoodEntryResponse(BaseModel):
+    """Schema for mood entry response with extended fields"""
     id: UUID
     user_id: UUID
     mood: str
-    intensity: Optional[int] = None
-    notes: Optional[str] = None
+    intensity: Optional[int]
+    notes: Optional[str]
+    source_type: str
+    source_id: Optional[UUID]
+    triggers: List[str]
+    activities: List[str]
+    physical_symptoms: List[str]
+    social_context: Optional[str]
+    sleep_quality: Optional[int]
+    energy_level: Optional[int]
+    location: Optional[str]
+    weather: Optional[str]
+    duration_minutes: Optional[int]
+    medication_taken: bool
+    medication_notes: Optional[str]
+    created_at: datetime
+    updated_at: datetime
 
-class MoodEntryResponse(MoodEntryInDB):
-    """Mood entry schema for API responses"""
-    pass
+    class Config:
+        from_attributes = True
+
+class MoodEntryHybridResponse(MoodEntryResponse):
+    """Schema for hybrid mood entries with context from posts/journals - FIXED FOR UUID PARSING"""
+    context_content: Optional[str] = None
+    context_title: Optional[str] = None
+    # Additional fields for joined data with proper UUID handling
+    post_id: Optional[UUID] = None
+    post_content: Optional[str] = None
+    journal_id: Optional[UUID] = None
+    journal_title: Optional[str] = None
+
+class MoodStats(BaseModel):
+    """Mood statistics response"""
+    total_entries: int
+    average_intensity: Optional[float]
+    most_common_mood: Optional[str]
+    mood_frequency: Dict[str, int]
+    weekly_trend: List[Dict[str, Any]]
+    source_distribution: Optional[List[Dict[str, Any]]] = []
+    top_triggers: Optional[List[Dict[str, Any]]] = []
+    top_activities: Optional[List[Dict[str, Any]]] = []
+
+class MoodSummary(BaseModel):
+    """Mood summary over a period"""
+    period: str
+    average_mood: float
+    mood_entries: int
+    top_triggers: List[str]
+    top_activities: List[str]
+    insights: List[str]
 
 class MoodHistoryResponse(BaseModel):
     """Response for mood history with pagination"""
@@ -83,14 +169,6 @@ class MoodHistoryResponse(BaseModel):
     total: int
     page: int
     has_next: bool
-
-class MoodStats(BaseModel):
-    """Mood statistics response"""
-    total_entries: int
-    average_intensity: Optional[float] = None
-    most_common_mood: Optional[str] = None
-    mood_frequency: Dict[str, int]
-    weekly_trend: List[Dict[str, Any]]
 
 class MoodHistoryQuery(BaseModel):
     """Query parameters for mood history"""

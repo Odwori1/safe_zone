@@ -9,6 +9,7 @@ from app.database.database import init_db, close_db
 from app.api.endpoints import health, auth, profiles, posts, comments, journals, mood, crisis, uploads, files, websocket, live_audio_rooms
 # Add with other router includes
 from app.api.endpoints import users
+from app.api.endpoints import mood
 # Setup logging at module level
 logger = setup_logging()
 
@@ -61,6 +62,7 @@ app.include_router(files.router, prefix="/api/v1/files", tags=["files"])
 app.include_router(websocket.router, prefix="/api/v1", tags=["websocket"])
 app.include_router(live_audio_rooms.router, prefix="/api/v1/audio", tags=["live-audio-rooms"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
+app.include_router(mood.router, prefix="/api/v1/mood", tags=["mood"])
 
 @app.get("/")
 async def root():

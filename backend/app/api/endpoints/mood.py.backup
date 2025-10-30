@@ -1,0 +1,365 @@
+from fastapi import APIRouter, Depends, HTTPException, status, Query
+from typing import List, Optional
+from uuid import UUID
+from app.schemas.mood import (
+    MoodEntryCreate,
+    MoodEntryResponse,
+    MoodEntryUpdate,
+    MoodEntryHybridResponse,
+    MoodHistoryResponse,
+    MoodStats,
+    MoodHistoryQuery,
+    MoodTrendQuery
+)
+from app.schemas.user import User
+from app.core.security import get_current_user
+from app.crud.mood import mood_crud
+
+router = APIRouter()
+
+@router.post("/entries/", response_model=MoodEntryResponse)
+async def create_mood_entry(
+    mood_entry: MoodEntryCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Create a new mood entry
+    """
+    try:
+        result = await mood_crud.create(current_user.id, mood_entry)
+        if result:
+            return MoodEntryResponse(**dict(result))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create mood entry"
+            )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating mood entry: {str(e)}"
+        )
+
+@router.get("/entries/", response_model=MoodHistoryResponse)
+async def get_mood_entries(
+    page: int = Query(1, ge=1, description="Page number"),
+    limit: int = Query(20, ge=1, le=100, description="Items per page"),
+    days: Optional[int] = Query(None, ge=1, le=365, description="Number of days to look back"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get mood history with pagination
+    """
+    try:
+        skip = (page - 1) * limit
+
+        if days:
+            # Get recent entries for specific days
+            entries = await mood_crud.get_recent_entries(current_user.id, days)
+            total = len(entries)
+            # Apply pagination manually for recent entries
+            paginated_entries = entries[skip:skip + limit]
+            entries_list = [MoodEntryResponse(**dict(entry)) for entry in paginated_entries]
+        else:
+            # Get all entries with pagination
+            entries = await mood_crud.get_user_entries(current_user.id, limit, skip)
+            total = await mood_crud.count_user_entries(current_user.id)
+            entries_list = [MoodEntryResponse(**dict(entry)) for entry in entries]
+
+        return MoodHistoryResponse(
+            entries=entries_list,
+            total=total,
+            page=page,
+            has_next=(skip + len(entries_list)) < total
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving mood entries: {str(e)}"
+        )
+
+@router.get("/entries/{entry_id}", response_model=MoodEntryResponse)
+async def get_mood_entry(
+    entry_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get a specific mood entry by ID
+    """
+    try:
+        entry = await mood_crud.get(UUID(entry_id), current_user.id)
+        if not entry:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Mood entry not found"
+            )
+        return MoodEntryResponse(**dict(entry))
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving mood entry: {str(e)}"
+        )
+
+@router.put("/entries/{entry_id}", response_model=MoodEntryResponse)
+async def update_mood_entry(
+    entry_id: str,
+    mood_update: MoodEntryUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Update a mood entry
+    """
+    try:
+        # First check if entry exists and user owns it
+        existing_entry = await mood_crud.get(UUID(entry_id), current_user.id)
+        if not existing_entry:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Mood entry not found"
+            )
+
+        # Update the entry
+        updated_entry = await mood_crud.update(UUID(entry_id), current_user.id, mood_update)
+        if updated_entry:
+            return MoodEntryResponse(**dict(updated_entry))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to update mood entry"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error updating mood entry: {str(e)}"
+        )
+
+@router.delete("/entries/{entry_id}")
+async def delete_mood_entry(
+    entry_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Delete a mood entry
+    """
+    try:
+        # First check if entry exists
+        existing_entry = await mood_crud.get(UUID(entry_id), current_user.id)
+        if not existing_entry:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Mood entry not found"
+            )
+
+        # Delete the entry
+        success = await mood_crud.delete(UUID(entry_id), current_user.id)
+        if success:
+            return {"message": "Mood entry deleted successfully"}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to delete mood entry"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error deleting mood entry: {str(e)}"
+        )
+
+@router.get("/stats/", response_model=MoodStats)
+async def get_mood_statistics(
+    days: int = Query(30, ge=1, le=365, description="Number of days for statistics"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get mood statistics and trends
+    """
+    try:
+        stats = await mood_crud.get_mood_stats(current_user.id, days)
+        return MoodStats(**stats)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving mood statistics: {str(e)}"
+        )
+
+@router.get("/entries/hybrid", response_model=List[MoodEntryHybridResponse])
+async def get_hybrid_mood_entries(
+    days: int = Query(30, ge=1, le=365, description="Number of days to look back"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get all mood entries including integrated posts and journals with context - FIXED UUID PARSING
+    """
+    try:
+        entries = await mood_crud.get_hybrid_entries(current_user.id, days)
+        
+        # Convert text UUIDs back to UUID objects for proper Pydantic validation
+        converted_entries = []
+        for entry in entries:
+            entry_dict = dict(entry)
+            
+            # Handle text UUIDs from joined tables
+            if entry_dict.get('post_id'):
+                entry_dict['post_id'] = UUID(entry_dict['post_id'])
+            if entry_dict.get('journal_id'):
+                entry_dict['journal_id'] = UUID(entry_dict['journal_id'])
+                
+            converted_entries.append(entry_dict)
+        
+        return [MoodEntryHybridResponse(**entry) for entry in converted_entries]
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving hybrid mood entries: {str(e)}"
+        )
+
+@router.get("/entries/hybrid-new", response_model=List[MoodEntryHybridResponse])
+async def get_hybrid_mood_entries_new(
+    days: int = Query(30, ge=1, le=365, description="Number of days to look back"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    NEW SAFE ENDPOINT: Get hybrid mood entries using separate queries
+    """
+    try:
+        # Use the safe method that avoids complex joins
+        entries = await mood_crud.get_hybrid_entries_safe(current_user.id, days)
+        return [MoodEntryHybridResponse(**entry) for entry in entries]
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving hybrid mood entries: {str(e)}"
+        )
+
+@router.get("/entries/hybrid-raw", response_model=List[MoodEntryHybridResponse])
+async def get_hybrid_mood_entries_raw(
+    days: int = Query(30, ge=1, le=365, description="Number of days to look back"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    RAW SQL ENDPOINT: Get hybrid mood entries using raw SQL with explicit types
+    """
+    try:
+        entries = await mood_crud.get_hybrid_entries_raw(current_user.id, days)
+        
+        # Convert text IDs back to UUIDs
+        for entry in entries:
+            if entry.get('mood_id'):
+                entry['id'] = UUID(entry.pop('mood_id'))
+            if entry.get('user_id'):
+                entry['user_id'] = UUID(entry['user_id'])
+            if entry.get('post_id'):
+                entry['post_id'] = UUID(entry['post_id'])
+            if entry.get('journal_id'):
+                entry['journal_id'] = UUID(entry['journal_id'])
+            if entry.get('source_id'):
+                entry['source_id'] = UUID(entry['source_id'])
+        
+        return [MoodEntryHybridResponse(**entry) for entry in entries]
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving hybrid mood entries: {str(e)}"
+        )
+
+@router.post("/entries/from-post/{post_id}", response_model=MoodEntryResponse)
+async def create_mood_from_post(
+    post_id: str,
+    mood: str = Query(..., description="Mood type"),
+    intensity: int = Query(..., ge=1, le=10, description="Mood intensity 1-10"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Create mood entry from existing post
+    """
+    try:
+        # Verify the post exists and belongs to the user
+        from app.crud.post import post_crud
+        post = await post_crud.get(UUID(post_id))
+        if not post:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Post not found"
+            )
+
+        result = await mood_crud.create_from_post(current_user.id, UUID(post_id), mood, intensity)
+        if result:
+            return MoodEntryResponse(**dict(result))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create mood entry from post"
+            )
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid post ID format"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating mood entry from post: {str(e)}"
+        )
+
+@router.post("/entries/from-journal/{journal_id}", response_model=MoodEntryResponse)
+async def create_mood_from_journal(
+    journal_id: str,
+    mood: str = Query(..., description="Mood type"),
+    intensity: int = Query(..., ge=1, le=10, description="Mood intensity 1-10"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Create mood entry from existing journal
+    """
+    try:
+        # Verify the journal exists and belongs to the user
+        from app.crud.journal import journal_crud
+        journal = await journal_crud.get_entry(UUID(journal_id), current_user.id)
+        if not journal:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Journal not found"
+            )
+
+        result = await mood_crud.create_from_journal(current_user.id, UUID(journal_id), mood, intensity)
+        if result:
+            return MoodEntryResponse(**dict(result))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create mood entry from journal"
+            )
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid journal ID format"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating mood entry from journal: {str(e)}"
+        )
+
+@router.get("/entries/hybrid-simple", response_model=List[MoodEntryHybridResponse])
+async def get_hybrid_mood_entries_simple(
+    days: int = Query(30, ge=1, le=365, description="Number of days to look back"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    SIMPLE HYBRID ENDPOINT: Get mood entries with basic context using separate queries
+    """
+    try:
+        from app.crud.mood_simple import get_simple_hybrid_entries
+        entries = await get_simple_hybrid_entries(current_user.id, days)
+        return entries
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving hybrid mood entries: {str(e)}"
+        )
