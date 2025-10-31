@@ -5,6 +5,7 @@ import { usePostsStore } from '@/stores/posts-store';
 import { useAuth } from '@/hooks/use-auth';
 import { PostsFilter as PostsFilterType } from '@/types/posts';
 import PostsFilter from './posts-filter';
+import { ShareDialog } from './share-dialog'; // ADD IMPORT
 import {
   Heart,
   MessageCircle,
@@ -14,7 +15,8 @@ import {
   Loader2,
   MoreVertical,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Share2
 } from 'lucide-react';
 import CommentsList from './comments-list';
 import CommentForm from './comment-form';
@@ -29,16 +31,21 @@ export default function PostsFeed() {
     getPosts,
     deletePost,
     likePost,
-    unlikePost
+    unlikePost,
+    sharePost
   } = usePostsStore();
   const { user } = useAuth();
   const [hasLoaded, setHasLoaded] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [likingId, setLikingId] = useState<string | null>(null);
+  const [sharingId, setSharingId] = useState<string | null>(null);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
   
-  // ADD THIS STATE FOR FILTERS
+  // ADD STATE FOR SHARE DIALOG
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [currentSharingPost, setCurrentSharingPost] = useState<{id: string, content: string} | null>(null);
+
   const [currentFilters, setCurrentFilters] = useState<PostsFilterType>({
     skip: 0,
     limit: 100
@@ -54,7 +61,6 @@ export default function PostsFeed() {
     currentFilters
   });
 
-  // MODIFY THIS FUNCTION TO USE FILTERS
   const handleLoadPosts = () => {
     console.log('🔄 Manual load triggered with filters:', currentFilters);
     getPosts(currentFilters).then(() => {
@@ -63,18 +69,15 @@ export default function PostsFeed() {
     });
   };
 
-  // ADD THIS FUNCTION TO HANDLE FILTER CHANGES
   const handleFilterChange = (filters: PostsFilterType) => {
     console.log('🎯 Filter changed:', filters);
     setCurrentFilters(filters);
-    
-    // Auto-load posts when filters change (if already loaded once)
+
     if (hasLoaded) {
       getPosts(filters);
     }
   };
 
-  // MODIFY THE REFRESH FUNCTION TO USE CURRENT FILTERS
   const handleRefresh = () => {
     if (user) {
       console.log('🔄 Refreshing with current filters:', currentFilters);
@@ -103,6 +106,35 @@ export default function PostsFeed() {
       }
     } finally {
       setLikingId(null);
+    }
+  };
+
+  // UPDATED SHARE HANDLER WITH DIALOG
+  const handleShareClick = (postId: string, postContent: string) => {
+    const post = posts.find(p => p.id === postId);
+    if (post?.user_has_shared) {
+      alert('You have already shared this post!');
+      return;
+    }
+    
+    setCurrentSharingPost({ id: postId, content: postContent });
+    setShareDialogOpen(true);
+  };
+
+  const handleSharePost = async (caption: string) => {
+    if (!currentSharingPost) return;
+    
+    setSharingId(currentSharingPost.id);
+    setShareDialogOpen(false);
+    
+    try {
+      await sharePost(currentSharingPost.id, caption);
+      console.log('✅ Post shared successfully:', currentSharingPost.id);
+    } catch (error) {
+      console.error('❌ Error sharing post:', error);
+    } finally {
+      setSharingId(null);
+      setCurrentSharingPost(null);
     }
   };
 
@@ -144,59 +176,21 @@ export default function PostsFeed() {
     return moodColors[mood.toLowerCase()] || 'bg-gray-100 text-gray-800';
   };
 
-  if (!hasLoaded) {
-    return (
-      <div className="space-y-6">
-        {/* ADD FILTER COMPONENT - HIDDEN UNTIL LOADED */}
-        <PostsFilter 
-          onFilterChange={handleFilterChange}
-          currentFilters={currentFilters}
-        />
-        
-        <div className="bg-white rounded-lg border p-6 text-center">
-          <h2 className="text-xl font-semibold mb-4">Community Posts</h2>
-          <p className="text-gray-600 mb-4">Connect with others and share your journey</p>
-          <button
-            onClick={handleLoadPosts}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Load Posts
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (isLoading && !hasLoaded) {
-    return (
-      <div className="bg-white rounded-lg border p-6 text-center">
-        <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
-        <p className="text-gray-600">Loading posts...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-        <h3 className="text-red-800 font-semibold mb-2">Error Loading Posts</h3>
-        <p className="text-red-600 mb-4">{error}</p>
-        <div className="flex gap-2">
-          <button
-            onClick={handleLoadPosts}
-            className="border border-red-300 text-red-700 px-4 py-2 rounded-lg hover:bg-red-100 transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // ... (keep all the loading/error states the same as before)
 
   return (
     <div className="space-y-6">
+      {/* SHARE DIALOG */}
+      <ShareDialog
+        isOpen={shareDialogOpen}
+        onClose={() => setShareDialogOpen(false)}
+        onShare={handleSharePost}
+        postContent={currentSharingPost?.content || ''}
+        isLoading={sharingId !== null}
+      />
+
       {/* ADD FILTER COMPONENT HERE */}
-      <PostsFilter 
+      <PostsFilter
         onFilterChange={handleFilterChange}
         currentFilters={currentFilters}
       />
@@ -233,7 +227,7 @@ export default function PostsFeed() {
               {currentFilters.mood || currentFilters.visibility ? 'No matching posts' : 'No posts yet'}
             </h3>
             <p className="text-gray-600 mb-4">
-              {currentFilters.mood || currentFilters.visibility 
+              {currentFilters.mood || currentFilters.visibility
                 ? 'Try changing your filters to see more posts.'
                 : 'Be the first to share your thoughts and start the conversation.'}
             </p>
@@ -335,6 +329,7 @@ export default function PostsFeed() {
               <div className="px-4 py-3 border-t">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-6">
+                    {/* Like Button */}
                     <button
                       onClick={() => handleLikePost(post.id)}
                       disabled={likingId === post.id}
@@ -354,6 +349,7 @@ export default function PostsFeed() {
                       <span className="font-medium">{post.like_count || 0}</span>
                     </button>
 
+                    {/* Comment Button */}
                     <button
                       onClick={() => toggleComments(post.id)}
                       className={`flex items-center gap-2 text-sm ${
@@ -370,7 +366,31 @@ export default function PostsFeed() {
                         <ChevronDown className="h-4 w-4" />
                       )}
                     </button>
+
+                    {/* Share Button - UPDATED WITH DIALOG */}
+                    <button
+                      onClick={() => handleShareClick(post.id, post.content)}
+                      disabled={sharingId === post.id || post.user_has_shared}
+                      className={`flex items-center gap-2 text-sm ${
+                        post.user_has_shared
+                          ? 'text-blue-600 cursor-not-allowed'
+                          : 'text-gray-600 hover:text-gray-700'
+                      } disabled:opacity-50 transition-colors`}
+                    >
+                      {sharingId === post.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Share2 className="h-5 w-5" />
+                      )}
+                      <span className="font-medium">{post.share_count || 0}</span>
+                    </button>
                   </div>
+
+                  {/* Save Button */}
+                  <button className="flex items-center space-x-2 text-gray-500 hover:text-purple-500 transition-colors">
+                    <span>📑</span>
+                    <span className="text-sm">Save</span>
+                  </button>
                 </div>
               </div>
 

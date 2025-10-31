@@ -153,6 +153,11 @@ class PostResponse(PostInDB):
     username: Optional[str] = None  # Only show if not anonymous
     user_avatar: Optional[str] = None
 
+    like_count: int = 0
+    user_has_liked: bool = False
+    share_count: int = 0
+    user_has_shared: bool = False
+
     @model_validator(mode='before')
     @classmethod
     def handle_anonymous_posts(cls, data: Any) -> Any:

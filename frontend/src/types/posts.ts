@@ -36,6 +36,8 @@ export interface PostResponse {
   like_count?: number;
   comment_count?: number;
   user_has_liked?: boolean;
+  share_count?: number;        // ADD THIS
+  user_has_shared?: boolean;   // ADD THIS
 }
 
 export interface PostUpdate {
@@ -53,4 +55,13 @@ export interface PostsFilter {
   visibility?: string;
   user_id?: string;
   search?: string;
+}
+
+// ADD THESE NEW INTERFACES
+export interface ShareResponse {
+  message: string;
+  already_shared: boolean;
+  share_count: number;
+  shareable_url: string;
+  instructions?: string;
 }

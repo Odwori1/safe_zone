@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { PostCreate, PostResponse, PostUpdate, PostsFilter } from '@/types/posts';
+import { PostCreate, PostResponse, PostUpdate, PostsFilter, ShareResponse } from '@/types/posts';
 import { apiClient } from '@/lib/api-client';
 
 interface PostsState {
@@ -7,7 +7,7 @@ interface PostsState {
   currentPost: PostResponse | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   getPosts: (filters?: PostsFilter) => Promise<void>;
   getPost: (postId: string) => Promise<void>;
@@ -16,6 +16,7 @@ interface PostsState {
   deletePost: (postId: string) => Promise<void>;
   likePost: (postId: string) => Promise<void>;
   unlikePost: (postId: string) => Promise<void>;
+  sharePost: (postId: string) => Promise<void>;  // ADD THIS
   clearError: () => void;
   clearCurrentPost: () => void;
 }
@@ -28,7 +29,7 @@ export const usePostsStore = create<PostsState>((set, get) => ({
 
   getPosts: async (filters = {}) => {
     const { skip = 0, limit = 100, ...otherFilters } = filters;
-    
+
     console.log('🔄 POSTS STORE: Getting posts...', { filters });
     set({ isLoading: true, error: null });
 
@@ -148,7 +149,7 @@ export const usePostsStore = create<PostsState>((set, get) => ({
 
       // Update post in the list
       set((state) => ({
-        posts: state.posts.map(post => 
+        posts: state.posts.map(post =>
           post.id === postId ? updatedPost : post
         ),
         currentPost: state.currentPost?.id === postId ? updatedPost : state.currentPost,
@@ -217,10 +218,10 @@ export const usePostsStore = create<PostsState>((set, get) => ({
 
       // Optimistically update the post
       set((state) => ({
-        posts: state.posts.map(post => 
-          post.id === postId 
-            ? { 
-                ...post, 
+        posts: state.posts.map(post =>
+          post.id === postId
+            ? {
+                ...post,
                 like_count: (post.like_count || 0) + 1,
                 user_has_liked: true
               }
@@ -234,10 +235,10 @@ export const usePostsStore = create<PostsState>((set, get) => ({
       console.error('❌ POSTS STORE: Like error:', error);
       // Revert optimistic update
       set((state) => ({
-        posts: state.posts.map(post => 
-          post.id === postId 
-            ? { 
-                ...post, 
+        posts: state.posts.map(post =>
+          post.id === postId
+            ? {
+                ...post,
                 like_count: Math.max(0, (post.like_count || 1) - 1),
                 user_has_liked: false
               }
@@ -264,10 +265,10 @@ export const usePostsStore = create<PostsState>((set, get) => ({
 
       // Optimistically update the post
       set((state) => ({
-        posts: state.posts.map(post => 
-          post.id === postId 
-            ? { 
-                ...post, 
+        posts: state.posts.map(post =>
+          post.id === postId
+            ? {
+                ...post,
                 like_count: Math.max(0, (post.like_count || 1) - 1),
                 user_has_liked: false
               }
@@ -281,16 +282,63 @@ export const usePostsStore = create<PostsState>((set, get) => ({
       console.error('❌ POSTS STORE: Unlike error:', error);
       // Revert optimistic update
       set((state) => ({
-        posts: state.posts.map(post => 
-          post.id === postId 
-            ? { 
-                ...post, 
+        posts: state.posts.map(post =>
+          post.id === postId
+            ? {
+                ...post,
                 like_count: (post.like_count || 0) + 1,
                 user_has_liked: true
               }
             : post
         )
       }));
+      throw error;
+    }
+  },
+
+  sharePost: async (postId: string) => {
+    console.log('🔄 POSTS STORE: Sharing post:', postId);
+
+    try {
+      const response = await apiClient.request(`/api/v1/posts/${postId}/share`, {
+        method: 'POST',
+      });
+
+      console.log('📥 POSTS STORE: Share response status:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: Failed to share post`);
+      }
+
+      const shareData: ShareResponse = await response.json();
+      console.log('✅ POSTS STORE: Share response:', shareData);
+
+      // Update the post with new share data
+      set((state) => ({
+        posts: state.posts.map(post =>
+          post.id === postId
+            ? {
+                ...post,
+                share_count: shareData.share_count,
+                user_has_shared: !shareData.already_shared,
+              }
+            : post
+        ),
+        currentPost: state.currentPost?.id === postId
+          ? {
+              ...state.currentPost,
+              share_count: shareData.share_count,
+              user_has_shared: !shareData.already_shared,
+            }
+          : state.currentPost,
+      }));
+
+      console.log('✅ POSTS STORE: Post share status updated:', postId);
+
+      return shareData;
+
+    } catch (error) {
+      console.error('❌ POSTS STORE: Share error:', error);
       throw error;
     }
   },

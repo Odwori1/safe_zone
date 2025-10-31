@@ -1,0 +1,39 @@
+--- mood.py.backup	2024-01-01 00:00:00.000000000 +0000
++++ mood.py	2024-01-01 00:00:00.000000000 +0000
+@@ -120,18 +120,26 @@
+     clinical_insights: Optional[List[str]] = None
+ 
+     class Config:
+         from_attributes = True
+ 
+-    @validator('mood_category', 'energy_level_category', 'valence', 'clinical_insights', pre=True, always=True)
+-    def set_professional_insights(cls, v, values):
+-        """Automatically set professional insights based on mood"""
++    @validator('mood_category', pre=True, always=True)
++    def set_mood_category(cls, v, values):
++        """Set mood category based on mood"""
+         if 'mood' in values and values['mood']:
+-            insights = get_mood_insights(values['mood'])
+-            return {
+-                'mood_category': get_mood_category(values['mood']),
+-                'energy_level_category': insights.get('energy_level'),
+-                'valence': insights.get('valence'),
+-                'clinical_insights': insights.get('recommendations', [])
+-            }
++            category = get_mood_category(values['mood'])
++            return category.value if hasattr(category, 'value') else str(category)
++        return v
++
++    @validator('energy_level_category', 'valence', 'clinical_insights', pre=True, always=True)
++    def set_other_insights(cls, v, values, field_name):
++        """Set energy level, valence, and clinical insights"""
++        if 'mood' in values and values['mood'] and field_name in ['energy_level_category', 'valence', 'clinical_insights']:
++            insights = get_mood_insights(values['mood'])
++            if field_name == 'energy_level_category':
++                return insights.get('energy_level')
++            elif field_name == 'valence':
++                return insights.get('valence')
++            elif field_name == 'clinical_insights':
++                return insights.get('recommendations', [])
+         return v
+ 

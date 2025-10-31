@@ -3,6 +3,7 @@ from typing import Optional, List, Dict, Any
 from uuid import UUID
 from datetime import datetime, timedelta
 from app.database.database import database
+from app.schemas.mood_taxonomy import get_mood_category, get_mood_insights
 
 class CRUDMood:
     async def create(self, user_id: UUID, mood_in) -> Optional[asyncpg.Record]:
@@ -83,7 +84,7 @@ class CRUDMood:
                 """
                 UPDATE mood_entries SET mood = $1, intensity = $2, notes = $3, triggers = $4, activities = $5,
                 physical_symptoms = $6, social_context = $7, sleep_quality = $8, energy_level = $9,
-                location = $10, weather = $11, duration_minutes = $12, medication_taken = $13, 
+                location = $10, weather = $11, duration_minutes = $12, medication_taken = $13,
                 medication_notes = $14, updated_at = NOW() WHERE id = $15 RETURNING *
                 """,
                 mood_in.mood, getattr(mood_in, 'intensity', None), getattr(mood_in, 'notes', None),
@@ -106,13 +107,13 @@ class CRUDMood:
         """Get mood statistics"""
         async with database.pool.acquire() as conn:
             await conn.execute("SELECT set_current_user_id($1);", str(user_id))
-            
+
             # Get entries for the period
             entries = await conn.fetch(
                 "SELECT * FROM mood_entries WHERE user_id = $1 AND created_at >= NOW() - INTERVAL '1 day' * $2",
                 user_id, days
             )
-            
+
             if not entries:
                 return {
                     "total_entries": 0,
@@ -128,7 +129,7 @@ class CRUDMood:
             # Calculate statistics
             total_entries = len(entries)
             avg_intensity = sum(entry['intensity'] or 0 for entry in entries) / total_entries
-            
+
             # Mood frequency
             mood_counts = {}
             for entry in entries:
@@ -158,7 +159,7 @@ class CRUDMood:
             # Weekly trend (simplified)
             today = datetime.utcnow().date()
             week_ago = today - timedelta(days=7)
-            
+
             weekly_data = []
             current_date = week_ago
             while current_date <= today:
@@ -202,19 +203,19 @@ class CRUDMood:
         """
         async with database.pool.acquire() as conn:
             await conn.execute("SELECT set_current_user_id($1);", str(user_id))
-            
+
             # Get basic mood entries
             mood_entries = await conn.fetch(
                 "SELECT * FROM mood_entries WHERE user_id = $1 AND created_at >= NOW() - INTERVAL '1 day' * $2 ORDER BY created_at DESC",
                 user_id, days
             )
-            
+
             enhanced_entries = []
             for entry in mood_entries:
                 entry_dict = dict(entry)
                 source_type = entry_dict.get('source_type')
                 source_id = entry_dict.get('source_id')
-                
+
                 # Add post context if applicable
                 if source_type == 'post' and source_id:
                     try:
@@ -227,12 +228,12 @@ class CRUDMood:
                             entry_dict['post_content'] = post['content']
                     except Exception:
                         pass  # Skip if post not found or error
-                
+
                 # Add journal context if applicable
                 elif source_type == 'journal' and source_id:
                     try:
                         journal = await conn.fetchrow(
-                            "SELECT title, content FROM journals WHERE id = $1 AND user_id = $2", 
+                            "SELECT title, content FROM journals WHERE id = $1 AND user_id = $2",
                             source_id, user_id
                         )
                         if journal:
@@ -240,9 +241,135 @@ class CRUDMood:
                             entry_dict['journal_content'] = journal['content']
                     except Exception:
                         pass  # Skip if journal not found or error
-                
+
                 enhanced_entries.append(entry_dict)
-            
+
             return enhanced_entries
+
+    async def get_clinical_insights(self, user_id: UUID, days: int = 30) -> Dict[str, Any]:
+        """Get clinical insights from mood patterns"""
+        async with database.pool.acquire() as conn:
+            await conn.execute("SELECT set_current_user_id($1);", str(user_id))
+            
+            entries = await conn.fetch(
+                "SELECT * FROM mood_entries WHERE user_id = $1 AND created_at >= NOW() - INTERVAL '1 day' * $2 ORDER BY created_at DESC",
+                user_id, days
+            )
+            
+            if len(entries) < 3:
+                return {
+                    "dominant_category": None,
+                    "pattern_insights": ["Insufficient data for clinical analysis"],
+                    "clinical_recommendations": ["Continue tracking moods regularly"],
+                    "risk_factors": [],
+                    "positive_patterns": []
+                }
+            
+            # Analyze mood patterns
+            category_counts = {}
+            intensity_trend = []
+            negative_streak = 0
+            max_negative_streak = 0
+            positive_days = 0
+            negative_days = 0
+            
+            for entry in entries:
+                # Categorize mood
+                category = get_mood_category(entry['mood'])
+                if category:
+                    category_counts[category.value] = category_counts.get(category.value, 0) + 1
+                
+                # Track streaks
+                if category and 'negative' in category.value:
+                    negative_streak += 1
+                    max_negative_streak = max(max_negative_streak, negative_streak)
+                    negative_days += 1
+                else:
+                    negative_streak = 0
+                    if category and 'positive' in category.value:
+                        positive_days += 1
+            
+            # Generate insights
+            insights = []
+            recommendations = []
+            risk_factors = []
+            positive_patterns = []
+            
+            # Dominant category analysis
+            dominant_category = max(category_counts.items(), key=lambda x: x[1])[0] if category_counts else None
+            
+            if dominant_category:
+                if 'negative' in dominant_category:
+                    insights.append(f"Predominantly {dominant_category.replace('_', ' ')} mood pattern")
+                    if max_negative_streak >= 3:
+                        risk_factors.append(f"Extended negative mood streak ({max_negative_streak} days)")
+                        recommendations.append("Consider discussing patterns with mental health professional")
+                elif 'positive' in dominant_category:
+                    positive_patterns.append(f"Consistently {dominant_category.replace('_', ' ')} mood pattern")
+                    insights.append("Strong positive mood foundation")
+            
+            # Ratio analysis
+            total_days = len(entries)
+            if total_days > 0:
+                positive_ratio = positive_days / total_days
+                negative_ratio = negative_days / total_days
+                
+                if negative_ratio > 0.7:
+                    risk_factors.append("High frequency of negative moods")
+                    recommendations.append("Explore mood triggers and coping strategies")
+                elif positive_ratio > 0.7:
+                    positive_patterns.append("High frequency of positive moods")
+                    recommendations.append("Leverage positive patterns for wellbeing")
+            
+            # Default recommendations if none generated
+            if not recommendations:
+                recommendations = [
+                    "Continue current self-care practices",
+                    "Maintain regular mood tracking",
+                    "Notice patterns between activities and moods"
+                ]
+            
+            return {
+                "dominant_category": dominant_category,
+                "pattern_insights": insights,
+                "clinical_recommendations": recommendations,
+                "risk_factors": risk_factors,
+                "positive_patterns": positive_patterns
+            }
+
+    async def get_enhanced_stats(self, user_id: UUID, days: int = 30) -> Dict[str, Any]:
+        """Get enhanced statistics with clinical insights"""
+        basic_stats = await self.get_mood_stats(user_id, days)
+        clinical_insights = await self.get_clinical_insights(user_id, days)
+        
+        # Add category distribution to basic stats
+        async with database.pool.acquire() as conn:
+            await conn.execute("SELECT set_current_user_id($1);", str(user_id))
+            entries = await conn.fetch(
+                "SELECT * FROM mood_entries WHERE user_id = $1 AND created_at >= NOW() - INTERVAL '1 day' * $2",
+                user_id, days
+            )
+            
+            category_distribution = {}
+            for entry in entries:
+                category = get_mood_category(entry['mood'])
+                if category:
+                    category_distribution[category.value] = category_distribution.get(category.value, 0) + 1
+        
+        basic_stats['category_distribution'] = category_distribution
+        basic_stats['clinical_insights'] = clinical_insights
+        
+        return basic_stats
+
+    async def get_mood_taxonomy(self) -> Dict[str, Any]:
+        """Get professional mood taxonomy"""
+        from app.schemas.mood_taxonomy import get_all_moods_by_category, MoodCategory
+        categories = get_all_moods_by_category()
+        total_moods = sum(len(moods) for moods in categories.values())
+        
+        return {
+            "categories": {category.value: moods for category, moods in categories.items()},
+            "total_moods": total_moods
+        }
 
 mood_crud = CRUDMood()

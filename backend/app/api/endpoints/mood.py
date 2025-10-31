@@ -1,7 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from typing import List, Optional
 from uuid import UUID
-from app.schemas.mood import MoodEntryResponse, MoodEntryCreate, MoodEntryUpdate
+from app.schemas.mood import (
+    MoodEntryCreate, MoodEntryResponse, MoodEntryUpdate, MoodEntryHybridResponse,
+    MoodHistoryResponse, MoodStats, MoodHistoryQuery, MoodTrendQuery,
+    MoodTaxonomyResponse, ClinicalInsights
+)
 from app.schemas.user import User
 from app.core.security import get_current_user
 from app.crud.mood import mood_crud
@@ -131,4 +135,55 @@ async def get_hybrid_mood_enhanced(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error retrieving enhanced hybrid entries: {str(e)}"
+        )
+
+@router.get("/taxonomy", response_model=MoodTaxonomyResponse)
+async def get_mood_taxonomy():
+    """
+    Get professional mood taxonomy
+    Returns all available moods organized by clinical categories
+    """
+    try:
+        taxonomy = await mood_crud.get_mood_taxonomy()
+        return MoodTaxonomyResponse(**taxonomy)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving mood taxonomy: {str(e)}"
+        )
+
+@router.get("/stats/enhanced", response_model=MoodStats)
+async def get_enhanced_mood_stats(
+    days: int = Query(30, ge=1, le=365, description="Number of days for analysis"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get enhanced mood statistics with clinical insights
+    Includes category analysis and professional recommendations
+    """
+    try:
+        stats = await mood_crud.get_enhanced_stats(current_user.id, days)
+        return MoodStats(**stats)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving enhanced mood statistics: {str(e)}"
+        )
+
+@router.get("/insights/clinical")
+async def get_clinical_insights(
+    days: int = Query(30, ge=1, le=365, description="Number of days for analysis"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get clinical insights from mood patterns
+    Provides professional analysis and recommendations
+    """
+    try:
+        insights = await mood_crud.get_clinical_insights(current_user.id, days)
+        return insights
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving clinical insights: {str(e)}"
         )
