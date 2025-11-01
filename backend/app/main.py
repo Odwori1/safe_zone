@@ -10,6 +10,8 @@ from app.api.endpoints import health, auth, profiles, posts, comments, journals,
 # Add with other router includes
 from app.api.endpoints import users
 from app.api.endpoints import mood
+# Add this import near the other imports
+from app.api.endpoints import crisis
 # Setup logging at module level
 logger = setup_logging()
 
@@ -56,13 +58,14 @@ app.include_router(posts.router, prefix="/api/v1/posts", tags=["posts"])
 app.include_router(comments.router, prefix="/api/v1/comments", tags=["comments"])
 app.include_router(journals.router, prefix="/api/v1/journals", tags=["journals"])
 app.include_router(mood.router, prefix="/api/v1/mood", tags=["mood"])
-app.include_router(crisis.router, prefix="/api/v1/crisis", tags=["crisis"])
+app.include_router(crisis.router, prefix="/api/v1/crisis-support", tags=["crisis"])
 app.include_router(uploads.router, prefix="/api/v1/uploads", tags=["uploads"])
 app.include_router(files.router, prefix="/api/v1/files", tags=["files"])
 app.include_router(websocket.router, prefix="/api/v1", tags=["websocket"])
 app.include_router(live_audio_rooms.router, prefix="/api/v1/audio", tags=["live-audio-rooms"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
 app.include_router(mood.router, prefix="/api/v1/mood", tags=["mood"])
+# Add this line where other routers are included (look for similar app.include_router lines)
 
 @app.get("/")
 async def root():

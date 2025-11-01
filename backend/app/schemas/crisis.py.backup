@@ -1,0 +1,422 @@
+from pydantic import BaseModel, Field, field_validator, ConfigDict, HttpUrl
+from typing import Optional, List, Dict, Any
+from uuid import UUID
+from datetime import datetime, date
+from enum import Enum
+from app.utils.timezone import timezone_handler
+from .base import TimeStampedSchema
+
+class ResourceCategory(str, Enum):
+    """Crisis resource categories"""
+    SUICIDE_PREVENTION = "suicide_prevention"
+    CRISIS_SUPPORT = "crisis_support"
+    MENTAL_HEALTH = "mental_health"
+    SUBSTANCE_ABUSE = "substance_abuse"
+    DOMESTIC_VIOLENCE = "domestic_violence"
+    EMERGENCY = "emergency"
+    INFORMATION = "information"
+    SUPPORT_GROUP = "support_group"
+    HOTLINE = "hotline"
+    CRISIS_CENTER = "crisis_center"
+    LGBTQ = "lgbtq"
+    VETERAN = "veteran"
+    YOUTH = "youth"
+
+class GeographicScope(str, Enum):
+    """Geographic scope of resources"""
+    GLOBAL = "global"
+    US = "US"
+    EUROPE = "europe"
+    ASIA = "asia"
+    AFRICA = "africa"
+    LOCAL = "local"
+
+class AlertType(str, Enum):
+    SOS = "sos"
+    WELLNESS_CHECK = "wellness_check"
+    SAFETY_CONCERN = "safety_concern"
+
+class SeverityLevel(str, Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+# ========== EXISTING CRISIS RESOURCES SCHEMAS ==========
+class CrisisResourceBase(BaseModel):
+    """Base crisis resource schema"""
+    model_config = ConfigDict(from_attributes=True)
+
+    name: str = Field(..., min_length=1, max_length=200)
+    description: Optional[str] = Field(None, max_length=1000)
+    category: ResourceCategory
+    phone_number: Optional[str] = Field(None, max_length=50)
+    website_url: Optional[str] = Field(None, max_length=500)
+    chat_url: Optional[str] = Field(None, max_length=500)
+    text_line: Optional[str] = Field(None, max_length=50)
+    languages: List[str] = Field(default=["en"])
+    operating_hours: Optional[Dict[str, Any]] = None
+    geographic_scope: GeographicScope = GeographicScope.GLOBAL
+    tags: List[str] = Field(default=[])
+
+    @field_validator('name')
+    @classmethod
+    def validate_name(cls, v: str) -> str:
+        """Validate name is not empty"""
+        if not v.strip():
+            raise ValueError('Resource name cannot be empty')
+        return v.strip()
+
+    @field_validator('website_url', 'chat_url')
+    @classmethod
+    def validate_urls(cls, v: Optional[str]) -> Optional[str]:
+        """Validate URLs if provided"""
+        if v and not v.startswith(('http://', 'https://')):
+            raise ValueError('URL must start with http:// or https://')
+        return v
+
+class CrisisResourceCreate(CrisisResourceBase):
+    """Schema for creating a crisis resource (admin only)"""
+    is_active: bool = True
+    priority: int = Field(1, ge=1, le=10)
+
+class CrisisResourceUpdate(BaseModel):
+    """Schema for updating a crisis resource"""
+    model_config = ConfigDict(from_attributes=True)
+
+    name: Optional[str] = Field(None, min_length=1, max_length=200)
+    description: Optional[str] = Field(None, max_length=1000)
+    category: Optional[ResourceCategory] = None
+    phone_number: Optional[str] = Field(None, max_length=50)
+    website_url: Optional[str] = Field(None, max_length=500)
+    chat_url: Optional[str] = Field(None, max_length=500)
+    text_line: Optional[str] = Field(None, max_length=50)
+    languages: Optional[List[str]] = None
+    operating_hours: Optional[Dict[str, Any]] = None
+    geographic_scope: Optional[GeographicScope] = None
+    is_active: Optional[bool] = None
+    priority: Optional[int] = Field(None, ge=1, le=10)
+    tags: Optional[List[str]] = None
+
+class CrisisResourceInDB(TimeStampedSchema):
+    """Crisis resource schema as stored in database"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    name: str
+    description: Optional[str] = None
+    category: ResourceCategory
+    phone_number: Optional[str] = None
+    website_url: Optional[str] = None
+    chat_url: Optional[str] = None
+    text_line: Optional[str] = None
+    languages: List[str]
+    operating_hours: Optional[Dict[str, Any]] = None
+    geographic_scope: GeographicScope
+    is_active: bool
+    priority: int
+    tags: List[str]
+
+class CrisisResourceResponse(CrisisResourceInDB):
+    """Crisis resource schema for API responses"""
+    pass
+
+# ========== EXISTING EMERGENCY CONTACTS SCHEMAS ==========
+
+    @field_validator('languages', mode='before')
+    @classmethod
+    def parse_languages(cls, v):
+        """Parse languages from JSON string to list"""
+        if isinstance(v, str):
+            try:
+                import json
+                return json.loads(v)
+            except:
+                return []
+        return v
+
+    @field_validator('tags', mode='before')
+    @classmethod
+    def parse_tags(cls, v):
+        """Parse tags from JSON string to list"""
+        if isinstance(v, str):
+            try:
+                import json
+                return json.loads(v)
+            except:
+                return []
+        return v
+class EmergencyContactBase(BaseModel):
+    """Base emergency contact schema"""
+    model_config = ConfigDict(from_attributes=True)
+
+    name: str = Field(..., min_length=1, max_length=200)
+    relationship: Optional[str] = Field(None, max_length=100)
+    phone_number: str = Field(..., min_length=1, max_length=50)
+    email: Optional[str] = Field(None, max_length=200)
+    is_primary: bool = False
+    can_receive_alerts: bool = False
+    notes: Optional[str] = Field(None, max_length=500)
+
+    @field_validator('name')
+    @classmethod
+    def validate_name(cls, v: str) -> str:
+        """Validate name is not empty"""
+        if not v.strip():
+            raise ValueError('Contact name cannot be empty')
+        return v.strip()
+
+    @field_validator('phone_number')
+    @classmethod
+    def validate_phone_number(cls, v: str) -> str:
+        """Validate phone number is not empty"""
+        if not v.strip():
+            raise ValueError('Phone number cannot be empty')
+        return v.strip()
+
+class EmergencyContactCreate(EmergencyContactBase):
+    """Schema for creating an emergency contact"""
+    pass
+
+class EmergencyContactUpdate(BaseModel):
+    """Schema for updating an emergency contact"""
+    model_config = ConfigDict(from_attributes=True)
+
+    name: Optional[str] = Field(None, min_length=1, max_length=200)
+    relationship: Optional[str] = Field(None, max_length=100)
+    phone_number: Optional[str] = Field(None, min_length=1, max_length=50)
+    email: Optional[str] = Field(None, max_length=200)
+    is_primary: Optional[bool] = None
+    can_receive_alerts: Optional[bool] = None
+    notes: Optional[str] = Field(None, max_length=500)
+
+class EmergencyContactInDB(TimeStampedSchema):
+    """Emergency contact schema as stored in database"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    user_id: UUID
+    name: str
+    relationship: Optional[str] = None
+    phone_number: str
+    email: Optional[str] = None
+    is_primary: bool
+    can_receive_alerts: bool
+    notes: Optional[str] = None
+
+class EmergencyContactResponse(EmergencyContactInDB):
+    """Emergency contact schema for API responses"""
+    pass
+
+# ========== NEW SAFETY PLANS SCHEMAS ==========
+class SafetyPlanBase(BaseModel):
+    """Base safety plan schema"""
+    model_config = ConfigDict(from_attributes=True)
+
+    plan_name: str = Field("My Safety Plan", min_length=1, max_length=200)
+    warning_signs: Optional[List[str]] = None
+    internal_coping_strategies: Optional[List[str]] = None
+    external_coping_strategies: Optional[List[str]] = None
+    social_contacts: Optional[Dict[str, Any]] = None
+    professional_contacts: Optional[Dict[str, Any]] = None
+    environment_safety: Optional[List[str]] = None
+    reasons_for_living: Optional[List[str]] = None
+
+class SafetyPlanCreate(SafetyPlanBase):
+    """Schema for creating a safety plan"""
+    pass
+
+class SafetyPlanUpdate(BaseModel):
+    """Schema for updating a safety plan"""
+    model_config = ConfigDict(from_attributes=True)
+
+    plan_name: Optional[str] = Field(None, min_length=1, max_length=200)
+    warning_signs: Optional[List[str]] = None
+    internal_coping_strategies: Optional[List[str]] = None
+    external_coping_strategies: Optional[List[str]] = None
+    social_contacts: Optional[Dict[str, Any]] = None
+    professional_contacts: Optional[Dict[str, Any]] = None
+    environment_safety: Optional[List[str]] = None
+    reasons_for_living: Optional[List[str]] = None
+
+class SafetyPlanInDB(TimeStampedSchema):
+    """Safety plan schema as stored in database"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    user_id: UUID
+    plan_name: str
+    warning_signs: Optional[List[str]] = None
+    internal_coping_strategies: Optional[List[str]] = None
+    external_coping_strategies: Optional[List[str]] = None
+    social_contacts: Optional[Dict[str, Any]] = None
+    professional_contacts: Optional[Dict[str, Any]] = None
+    environment_safety: Optional[List[str]] = None
+    reasons_for_living: Optional[List[str]] = None
+    is_active: bool
+
+class SafetyPlanResponse(SafetyPlanInDB):
+    """Safety plan schema for API responses"""
+    pass
+
+# ========== NEW WELLNESS CHECKINS SCHEMAS ==========
+class WellnessCheckinBase(BaseModel):
+    """Base wellness checkin schema"""
+    model_config = ConfigDict(from_attributes=True)
+
+    checkin_date: date
+    mood_rating: Optional[int] = Field(None, ge=1, le=10)
+    anxiety_level: Optional[int] = Field(None, ge=1, le=10)
+    sleep_quality: Optional[int] = Field(None, ge=1, le=5)
+    safety_concerns: bool = False
+    safety_concerns_details: Optional[str] = Field(None, max_length=1000)
+    coping_strategies_used: Optional[List[str]] = None
+    support_needed: bool = False
+    support_type: Optional[str] = Field(None, max_length=100)
+    notes: Optional[str] = Field(None, max_length=2000)
+
+class WellnessCheckinCreate(WellnessCheckinBase):
+    """Schema for creating a wellness checkin"""
+    pass
+
+class WellnessCheckinUpdate(BaseModel):
+    """Schema for updating a wellness checkin"""
+    model_config = ConfigDict(from_attributes=True)
+
+    mood_rating: Optional[int] = Field(None, ge=1, le=10)
+    anxiety_level: Optional[int] = Field(None, ge=1, le=10)
+    sleep_quality: Optional[int] = Field(None, ge=1, le=5)
+    safety_concerns: Optional[bool] = None
+    safety_concerns_details: Optional[str] = Field(None, max_length=1000)
+    coping_strategies_used: Optional[List[str]] = None
+    support_needed: Optional[bool] = None
+    support_type: Optional[str] = Field(None, max_length=100)
+    notes: Optional[str] = Field(None, max_length=2000)
+
+class WellnessCheckinInDB(TimeStampedSchema):
+    """Wellness checkin schema as stored in database"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    user_id: UUID
+    checkin_date: date
+    mood_rating: Optional[int] = None
+    anxiety_level: Optional[int] = None
+    sleep_quality: Optional[int] = None
+    safety_concerns: bool
+    safety_concerns_details: Optional[str] = None
+    coping_strategies_used: Optional[List[str]] = None
+    support_needed: bool
+    support_type: Optional[str] = None
+    notes: Optional[str] = None
+
+class WellnessCheckinResponse(WellnessCheckinInDB):
+    """Wellness checkin schema for API responses"""
+    pass
+
+# ========== NEW CRISIS ALERTS SCHEMAS ==========
+class CrisisAlertBase(BaseModel):
+    """Base crisis alert schema"""
+    model_config = ConfigDict(from_attributes=True)
+
+    alert_type: AlertType
+    severity_level: SeverityLevel
+    message: Optional[str] = Field(None, max_length=1000)
+    location_data: Optional[Dict[str, Any]] = None
+
+class CrisisAlertCreate(CrisisAlertBase):
+    """Schema for creating a crisis alert"""
+    pass
+
+class CrisisAlertInDB(TimeStampedSchema):
+    """Crisis alert schema as stored in database"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    user_id: UUID
+    alert_type: AlertType
+    severity_level: SeverityLevel
+    message: Optional[str] = None
+    location_data: Optional[Dict[str, Any]] = None
+    is_resolved: bool
+    resolved_at: Optional[datetime] = None
+    resolved_by: Optional[UUID] = None
+    resolution_notes: Optional[str] = None
+
+class CrisisAlertResponse(CrisisAlertInDB):
+    """Crisis alert schema for API responses"""
+    pass
+
+# ========== EXISTING USER CRISIS PREFERENCES SCHEMAS ==========
+class UserCrisisPreferencesBase(BaseModel):
+    """Base user crisis preferences schema"""
+    model_config = ConfigDict(from_attributes=True)
+
+    preferred_language: str = Field("en", max_length=10)
+    country_code: Optional[str] = Field(None, max_length=5)
+    emergency_contact_instructions: Optional[str] = Field(None, max_length=1000)
+    medical_information: Optional[str] = Field(None, max_length=2000)
+    consent_to_contact: bool = False
+
+class UserCrisisPreferencesCreate(UserCrisisPreferencesBase):
+    """Schema for creating user crisis preferences"""
+    pass
+
+class UserCrisisPreferencesUpdate(BaseModel):
+    """Schema for updating user crisis preferences"""
+    model_config = ConfigDict(from_attributes=True)
+
+    preferred_language: Optional[str] = Field(None, max_length=10)
+    country_code: Optional[str] = Field(None, max_length=5)
+    emergency_contact_instructions: Optional[str] = Field(None, max_length=1000)
+    medical_information: Optional[str] = Field(None, max_length=2000)
+    consent_to_contact: Optional[bool] = None
+
+class UserCrisisPreferencesInDB(BaseModel):
+    """User crisis preferences schema as stored in database"""
+    model_config = ConfigDict(from_attributes=True)
+    
+    user_id: UUID
+    preferred_language: str
+    country_code: Optional[str] = None
+    emergency_contact_instructions: Optional[str] = None
+    medical_information: Optional[str] = None
+    consent_to_contact: bool
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+
+class UserCrisisPreferencesResponse(UserCrisisPreferencesInDB):
+    """User crisis preferences schema for API responses"""
+    pass
+
+# ========== RESPONSE SCHEMAS ==========
+class CrisisResourcesResponse(BaseModel):
+    """Response for crisis resources with filtering"""
+    resources: List[CrisisResourceResponse]
+    total: int
+    user_location: Optional[str] = None
+
+class EmergencyContactsResponse(BaseModel):
+    """Response for emergency contacts"""
+    contacts: List[EmergencyContactResponse]
+    total: int
+    has_primary: bool
+
+class SafetyPlansResponse(BaseModel):
+    """Response for safety plans"""
+    plans: List[SafetyPlanResponse]
+    total: int
+    active_plan: Optional[SafetyPlanResponse] = None
+
+class WellnessCheckinsResponse(BaseModel):
+    """Response for wellness checkins"""
+    checkins: List[WellnessCheckinResponse]
+    total: int
+    today_checkin: Optional[WellnessCheckinResponse] = None
+
+class CrisisAlertsResponse(BaseModel):
+    """Response for crisis alerts"""
+    alerts: List[CrisisAlertResponse]
+    total: int
+    active_alerts: List[CrisisAlertResponse]

@@ -9634,3 +9634,2085 @@
 2025-10-31 21:48:00,368 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 17:48:00.366028+00:00
 2025-10-31 21:48:00,383 - safe_zone.database - INFO - Timezone conversion test passed: False
 2025-10-31 21:48:00,385 - safe_zone - INFO - Database connection established
+2025-10-31 22:17:08,921 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 22:17:08,921 - safe_zone - INFO - Database connection closed
+2025-10-31 22:17:08,921 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 22:17:09,766 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:17:10,418 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:17:11,442 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 22:17:11,442 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 22:17:11,485 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 22:17:11,488 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 22:17:11,488 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 18:17:11.487154+00:00
+2025-10-31 22:17:11,489 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 18:17:11.488542+00:00
+2025-10-31 22:17:11,490 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 22:17:11,491 - safe_zone - INFO - Database connection established
+2025-10-31 22:19:57,562 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 22:19:57,562 - safe_zone - INFO - Database connection closed
+2025-10-31 22:19:57,562 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 22:19:58,397 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:19:59,044 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:20:00,087 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 22:20:00,087 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 22:20:00,128 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 22:20:00,149 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 22:20:00,150 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 18:20:00.147063+00:00
+2025-10-31 22:20:00,151 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 18:20:00.150751+00:00
+2025-10-31 22:20:00,166 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 22:20:00,167 - safe_zone - INFO - Database connection established
+2025-10-31 22:25:34,840 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 22:25:34,842 - safe_zone - INFO - Database connection closed
+2025-10-31 22:25:34,842 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 22:25:35,818 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:25:36,610 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:25:37,941 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 22:25:37,941 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 22:25:37,987 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 22:25:37,991 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 22:25:37,991 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 18:25:37.990111+00:00
+2025-10-31 22:25:37,993 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 18:25:37.992739+00:00
+2025-10-31 22:25:37,995 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 22:25:37,996 - safe_zone - INFO - Database connection established
+2025-10-31 22:42:57,225 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 22:42:57,226 - safe_zone - INFO - Database connection closed
+2025-10-31 22:42:57,226 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 22:42:58,106 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:42:58,776 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:42:59,722 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 22:42:59,722 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 22:42:59,766 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 22:42:59,771 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 22:42:59,771 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 18:42:59.769194+00:00
+2025-10-31 22:42:59,773 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 18:42:59.772156+00:00
+2025-10-31 22:42:59,774 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 22:42:59,775 - safe_zone - INFO - Database connection established
+2025-10-31 22:44:18,546 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 22:44:18,547 - safe_zone - INFO - Database connection closed
+2025-10-31 22:44:18,547 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 22:44:19,388 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:44:20,045 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:44:21,043 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 22:44:21,044 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 22:44:21,085 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 22:44:21,088 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 22:44:21,088 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 18:44:21.087459+00:00
+2025-10-31 22:44:21,090 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 18:44:21.089102+00:00
+2025-10-31 22:44:21,092 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 22:44:21,093 - safe_zone - INFO - Database connection established
+2025-10-31 22:44:57,204 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 22:44:57,206 - safe_zone - INFO - Database connection closed
+2025-10-31 22:44:57,207 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 22:44:58,072 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:44:58,744 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:44:59,704 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 22:44:59,704 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 22:44:59,745 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 22:44:59,748 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 22:44:59,748 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 18:44:59.747083+00:00
+2025-10-31 22:44:59,750 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 18:44:59.749377+00:00
+2025-10-31 22:44:59,751 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 22:44:59,752 - safe_zone - INFO - Database connection established
+2025-10-31 22:49:15,688 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 22:49:15,689 - safe_zone - INFO - Database connection closed
+2025-10-31 22:49:15,689 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 22:49:16,580 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:49:17,244 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:49:18,288 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 22:49:18,288 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 22:49:18,332 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 22:49:18,335 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 22:49:18,335 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 18:49:18.334502+00:00
+2025-10-31 22:49:18,337 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 18:49:18.336215+00:00
+2025-10-31 22:49:18,339 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 22:49:18,340 - safe_zone - INFO - Database connection established
+2025-10-31 22:53:20,927 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 22:53:20,928 - safe_zone - INFO - Database connection closed
+2025-10-31 22:53:20,928 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 22:53:21,813 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:53:22,470 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:53:23,515 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 22:53:23,516 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 22:53:23,557 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 22:53:23,559 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 22:53:23,560 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 18:53:23.558954+00:00
+2025-10-31 22:53:23,561 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 18:53:23.560443+00:00
+2025-10-31 22:53:23,563 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 22:53:23,564 - safe_zone - INFO - Database connection established
+2025-10-31 22:56:21,372 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 22:56:21,373 - safe_zone - INFO - Database connection closed
+2025-10-31 22:56:21,374 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 22:56:22,303 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:56:23,024 - safe_zone - INFO - Logging setup completed
+2025-10-31 22:56:24,057 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 22:56:24,057 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 22:56:24,100 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 22:56:24,102 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 22:56:24,102 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 18:56:24.101654+00:00
+2025-10-31 22:56:24,103 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 18:56:24.102873+00:00
+2025-10-31 22:56:24,105 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 22:56:24,106 - safe_zone - INFO - Database connection established
+2025-10-31 23:03:03,041 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:03:03,042 - safe_zone - INFO - Database connection closed
+2025-10-31 23:03:03,043 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:03:03,959 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:03:04,694 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:03:05,681 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:03:05,681 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:03:05,723 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:03:05,726 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:03:05,726 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:03:05.725447+00:00
+2025-10-31 23:03:05,728 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:03:05.727362+00:00
+2025-10-31 23:03:05,730 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:03:05,731 - safe_zone - INFO - Database connection established
+2025-10-31 23:07:16,328 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:07:16,329 - safe_zone - INFO - Database connection closed
+2025-10-31 23:07:16,330 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:07:17,205 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:07:17,865 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:07:18,781 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:07:18,782 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:07:18,822 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:07:18,825 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:07:18,825 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:07:18.824593+00:00
+2025-10-31 23:07:18,827 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:07:18.826297+00:00
+2025-10-31 23:07:18,829 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:07:18,829 - safe_zone - INFO - Database connection established
+2025-10-31 23:14:34,168 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:14:34,168 - safe_zone - INFO - Database connection closed
+2025-10-31 23:14:34,169 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:14:35,112 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:14:35,780 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:14:36,853 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:14:36,853 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:14:36,901 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:14:36,905 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:14:36,905 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:14:36.903701+00:00
+2025-10-31 23:14:36,907 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:14:36.906034+00:00
+2025-10-31 23:14:36,908 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:14:36,909 - safe_zone - INFO - Database connection established
+2025-10-31 23:19:56,809 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:19:56,810 - safe_zone - INFO - Database connection closed
+2025-10-31 23:19:56,810 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:19:57,707 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:19:58,424 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:19:59,429 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:19:59,429 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:19:59,473 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:19:59,476 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:19:59,476 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:19:59.475097+00:00
+2025-10-31 23:19:59,478 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:19:59.476882+00:00
+2025-10-31 23:19:59,480 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:19:59,481 - safe_zone - INFO - Database connection established
+2025-10-31 23:31:10,803 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:31:10,804 - safe_zone - INFO - Database connection closed
+2025-10-31 23:31:10,804 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:31:11,710 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:31:12,465 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:31:13,463 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:31:13,463 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:31:13,505 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:31:13,508 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:31:13,508 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:31:13.507167+00:00
+2025-10-31 23:31:13,509 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:31:13.508537+00:00
+2025-10-31 23:31:13,511 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:31:13,512 - safe_zone - INFO - Database connection established
+2025-10-31 23:36:38,693 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:36:38,693 - safe_zone - INFO - Database connection closed
+2025-10-31 23:36:38,693 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:36:39,574 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:36:40,282 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:36:41,216 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:36:41,216 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:36:41,259 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:36:41,263 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:36:41,263 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:36:41.261523+00:00
+2025-10-31 23:36:41,265 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:36:41.264260+00:00
+2025-10-31 23:36:41,267 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:36:41,268 - safe_zone - INFO - Database connection established
+2025-10-31 23:42:04,029 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:42:04,030 - safe_zone - INFO - Database connection closed
+2025-10-31 23:42:04,030 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:42:04,954 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:42:05,672 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:42:06,611 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:42:06,612 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:42:06,664 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:42:06,667 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:42:06,667 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:42:06.666306+00:00
+2025-10-31 23:42:06,668 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:42:06.667750+00:00
+2025-10-31 23:42:06,670 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:42:06,671 - safe_zone - INFO - Database connection established
+2025-10-31 23:43:27,199 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:43:27,200 - safe_zone - INFO - Database connection closed
+2025-10-31 23:43:27,200 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:43:28,070 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:43:28,822 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:43:29,849 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:43:29,850 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:43:29,920 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:43:29,922 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:43:29,923 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:43:29.921824+00:00
+2025-10-31 23:43:29,924 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:43:29.923334+00:00
+2025-10-31 23:43:29,926 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:43:29,926 - safe_zone - INFO - Database connection established
+2025-10-31 23:45:04,764 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:45:04,765 - safe_zone - INFO - Database connection closed
+2025-10-31 23:45:04,765 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:45:05,743 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:45:06,486 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:45:07,702 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:45:07,702 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:45:07,745 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:45:07,750 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:45:07,751 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:45:07.748743+00:00
+2025-10-31 23:45:07,752 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:45:07.751471+00:00
+2025-10-31 23:45:07,754 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:45:07,755 - safe_zone - INFO - Database connection established
+2025-10-31 23:53:08,511 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:53:08,512 - safe_zone - INFO - Database connection closed
+2025-10-31 23:53:08,512 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:53:09,405 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:53:10,139 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:53:11,195 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:53:11,196 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:53:11,239 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:53:11,242 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:53:11,242 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:53:11.241512+00:00
+2025-10-31 23:53:11,244 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:53:11.243223+00:00
+2025-10-31 23:53:11,246 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:53:11,247 - safe_zone - INFO - Database connection established
+2025-10-31 23:56:50,148 - safe_zone.database - INFO - Database connection pool closed
+2025-10-31 23:56:50,149 - safe_zone - INFO - Database connection closed
+2025-10-31 23:56:50,149 - safe_zone - INFO - Safe Zone API Server stopped
+2025-10-31 23:56:51,171 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:56:51,971 - safe_zone - INFO - Logging setup completed
+2025-10-31 23:56:52,974 - safe_zone - INFO - Starting Safe Zone API Server
+2025-10-31 23:56:52,974 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-10-31 23:56:53,017 - safe_zone.database - INFO - Database connection pool created successfully
+2025-10-31 23:56:53,020 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-10-31 23:56:53,020 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 19:56:53.019548+00:00
+2025-10-31 23:56:53,022 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 19:56:53.020966+00:00
+2025-10-31 23:56:53,024 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-10-31 23:56:53,024 - safe_zone - INFO - Database connection established
+2025-11-01 00:00:40,982 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 00:00:40,983 - safe_zone - INFO - Database connection closed
+2025-11-01 00:00:40,983 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 00:00:41,412 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:00:42,169 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:00:43,203 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 00:00:43,204 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 00:00:43,249 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 00:00:43,252 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 00:00:43,253 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 20:00:43.251666+00:00
+2025-11-01 00:00:43,255 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 20:00:43.253456+00:00
+2025-11-01 00:00:43,256 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 00:00:43,257 - safe_zone - INFO - Database connection established
+2025-11-01 00:03:42,922 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 00:03:42,922 - safe_zone - INFO - Database connection closed
+2025-11-01 00:03:42,923 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 00:03:43,892 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:03:44,637 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:03:45,639 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 00:03:45,640 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 00:03:45,685 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 00:03:45,687 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 00:03:45,688 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 20:03:45.686984+00:00
+2025-11-01 00:03:45,690 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 20:03:45.688672+00:00
+2025-11-01 00:03:45,691 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 00:03:45,692 - safe_zone - INFO - Database connection established
+2025-11-01 00:07:55,200 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 00:07:55,201 - safe_zone - INFO - Database connection closed
+2025-11-01 00:07:55,203 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 00:07:56,157 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:07:56,904 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:07:58,032 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 00:07:58,032 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 00:07:58,074 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 00:07:58,077 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 00:07:58,077 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 20:07:58.076358+00:00
+2025-11-01 00:07:58,079 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 20:07:58.078212+00:00
+2025-11-01 00:07:58,081 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 00:07:58,082 - safe_zone - INFO - Database connection established
+2025-11-01 00:18:18,596 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 00:18:18,596 - safe_zone - INFO - Database connection closed
+2025-11-01 00:18:18,597 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 00:18:19,644 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:18:20,465 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:18:21,520 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 00:18:21,520 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 00:18:21,565 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 00:18:21,568 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 00:18:21,568 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 20:18:21.566983+00:00
+2025-11-01 00:18:21,570 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 20:18:21.568892+00:00
+2025-11-01 00:18:21,572 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 00:18:21,573 - safe_zone - INFO - Database connection established
+2025-11-01 00:21:03,403 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 00:21:03,403 - safe_zone - INFO - Database connection closed
+2025-11-01 00:21:03,404 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 00:21:04,395 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:21:05,124 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:21:06,191 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 00:21:06,191 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 00:21:06,255 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 00:21:06,258 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 00:21:06,258 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 20:21:06.257446+00:00
+2025-11-01 00:21:06,259 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 20:21:06.258900+00:00
+2025-11-01 00:21:06,262 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 00:21:06,262 - safe_zone - INFO - Database connection established
+2025-11-01 00:23:00,729 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 00:23:00,730 - safe_zone - INFO - Database connection closed
+2025-11-01 00:23:00,730 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 00:23:01,688 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:23:02,454 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:23:03,494 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 00:23:03,494 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 00:23:03,535 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 00:23:03,538 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 00:23:03,539 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 20:23:03.537728+00:00
+2025-11-01 00:23:03,540 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 20:23:03.539386+00:00
+2025-11-01 00:23:03,542 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 00:23:03,543 - safe_zone - INFO - Database connection established
+2025-11-01 00:24:52,129 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 00:24:52,130 - safe_zone - INFO - Database connection closed
+2025-11-01 00:24:52,131 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 00:24:53,126 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:24:53,970 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:24:55,166 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 00:24:55,166 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 00:24:55,222 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 00:24:55,225 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 00:24:55,226 - safe_zone.database - INFO - Current database time (UTC): 2025-10-31 20:24:55.224858+00:00
+2025-11-01 00:24:55,228 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-10-31 20:24:55.226634+00:00
+2025-11-01 00:24:55,229 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 00:24:55,230 - safe_zone - INFO - Database connection established
+2025-11-01 00:25:05,124 - safe_zone - INFO - Logging setup completed
+2025-11-01 00:25:05,650 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:34:15,590 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:34:17,076 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:34:18,194 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 06:34:18,194 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 06:34:18,300 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 06:34:18,339 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 06:34:18,340 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 02:34:18.313490+00:00
+2025-11-01 06:34:18,345 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 02:34:18.340662+00:00
+2025-11-01 06:34:18,377 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 06:34:18,382 - safe_zone - INFO - Database connection established
+2025-11-01 06:43:23,166 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 06:43:23,167 - safe_zone - INFO - Database connection closed
+2025-11-01 06:43:23,167 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 06:43:24,148 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:43:24,993 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:43:26,270 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 06:43:26,270 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 06:43:26,316 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 06:43:26,319 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 06:43:26,319 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 02:43:26.318752+00:00
+2025-11-01 06:43:26,321 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 02:43:26.320375+00:00
+2025-11-01 06:43:26,323 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 06:43:26,324 - safe_zone - INFO - Database connection established
+2025-11-01 06:44:26,969 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 06:44:26,971 - safe_zone - INFO - Database connection closed
+2025-11-01 06:44:26,971 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 06:44:27,944 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:44:28,699 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:44:29,744 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 06:44:29,744 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 06:44:29,791 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 06:44:29,797 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 06:44:29,797 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 02:44:29.795245+00:00
+2025-11-01 06:44:29,798 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 02:44:29.797813+00:00
+2025-11-01 06:44:29,800 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 06:44:29,801 - safe_zone - INFO - Database connection established
+2025-11-01 06:49:46,525 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 06:49:46,527 - safe_zone - INFO - Database connection closed
+2025-11-01 06:49:46,528 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 06:49:47,514 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:49:48,320 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:49:49,391 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 06:49:49,392 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 06:49:49,440 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 06:49:49,444 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 06:49:49,444 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 02:49:49.442022+00:00
+2025-11-01 06:49:49,445 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 02:49:49.444662+00:00
+2025-11-01 06:49:49,446 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 06:49:49,447 - safe_zone - INFO - Database connection established
+2025-11-01 06:49:59,601 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 06:49:59,602 - safe_zone - INFO - Database connection closed
+2025-11-01 06:49:59,602 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 06:50:00,530 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:50:01,284 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:50:02,397 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 06:50:02,397 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 06:50:02,466 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 06:50:02,469 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 06:50:02,469 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 02:50:02.468240+00:00
+2025-11-01 06:50:02,471 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 02:50:02.470195+00:00
+2025-11-01 06:50:02,473 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 06:50:02,474 - safe_zone - INFO - Database connection established
+2025-11-01 06:56:11,198 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 06:56:11,198 - safe_zone - INFO - Database connection closed
+2025-11-01 06:56:11,199 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 06:56:12,234 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:56:13,090 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:56:14,534 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 06:56:14,534 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 06:56:14,584 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 06:56:14,587 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 06:56:14,587 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 02:56:14.586461+00:00
+2025-11-01 06:56:14,589 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 02:56:14.588083+00:00
+2025-11-01 06:56:14,590 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 06:56:14,591 - safe_zone - INFO - Database connection established
+2025-11-01 06:58:19,039 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 06:58:19,039 - safe_zone - INFO - Database connection closed
+2025-11-01 06:58:19,039 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 06:58:20,066 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:58:20,891 - safe_zone - INFO - Logging setup completed
+2025-11-01 06:58:21,406 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 06:58:21,406 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 06:58:21,454 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 06:58:21,458 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 06:58:21,458 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 02:58:21.457207+00:00
+2025-11-01 06:58:21,460 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 02:58:21.459526+00:00
+2025-11-01 06:58:21,462 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 06:58:21,462 - safe_zone - INFO - Database connection established
+2025-11-01 07:00:08,048 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:00:08,049 - safe_zone - INFO - Database connection closed
+2025-11-01 07:00:08,049 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:00:09,032 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:00:09,804 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:00:10,924 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:00:10,924 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:00:10,971 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:00:10,974 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:00:10,974 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:00:10.973282+00:00
+2025-11-01 07:00:10,975 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:00:10.974837+00:00
+2025-11-01 07:00:10,977 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:00:10,978 - safe_zone - INFO - Database connection established
+2025-11-01 07:01:22,134 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:01:22,135 - safe_zone - INFO - Database connection closed
+2025-11-01 07:01:22,135 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:01:23,106 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:01:23,871 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:01:25,006 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:01:25,006 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:01:25,050 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:01:25,053 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:01:25,053 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:01:25.051998+00:00
+2025-11-01 07:01:25,054 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:01:25.053629+00:00
+2025-11-01 07:01:25,056 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:01:25,057 - safe_zone - INFO - Database connection established
+2025-11-01 07:01:36,576 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:01:36,576 - safe_zone - INFO - Database connection closed
+2025-11-01 07:01:36,577 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:01:37,519 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:01:38,249 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:01:39,289 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:01:39,289 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:01:39,334 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:01:39,337 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:01:39,337 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:01:39.336567+00:00
+2025-11-01 07:01:39,339 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:01:39.338290+00:00
+2025-11-01 07:01:39,341 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:01:39,342 - safe_zone - INFO - Database connection established
+2025-11-01 07:04:14,664 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:04:14,664 - safe_zone - INFO - Database connection closed
+2025-11-01 07:04:14,665 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:04:15,633 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:04:16,395 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:04:17,461 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:04:17,461 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:04:17,504 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:04:17,507 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:04:17,507 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:04:17.506645+00:00
+2025-11-01 07:04:17,508 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:04:17.507836+00:00
+2025-11-01 07:04:17,510 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:04:17,511 - safe_zone - INFO - Database connection established
+2025-11-01 07:13:43,105 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:13:43,106 - safe_zone - INFO - Database connection closed
+2025-11-01 07:13:43,106 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:13:44,117 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:13:44,877 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:13:45,891 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:13:45,891 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:13:45,938 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:13:45,942 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:13:45,942 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:13:45.941116+00:00
+2025-11-01 07:13:45,944 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:13:45.943145+00:00
+2025-11-01 07:13:45,946 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:13:45,947 - safe_zone - INFO - Database connection established
+2025-11-01 07:15:40,894 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:15:40,895 - safe_zone - INFO - Database connection closed
+2025-11-01 07:15:40,896 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:15:41,938 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:15:42,709 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:15:42,835 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:15:42,835 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:15:42,883 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:15:42,886 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:15:42,886 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:15:42.885017+00:00
+2025-11-01 07:15:42,887 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:15:42.886691+00:00
+2025-11-01 07:15:42,889 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:15:42,890 - safe_zone - INFO - Database connection established
+2025-11-01 07:20:16,427 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:20:16,428 - safe_zone - INFO - Database connection closed
+2025-11-01 07:20:16,429 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:20:17,401 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:20:18,141 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:20:19,359 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:20:19,359 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:20:19,407 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:20:19,410 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:20:19,410 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:20:19.409302+00:00
+2025-11-01 07:20:19,412 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:20:19.411157+00:00
+2025-11-01 07:20:19,414 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:20:19,415 - safe_zone - INFO - Database connection established
+2025-11-01 07:33:12,561 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:33:12,562 - safe_zone - INFO - Database connection closed
+2025-11-01 07:33:12,562 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:33:13,546 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:33:14,289 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:33:15,276 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:33:15,276 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:33:15,319 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:33:15,322 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:33:15,322 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:33:15.321159+00:00
+2025-11-01 07:33:15,323 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:33:15.322597+00:00
+2025-11-01 07:33:15,325 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:33:15,326 - safe_zone - INFO - Database connection established
+2025-11-01 07:33:57,470 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:33:57,471 - safe_zone - INFO - Database connection closed
+2025-11-01 07:33:57,471 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:33:58,432 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:33:59,172 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:34:00,122 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:34:00,123 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:34:00,163 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:34:00,165 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:34:00,166 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:34:00.164898+00:00
+2025-11-01 07:34:00,167 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:34:00.166508+00:00
+2025-11-01 07:34:00,169 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:34:00,170 - safe_zone - INFO - Database connection established
+2025-11-01 07:40:44,551 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:40:44,551 - safe_zone - INFO - Database connection closed
+2025-11-01 07:40:44,551 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:40:45,447 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:40:46,156 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:40:47,091 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:40:47,092 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:40:47,131 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:40:47,133 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:40:47,134 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:40:47.133259+00:00
+2025-11-01 07:40:47,134 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:40:47.134341+00:00
+2025-11-01 07:40:47,136 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:40:47,137 - safe_zone - INFO - Database connection established
+2025-11-01 07:41:15,869 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:41:15,869 - safe_zone - INFO - Database connection closed
+2025-11-01 07:41:15,870 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:41:16,737 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:41:17,465 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:41:18,515 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:41:18,516 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:41:18,556 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:41:18,560 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:41:18,560 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:41:18.559033+00:00
+2025-11-01 07:41:18,562 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:41:18.560939+00:00
+2025-11-01 07:41:18,563 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:41:18,563 - safe_zone - INFO - Database connection established
+2025-11-01 07:42:32,475 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:42:32,475 - safe_zone - INFO - Database connection closed
+2025-11-01 07:42:32,475 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:42:33,406 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:42:34,154 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:42:35,127 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:42:35,127 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:42:35,166 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:42:35,169 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:42:35,169 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:42:35.168625+00:00
+2025-11-01 07:42:35,170 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:42:35.169987+00:00
+2025-11-01 07:42:35,172 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:42:35,173 - safe_zone - INFO - Database connection established
+2025-11-01 07:43:23,714 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:43:23,714 - safe_zone - INFO - Database connection closed
+2025-11-01 07:43:23,714 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:43:24,683 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:43:25,449 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:43:26,479 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:43:26,479 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:43:26,521 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:43:26,524 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:43:26,524 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:43:26.523429+00:00
+2025-11-01 07:43:26,526 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:43:26.525119+00:00
+2025-11-01 07:43:26,528 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:43:26,529 - safe_zone - INFO - Database connection established
+2025-11-01 07:54:35,542 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:54:35,542 - safe_zone - INFO - Database connection closed
+2025-11-01 07:54:35,542 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:54:36,437 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:54:37,140 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:54:38,095 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:54:38,095 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:54:38,135 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:54:38,137 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:54:38,137 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:54:38.136936+00:00
+2025-11-01 07:54:38,139 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:54:38.138284+00:00
+2025-11-01 07:54:38,141 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:54:38,141 - safe_zone - INFO - Database connection established
+2025-11-01 07:54:59,280 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:54:59,280 - safe_zone - INFO - Database connection closed
+2025-11-01 07:54:59,280 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:55:00,161 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:55:00,873 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:55:01,799 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:55:01,799 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:55:01,838 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:55:01,841 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:55:01,841 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:55:01.840572+00:00
+2025-11-01 07:55:01,842 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:55:01.841943+00:00
+2025-11-01 07:55:01,844 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:55:01,845 - safe_zone - INFO - Database connection established
+2025-11-01 07:58:04,067 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 07:58:04,067 - safe_zone - INFO - Database connection closed
+2025-11-01 07:58:04,067 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 07:58:05,066 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:58:05,836 - safe_zone - INFO - Logging setup completed
+2025-11-01 07:58:06,830 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 07:58:06,830 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 07:58:06,869 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 07:58:06,872 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 07:58:06,872 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 03:58:06.871233+00:00
+2025-11-01 07:58:06,874 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 03:58:06.873160+00:00
+2025-11-01 07:58:06,876 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 07:58:06,877 - safe_zone - INFO - Database connection established
+2025-11-01 08:02:56,245 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 08:02:56,245 - safe_zone - INFO - Database connection closed
+2025-11-01 08:02:56,245 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 08:02:57,169 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:02:57,880 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:02:58,822 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 08:02:58,822 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 08:02:58,865 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 08:02:58,868 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 08:02:58,868 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 04:02:58.867589+00:00
+2025-11-01 08:02:58,869 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 04:02:58.869059+00:00
+2025-11-01 08:02:58,871 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 08:02:58,872 - safe_zone - INFO - Database connection established
+2025-11-01 08:04:58,040 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 08:04:58,041 - safe_zone - INFO - Database connection closed
+2025-11-01 08:04:58,041 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 08:04:58,990 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:04:58,802 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:04:59,743 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 08:04:59,743 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 08:04:59,783 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 08:04:59,785 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 08:04:59,785 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 04:04:59.784824+00:00
+2025-11-01 08:04:59,786 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 04:04:59.785987+00:00
+2025-11-01 08:04:59,788 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 08:04:59,789 - safe_zone - INFO - Database connection established
+2025-11-01 08:09:33,731 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 08:09:33,732 - safe_zone - INFO - Database connection closed
+2025-11-01 08:09:33,733 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 08:09:34,610 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:09:35,320 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:09:36,269 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 08:09:36,270 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 08:09:36,309 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 08:09:36,312 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 08:09:36,312 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 04:09:36.311366+00:00
+2025-11-01 08:09:36,313 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 04:09:36.312867+00:00
+2025-11-01 08:09:36,315 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 08:09:36,316 - safe_zone - INFO - Database connection established
+2025-11-01 08:15:27,189 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 08:15:27,189 - safe_zone - INFO - Database connection closed
+2025-11-01 08:15:27,190 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 08:15:28,143 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:15:28,863 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:15:29,857 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 08:15:29,857 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 08:15:29,897 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 08:15:29,899 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 08:15:29,899 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 04:15:29.898797+00:00
+2025-11-01 08:15:29,900 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 04:15:29.900052+00:00
+2025-11-01 08:15:29,902 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 08:15:29,903 - safe_zone - INFO - Database connection established
+2025-11-01 08:18:56,636 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 08:18:56,636 - safe_zone - INFO - Database connection closed
+2025-11-01 08:18:56,636 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 08:18:57,560 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:18:58,276 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:18:59,225 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 08:18:59,225 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 08:18:59,264 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 08:18:59,267 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 08:18:59,267 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 04:18:59.266318+00:00
+2025-11-01 08:18:59,268 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 04:18:59.267565+00:00
+2025-11-01 08:18:59,270 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 08:18:59,270 - safe_zone - INFO - Database connection established
+2025-11-01 08:19:25,198 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 08:19:25,198 - safe_zone - INFO - Database connection closed
+2025-11-01 08:19:25,199 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 08:19:26,080 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:19:26,825 - safe_zone - INFO - Logging setup completed
+2025-11-01 08:19:27,809 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 08:19:27,809 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 08:19:27,849 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 08:19:27,852 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 08:19:27,852 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 04:19:27.851507+00:00
+2025-11-01 08:19:27,853 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 04:19:27.852850+00:00
+2025-11-01 08:19:27,855 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 08:19:27,856 - safe_zone - INFO - Database connection established
+2025-11-01 11:56:21,256 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 11:56:21,258 - safe_zone - INFO - Database connection closed
+2025-11-01 11:56:21,258 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 11:56:23,174 - safe_zone - INFO - Logging setup completed
+2025-11-01 11:56:24,129 - safe_zone - INFO - Logging setup completed
+2025-11-01 11:56:25,229 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 11:56:25,229 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 11:56:25,277 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 11:56:25,281 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 11:56:25,282 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 07:56:25.281005+00:00
+2025-11-01 11:56:25,283 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 07:56:25.282509+00:00
+2025-11-01 11:56:25,285 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 11:56:25,287 - safe_zone - INFO - Database connection established
+2025-11-01 12:02:10,203 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:02:10,204 - safe_zone - INFO - Database connection closed
+2025-11-01 12:02:10,204 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:02:11,200 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:02:11,994 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:02:13,203 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:02:13,203 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:02:13,254 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:02:13,257 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:02:13,258 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:02:13.256931+00:00
+2025-11-01 12:02:13,260 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:02:13.258954+00:00
+2025-11-01 12:02:13,261 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:02:13,262 - safe_zone - INFO - Database connection established
+2025-11-01 12:02:38,367 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:02:38,368 - safe_zone - INFO - Database connection closed
+2025-11-01 12:02:38,368 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:02:39,397 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:02:40,267 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:02:41,451 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:02:41,451 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:02:41,497 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:02:41,499 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:02:41,499 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:02:41.498943+00:00
+2025-11-01 12:02:41,501 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:02:41.500268+00:00
+2025-11-01 12:02:41,502 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:02:41,504 - safe_zone - INFO - Database connection established
+2025-11-01 12:03:07,943 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:03:07,944 - safe_zone - INFO - Database connection closed
+2025-11-01 12:03:07,945 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:03:09,002 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:03:09,891 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:03:10,978 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:03:10,978 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:03:11,033 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:03:11,037 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:03:11,037 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:03:11.036237+00:00
+2025-11-01 12:03:11,039 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:03:11.038308+00:00
+2025-11-01 12:03:11,042 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:03:11,044 - safe_zone - INFO - Database connection established
+2025-11-01 12:03:47,190 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:03:47,190 - safe_zone - INFO - Database connection closed
+2025-11-01 12:03:47,191 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:03:48,209 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:03:49,145 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:03:50,203 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:03:50,203 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:03:50,246 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:03:50,249 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:03:50,249 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:03:50.248014+00:00
+2025-11-01 12:03:50,250 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:03:50.249626+00:00
+2025-11-01 12:03:50,252 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:03:50,253 - safe_zone - INFO - Database connection established
+2025-11-01 12:07:53,672 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:07:53,673 - safe_zone - INFO - Database connection closed
+2025-11-01 12:07:53,675 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:07:54,721 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:07:55,568 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:07:56,697 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:07:56,697 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:07:56,749 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:07:56,752 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:07:56,752 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:07:56.751100+00:00
+2025-11-01 12:07:56,754 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:07:56.753614+00:00
+2025-11-01 12:07:56,756 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:07:56,756 - safe_zone - INFO - Database connection established
+2025-11-01 12:08:48,811 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:08:48,811 - safe_zone - INFO - Database connection closed
+2025-11-01 12:08:48,812 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:08:49,807 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:08:50,723 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:08:51,813 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:08:51,813 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:08:51,863 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:08:51,866 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:08:51,866 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:08:51.865439+00:00
+2025-11-01 12:08:51,869 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:08:51.867398+00:00
+2025-11-01 12:08:51,871 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:08:51,872 - safe_zone - INFO - Database connection established
+2025-11-01 12:13:27,462 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:13:27,462 - safe_zone - INFO - Database connection closed
+2025-11-01 12:13:27,463 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:13:28,538 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:13:29,547 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:13:30,761 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:13:30,761 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:13:30,807 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:13:30,810 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:13:30,810 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:13:30.809294+00:00
+2025-11-01 12:13:30,812 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:13:30.810859+00:00
+2025-11-01 12:13:30,814 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:13:30,815 - safe_zone - INFO - Database connection established
+2025-11-01 12:14:09,359 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:14:09,359 - safe_zone - INFO - Database connection closed
+2025-11-01 12:14:09,360 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:14:10,330 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:14:11,174 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:14:12,385 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:14:12,385 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:14:12,435 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:14:12,438 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:14:12,438 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:14:12.437224+00:00
+2025-11-01 12:14:12,439 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:14:12.438609+00:00
+2025-11-01 12:14:12,442 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:14:12,443 - safe_zone - INFO - Database connection established
+2025-11-01 12:14:43,126 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:14:43,126 - safe_zone - INFO - Database connection closed
+2025-11-01 12:14:43,127 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:14:44,162 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:14:45,076 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:14:44,992 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:14:44,992 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:14:45,043 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:14:45,046 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:14:45,046 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:14:45.045435+00:00
+2025-11-01 12:14:45,049 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:14:45.047547+00:00
+2025-11-01 12:14:45,051 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:14:45,051 - safe_zone - INFO - Database connection established
+2025-11-01 12:17:14,678 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:17:14,679 - safe_zone - INFO - Database connection closed
+2025-11-01 12:17:14,679 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:17:15,707 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:17:16,609 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:17:17,714 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:17:17,714 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:17:17,764 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:17:17,767 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:17:17,767 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:17:17.766478+00:00
+2025-11-01 12:17:17,769 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:17:17.768155+00:00
+2025-11-01 12:17:17,771 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:17:17,772 - safe_zone - INFO - Database connection established
+2025-11-01 12:17:27,121 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:17:27,121 - safe_zone - INFO - Database connection closed
+2025-11-01 12:17:27,122 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:17:28,171 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:17:28,947 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:17:30,104 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:17:30,104 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:17:30,148 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:17:30,151 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:17:30,151 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:17:30.150528+00:00
+2025-11-01 12:17:30,153 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:17:30.152001+00:00
+2025-11-01 12:17:30,155 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:17:30,156 - safe_zone - INFO - Database connection established
+2025-11-01 12:18:15,967 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:18:15,968 - safe_zone - INFO - Database connection closed
+2025-11-01 12:18:15,968 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:18:17,224 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:18:18,217 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:18:19,469 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:18:19,469 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:18:19,526 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:18:19,533 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:18:19,533 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:18:19.530408+00:00
+2025-11-01 12:18:19,535 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:18:19.534801+00:00
+2025-11-01 12:18:19,538 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:18:19,539 - safe_zone - INFO - Database connection established
+2025-11-01 12:18:42,972 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:18:42,973 - safe_zone - INFO - Database connection closed
+2025-11-01 12:18:42,973 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:18:44,336 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:18:45,202 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:18:46,312 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:18:46,312 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:18:46,361 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:18:46,364 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:18:46,364 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:18:46.363160+00:00
+2025-11-01 12:18:46,366 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:18:46.365190+00:00
+2025-11-01 12:18:46,368 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:18:46,369 - safe_zone - INFO - Database connection established
+2025-11-01 12:21:59,311 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:21:59,311 - safe_zone - INFO - Database connection closed
+2025-11-01 12:21:59,312 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:21:59,018 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:21:59,847 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:22:01,101 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:22:01,101 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:22:01,147 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:22:01,150 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:22:01,150 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:22:01.149729+00:00
+2025-11-01 12:22:01,152 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:22:01.151124+00:00
+2025-11-01 12:22:01,154 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:22:01,154 - safe_zone - INFO - Database connection established
+2025-11-01 12:22:37,615 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:22:37,615 - safe_zone - INFO - Database connection closed
+2025-11-01 12:22:37,616 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:22:38,615 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:22:39,522 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:22:40,726 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:22:40,726 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:22:40,768 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:22:40,771 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:22:40,771 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:22:40.770681+00:00
+2025-11-01 12:22:40,772 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:22:40.771917+00:00
+2025-11-01 12:22:40,774 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:22:40,774 - safe_zone - INFO - Database connection established
+2025-11-01 12:23:30,542 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:23:30,542 - safe_zone - INFO - Database connection closed
+2025-11-01 12:23:30,543 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:23:31,524 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:23:32,412 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:23:32,467 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:23:32,468 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:23:32,520 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:23:32,523 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:23:32,524 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:23:32.522717+00:00
+2025-11-01 12:23:32,526 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:23:32.524698+00:00
+2025-11-01 12:23:32,527 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:23:32,528 - safe_zone - INFO - Database connection established
+2025-11-01 12:24:06,711 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:24:06,712 - safe_zone - INFO - Database connection closed
+2025-11-01 12:24:06,713 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:24:07,725 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:24:08,617 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:24:09,717 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:24:09,717 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:24:09,769 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:24:09,772 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:24:09,772 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:24:09.771001+00:00
+2025-11-01 12:24:09,774 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:24:09.772762+00:00
+2025-11-01 12:24:09,775 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:24:09,776 - safe_zone - INFO - Database connection established
+2025-11-01 12:28:36,083 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:28:36,083 - safe_zone - INFO - Database connection closed
+2025-11-01 12:28:36,083 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:28:37,187 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:28:38,052 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:28:39,179 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:28:39,179 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:28:39,227 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:28:39,229 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:28:39,230 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:28:39.228772+00:00
+2025-11-01 12:28:39,231 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:28:39.230511+00:00
+2025-11-01 12:28:39,233 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:28:39,234 - safe_zone - INFO - Database connection established
+2025-11-01 12:29:08,098 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:29:08,098 - safe_zone - INFO - Database connection closed
+2025-11-01 12:29:08,099 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:29:09,051 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:29:09,837 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:29:11,064 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:29:11,064 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:29:11,119 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:29:11,122 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:29:11,123 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:29:11.121918+00:00
+2025-11-01 12:29:11,124 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:29:11.123609+00:00
+2025-11-01 12:29:11,126 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:29:11,127 - safe_zone - INFO - Database connection established
+2025-11-01 12:30:23,521 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:30:23,521 - safe_zone - INFO - Database connection closed
+2025-11-01 12:30:23,522 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:30:24,540 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:30:25,488 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:30:26,593 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:30:26,593 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:30:26,650 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:30:26,652 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:30:26,653 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:30:26.651944+00:00
+2025-11-01 12:30:26,654 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:30:26.653579+00:00
+2025-11-01 12:30:26,656 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:30:26,657 - safe_zone - INFO - Database connection established
+2025-11-01 12:31:04,392 - safe_zone.health - INFO - Health check - Database connected
+2025-11-01 12:31:23,290 - safe_zone.health - INFO - Health check - Database connected
+2025-11-01 12:35:54,895 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:35:54,895 - safe_zone - INFO - Database connection closed
+2025-11-01 12:35:54,896 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:35:56,002 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:35:56,808 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:35:57,904 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:35:57,904 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:35:57,955 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:35:57,958 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:35:57,958 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:35:57.957690+00:00
+2025-11-01 12:35:57,960 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:35:57.959339+00:00
+2025-11-01 12:35:57,962 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:35:57,962 - safe_zone - INFO - Database connection established
+2025-11-01 12:36:49,040 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:36:49,041 - safe_zone - INFO - Database connection closed
+2025-11-01 12:36:49,042 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:36:50,063 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:36:50,990 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:36:52,061 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:36:52,061 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:36:52,104 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:36:52,107 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:36:52,107 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:36:52.106304+00:00
+2025-11-01 12:36:52,109 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:36:52.108053+00:00
+2025-11-01 12:36:52,111 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:36:52,111 - safe_zone - INFO - Database connection established
+2025-11-01 12:39:17,531 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:39:17,532 - safe_zone - INFO - Database connection closed
+2025-11-01 12:39:17,533 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:39:18,594 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:39:19,638 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:39:21,011 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:39:21,011 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:39:21,059 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:39:21,062 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:39:21,062 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:39:21.061464+00:00
+2025-11-01 12:39:21,064 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:39:21.063275+00:00
+2025-11-01 12:39:21,066 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:39:21,067 - safe_zone - INFO - Database connection established
+2025-11-01 12:39:29,955 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:39:29,956 - safe_zone - INFO - Database connection closed
+2025-11-01 12:39:29,956 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:39:30,972 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:39:31,872 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:39:33,010 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:39:33,010 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:39:33,060 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:39:33,063 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:39:33,063 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:39:33.062114+00:00
+2025-11-01 12:39:33,064 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:39:33.063640+00:00
+2025-11-01 12:39:33,066 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:39:33,067 - safe_zone - INFO - Database connection established
+2025-11-01 12:40:12,899 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:40:12,900 - safe_zone - INFO - Database connection closed
+2025-11-01 12:40:12,900 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:40:13,931 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:40:14,836 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:40:15,976 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:40:15,976 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:40:16,031 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:40:16,034 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:40:16,034 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:40:16.033738+00:00
+2025-11-01 12:40:16,036 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:40:16.035214+00:00
+2025-11-01 12:40:16,038 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:40:16,039 - safe_zone - INFO - Database connection established
+2025-11-01 12:40:23,460 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:40:23,461 - safe_zone - INFO - Database connection closed
+2025-11-01 12:40:23,462 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:40:24,411 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:40:25,268 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:40:26,497 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:40:26,497 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:40:26,540 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:40:26,543 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:40:26,543 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:40:26.542387+00:00
+2025-11-01 12:40:26,545 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:40:26.544111+00:00
+2025-11-01 12:40:26,547 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:40:26,547 - safe_zone - INFO - Database connection established
+2025-11-01 12:41:11,077 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:41:11,078 - safe_zone - INFO - Database connection closed
+2025-11-01 12:41:11,080 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:41:11,990 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:41:12,750 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:41:13,861 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:41:13,861 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:41:13,908 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:41:13,911 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:41:13,912 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:41:13.909766+00:00
+2025-11-01 12:41:13,913 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:41:13.912505+00:00
+2025-11-01 12:41:13,914 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:41:13,915 - safe_zone - INFO - Database connection established
+2025-11-01 12:42:27,916 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:42:27,916 - safe_zone - INFO - Database connection closed
+2025-11-01 12:42:27,917 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:42:28,836 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:42:29,719 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:42:30,733 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:42:30,733 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:42:30,774 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:42:30,778 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:42:30,778 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:42:30.776413+00:00
+2025-11-01 12:42:30,779 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:42:30.779144+00:00
+2025-11-01 12:42:30,781 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:42:30,782 - safe_zone - INFO - Database connection established
+2025-11-01 12:46:19,594 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:46:19,595 - safe_zone - INFO - Database connection closed
+2025-11-01 12:46:19,595 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:46:20,493 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:46:21,256 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:46:22,483 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:46:22,483 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:46:22,525 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:46:22,527 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:46:22,527 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:46:22.527027+00:00
+2025-11-01 12:46:22,529 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:46:22.528281+00:00
+2025-11-01 12:46:22,531 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:46:22,532 - safe_zone - INFO - Database connection established
+2025-11-01 12:48:23,253 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:48:23,253 - safe_zone - INFO - Database connection closed
+2025-11-01 12:48:23,253 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:48:22,857 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:48:23,605 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:48:24,817 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:48:24,818 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:48:24,860 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:48:24,863 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:48:24,863 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:48:24.861955+00:00
+2025-11-01 12:48:24,865 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:48:24.863752+00:00
+2025-11-01 12:48:24,866 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:48:24,867 - safe_zone - INFO - Database connection established
+2025-11-01 12:48:35,107 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:48:35,107 - safe_zone - INFO - Database connection closed
+2025-11-01 12:48:35,107 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:48:36,000 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:48:36,739 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:48:37,716 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:48:37,717 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:48:37,757 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:48:37,760 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:48:37,760 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:48:37.759229+00:00
+2025-11-01 12:48:37,761 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:48:37.760810+00:00
+2025-11-01 12:48:37,764 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:48:37,764 - safe_zone - INFO - Database connection established
+2025-11-01 12:49:19,797 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:49:19,798 - safe_zone - INFO - Database connection closed
+2025-11-01 12:49:19,798 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:49:20,716 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:49:21,547 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:49:22,536 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:49:22,536 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:49:22,580 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:49:22,584 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:49:22,584 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:49:22.582801+00:00
+2025-11-01 12:49:22,586 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:49:22.584802+00:00
+2025-11-01 12:49:22,588 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:49:22,589 - safe_zone - INFO - Database connection established
+2025-11-01 12:49:33,096 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:49:33,097 - safe_zone - INFO - Database connection closed
+2025-11-01 12:49:33,098 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:49:33,990 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:49:34,743 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:49:35,825 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:49:35,825 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:49:35,870 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:49:35,873 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:49:35,873 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:49:35.872287+00:00
+2025-11-01 12:49:35,874 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:49:35.873689+00:00
+2025-11-01 12:49:35,876 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:49:35,877 - safe_zone - INFO - Database connection established
+2025-11-01 12:49:57,654 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:49:57,654 - safe_zone - INFO - Database connection closed
+2025-11-01 12:49:57,655 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:49:58,560 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:49:59,415 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:50:00,434 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:50:00,434 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:50:00,477 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:50:00,480 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:50:00,480 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:50:00.479461+00:00
+2025-11-01 12:50:00,481 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:50:00.480777+00:00
+2025-11-01 12:50:00,484 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:50:00,485 - safe_zone - INFO - Database connection established
+2025-11-01 12:50:09,549 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:50:09,549 - safe_zone - INFO - Database connection closed
+2025-11-01 12:50:09,549 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:50:10,444 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:50:11,174 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:50:12,141 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:50:12,141 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:50:12,182 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:50:12,184 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:50:12,185 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:50:12.183900+00:00
+2025-11-01 12:50:12,186 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:50:12.185471+00:00
+2025-11-01 12:50:12,188 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:50:12,189 - safe_zone - INFO - Database connection established
+2025-11-01 12:51:27,753 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:51:27,754 - safe_zone - INFO - Database connection closed
+2025-11-01 12:51:27,754 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:51:28,729 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:51:29,599 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:51:29,460 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:51:29,460 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:51:29,505 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:51:29,508 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:51:29,508 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:51:29.507650+00:00
+2025-11-01 12:51:29,514 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:51:29.510484+00:00
+2025-11-01 12:51:29,516 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:51:29,517 - safe_zone - INFO - Database connection established
+2025-11-01 12:52:51,298 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 12:52:51,298 - safe_zone - INFO - Database connection closed
+2025-11-01 12:52:51,299 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 12:52:52,235 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:52:53,050 - safe_zone - INFO - Logging setup completed
+2025-11-01 12:52:54,105 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 12:52:54,105 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 12:52:54,147 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 12:52:54,150 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 12:52:54,151 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 08:52:54.149777+00:00
+2025-11-01 12:52:54,152 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 08:52:54.151439+00:00
+2025-11-01 12:52:54,154 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 12:52:54,155 - safe_zone - INFO - Database connection established
+2025-11-01 13:00:05,645 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:00:05,646 - safe_zone - INFO - Database connection closed
+2025-11-01 13:00:05,646 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:00:06,562 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:00:07,331 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:00:08,360 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:00:08,360 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:00:08,401 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:00:08,404 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:00:08,404 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:00:08.403202+00:00
+2025-11-01 13:00:08,405 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:00:08.404522+00:00
+2025-11-01 13:00:08,407 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:00:08,408 - safe_zone - INFO - Database connection established
+2025-11-01 13:00:43,757 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:00:43,758 - safe_zone - INFO - Database connection closed
+2025-11-01 13:00:43,759 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:00:44,680 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:00:45,641 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:00:46,860 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:00:46,861 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:00:46,902 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:00:46,905 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:00:46,905 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:00:46.904490+00:00
+2025-11-01 13:00:46,906 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:00:46.905833+00:00
+2025-11-01 13:00:46,908 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:00:46,909 - safe_zone - INFO - Database connection established
+2025-11-01 13:01:14,224 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:01:14,224 - safe_zone - INFO - Database connection closed
+2025-11-01 13:01:14,225 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:01:15,112 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:01:15,902 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:01:16,944 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:01:16,944 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:01:16,985 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:01:16,988 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:01:16,988 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:01:16.987395+00:00
+2025-11-01 13:01:16,990 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:01:16.988898+00:00
+2025-11-01 13:01:16,992 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:01:16,992 - safe_zone - INFO - Database connection established
+2025-11-01 13:01:26,581 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:01:26,581 - safe_zone - INFO - Database connection closed
+2025-11-01 13:01:26,581 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:01:27,507 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:01:28,247 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:01:29,245 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:01:29,245 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:01:29,286 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:01:29,289 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:01:29,289 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:01:29.288389+00:00
+2025-11-01 13:01:29,290 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:01:29.289932+00:00
+2025-11-01 13:01:29,293 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:01:29,294 - safe_zone - INFO - Database connection established
+2025-11-01 13:01:59,308 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:01:59,309 - safe_zone - INFO - Database connection closed
+2025-11-01 13:01:59,310 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:02:00,212 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:02:01,010 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:02:02,048 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:02:02,048 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:02:02,088 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:02:02,090 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:02:02,091 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:02:02.090015+00:00
+2025-11-01 13:02:02,092 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:02:02.091398+00:00
+2025-11-01 13:02:02,094 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:02:02,094 - safe_zone - INFO - Database connection established
+2025-11-01 13:02:35,737 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:02:35,737 - safe_zone - INFO - Database connection closed
+2025-11-01 13:02:35,738 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:02:36,634 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:02:37,418 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:02:38,466 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:02:38,467 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:02:38,507 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:02:38,510 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:02:38,510 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:02:38.509204+00:00
+2025-11-01 13:02:38,511 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:02:38.510644+00:00
+2025-11-01 13:02:38,513 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:02:38,514 - safe_zone - INFO - Database connection established
+2025-11-01 13:03:28,344 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:03:28,344 - safe_zone - INFO - Database connection closed
+2025-11-01 13:03:28,345 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:03:29,249 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:03:30,044 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:03:31,058 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:03:31,058 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:03:31,100 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:03:31,102 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:03:31,103 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:03:31.101971+00:00
+2025-11-01 13:03:31,104 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:03:31.103409+00:00
+2025-11-01 13:03:31,106 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:03:31,106 - safe_zone - INFO - Database connection established
+2025-11-01 13:54:55,216 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:54:55,216 - safe_zone - INFO - Database connection closed
+2025-11-01 13:54:55,216 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:54:56,163 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:54:56,916 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:54:58,075 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:54:58,075 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:54:58,129 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:54:58,131 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:54:58,131 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:54:58.130541+00:00
+2025-11-01 13:54:58,133 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:54:58.132118+00:00
+2025-11-01 13:54:58,134 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:54:58,135 - safe_zone - INFO - Database connection established
+2025-11-01 13:55:10,033 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:55:10,033 - safe_zone - INFO - Database connection closed
+2025-11-01 13:55:10,033 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:55:10,912 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:55:11,648 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:55:12,637 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:55:12,638 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:55:12,676 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:55:12,678 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:55:12,679 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:55:12.677958+00:00
+2025-11-01 13:55:12,680 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:55:12.679677+00:00
+2025-11-01 13:55:12,682 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:55:12,683 - safe_zone - INFO - Database connection established
+2025-11-01 13:55:50,560 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:55:50,561 - safe_zone - INFO - Database connection closed
+2025-11-01 13:55:50,562 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:55:51,469 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:55:52,264 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:55:53,249 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:55:53,249 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:55:53,288 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:55:53,290 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:55:53,290 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:55:53.289929+00:00
+2025-11-01 13:55:53,292 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:55:53.291228+00:00
+2025-11-01 13:55:53,293 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:55:53,294 - safe_zone - INFO - Database connection established
+2025-11-01 13:56:23,805 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:56:23,806 - safe_zone - INFO - Database connection closed
+2025-11-01 13:56:23,806 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:56:24,732 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:56:25,535 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:56:26,558 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:56:26,558 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:56:26,598 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:56:26,601 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:56:26,601 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:56:26.600247+00:00
+2025-11-01 13:56:26,602 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:56:26.601886+00:00
+2025-11-01 13:56:26,604 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:56:26,605 - safe_zone - INFO - Database connection established
+2025-11-01 13:59:02,934 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:59:02,935 - safe_zone - INFO - Database connection closed
+2025-11-01 13:59:02,935 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:59:03,813 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:59:04,580 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:59:05,608 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:59:05,608 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:59:05,647 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:59:05,650 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:59:05,650 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:59:05.649311+00:00
+2025-11-01 13:59:05,651 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:59:05.650971+00:00
+2025-11-01 13:59:05,653 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:59:05,654 - safe_zone - INFO - Database connection established
+2025-11-01 13:59:12,554 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:59:12,555 - safe_zone - INFO - Database connection closed
+2025-11-01 13:59:12,556 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:59:13,436 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:59:14,157 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:59:15,133 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:59:15,133 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:59:15,175 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:59:15,178 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:59:15,178 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:59:15.177480+00:00
+2025-11-01 13:59:15,179 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:59:15.178852+00:00
+2025-11-01 13:59:15,181 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:59:15,182 - safe_zone - INFO - Database connection established
+2025-11-01 13:59:54,855 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 13:59:54,856 - safe_zone - INFO - Database connection closed
+2025-11-01 13:59:54,857 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 13:59:55,736 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:59:56,520 - safe_zone - INFO - Logging setup completed
+2025-11-01 13:59:57,492 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 13:59:57,492 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 13:59:57,532 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 13:59:57,534 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 13:59:57,534 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 09:59:57.533952+00:00
+2025-11-01 13:59:57,536 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 09:59:57.535393+00:00
+2025-11-01 13:59:57,538 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 13:59:57,539 - safe_zone - INFO - Database connection established
+2025-11-01 14:03:45,871 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 14:03:45,872 - safe_zone - INFO - Database connection closed
+2025-11-01 14:03:45,872 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 14:03:46,751 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:03:47,492 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:03:48,529 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 14:03:48,529 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 14:03:48,572 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 14:03:48,575 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 14:03:48,576 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 10:03:48.574043+00:00
+2025-11-01 14:03:48,577 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 10:03:48.576484+00:00
+2025-11-01 14:03:48,578 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 14:03:48,579 - safe_zone - INFO - Database connection established
+2025-11-01 14:04:34,002 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 14:04:34,002 - safe_zone - INFO - Database connection closed
+2025-11-01 14:04:34,003 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 14:04:34,884 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:04:35,668 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:04:36,654 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 14:04:36,655 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 14:04:36,694 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 14:04:36,697 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 14:04:36,697 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 10:04:36.696479+00:00
+2025-11-01 14:04:36,698 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 10:04:36.697886+00:00
+2025-11-01 14:04:36,700 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 14:04:36,701 - safe_zone - INFO - Database connection established
+2025-11-01 14:04:53,832 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 14:04:53,832 - safe_zone - INFO - Database connection closed
+2025-11-01 14:04:53,832 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 14:04:54,706 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:04:55,461 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:04:55,974 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 14:04:55,974 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 14:04:56,015 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 14:04:56,017 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 14:04:56,018 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 10:04:56.016926+00:00
+2025-11-01 14:04:56,019 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 10:04:56.018339+00:00
+2025-11-01 14:04:56,021 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 14:04:56,021 - safe_zone - INFO - Database connection established
+2025-11-01 14:07:33,420 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 14:07:33,420 - safe_zone - INFO - Database connection closed
+2025-11-01 14:07:33,420 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 14:07:34,274 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:07:35,006 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:07:35,660 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 14:07:35,660 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 14:07:35,700 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 14:07:35,702 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 14:07:35,702 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 10:07:35.701713+00:00
+2025-11-01 14:07:35,703 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 10:07:35.702927+00:00
+2025-11-01 14:07:35,705 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 14:07:35,706 - safe_zone - INFO - Database connection established
+2025-11-01 14:07:42,484 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 14:07:42,484 - safe_zone - INFO - Database connection closed
+2025-11-01 14:07:42,485 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 14:07:43,358 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:07:44,076 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:07:45,030 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 14:07:45,030 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 14:07:45,069 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 14:07:45,072 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 14:07:45,072 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 10:07:45.071393+00:00
+2025-11-01 14:07:45,074 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 10:07:45.072870+00:00
+2025-11-01 14:07:45,075 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 14:07:45,076 - safe_zone - INFO - Database connection established
+2025-11-01 14:08:10,699 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 14:08:10,700 - safe_zone - INFO - Database connection closed
+2025-11-01 14:08:10,700 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 14:08:11,556 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:08:12,270 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:08:13,279 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 14:08:13,279 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 14:08:13,317 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 14:08:13,320 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 14:08:13,320 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 10:08:13.319526+00:00
+2025-11-01 14:08:13,321 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 10:08:13.320873+00:00
+2025-11-01 14:08:13,323 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 14:08:13,324 - safe_zone - INFO - Database connection established
+2025-11-01 14:12:34,049 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 14:12:34,049 - safe_zone - INFO - Database connection closed
+2025-11-01 14:12:34,050 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 14:12:35,056 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:12:35,935 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:12:36,929 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 14:12:36,929 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 14:12:36,970 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 14:12:36,974 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 14:12:36,974 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 10:12:36.972684+00:00
+2025-11-01 14:12:36,975 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 10:12:36.974767+00:00
+2025-11-01 14:12:36,976 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 14:12:36,977 - safe_zone - INFO - Database connection established
+2025-11-01 14:13:18,290 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 14:13:18,291 - safe_zone - INFO - Database connection closed
+2025-11-01 14:13:18,292 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 14:13:19,151 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:13:19,884 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:13:20,975 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 14:13:20,975 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 14:13:21,015 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 14:13:21,018 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 14:13:21,018 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 10:13:21.017295+00:00
+2025-11-01 14:13:21,019 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 10:13:21.018585+00:00
+2025-11-01 14:13:21,021 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 14:13:21,021 - safe_zone - INFO - Database connection established
+2025-11-01 14:13:30,737 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 14:13:30,738 - safe_zone - INFO - Database connection closed
+2025-11-01 14:13:30,738 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 14:13:31,604 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:15:06,757 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:20:21,382 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:21:35,883 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:21:36,672 - safe_zone - INFO - Logging setup completed
+2025-11-01 14:21:37,644 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 14:21:37,644 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 14:21:37,685 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 14:21:37,688 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 14:21:37,688 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 10:21:37.687734+00:00
+2025-11-01 14:21:37,690 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 10:21:37.689223+00:00
+2025-11-01 14:21:37,692 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 14:21:37,693 - safe_zone - INFO - Database connection established
+2025-11-01 15:50:34,443 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 15:50:34,444 - safe_zone - INFO - Database connection closed
+2025-11-01 15:50:34,444 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 15:50:35,418 - safe_zone - INFO - Logging setup completed
+2025-11-01 15:50:36,154 - safe_zone - INFO - Logging setup completed
+2025-11-01 15:50:37,157 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 15:50:37,157 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 15:50:37,202 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 15:50:37,205 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 15:50:37,205 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 11:50:37.204393+00:00
+2025-11-01 15:50:37,207 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 11:50:37.205884+00:00
+2025-11-01 15:50:37,209 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 15:50:37,209 - safe_zone - INFO - Database connection established
+2025-11-01 15:53:24,976 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 15:53:24,976 - safe_zone - INFO - Database connection closed
+2025-11-01 15:53:24,977 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 15:53:25,984 - safe_zone - INFO - Logging setup completed
+2025-11-01 15:53:26,807 - safe_zone - INFO - Logging setup completed
+2025-11-01 15:53:27,964 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 15:53:27,965 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 15:53:28,017 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 15:53:28,020 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 15:53:28,020 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 11:53:28.019178+00:00
+2025-11-01 15:53:28,022 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 11:53:28.021196+00:00
+2025-11-01 15:53:28,024 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 15:53:28,025 - safe_zone - INFO - Database connection established
+2025-11-01 15:55:14,988 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 15:55:14,988 - safe_zone - INFO - Database connection closed
+2025-11-01 15:55:14,989 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 15:55:15,936 - safe_zone - INFO - Logging setup completed
+2025-11-01 15:55:16,678 - safe_zone - INFO - Logging setup completed
+2025-11-01 15:55:17,673 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 15:55:17,674 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 15:55:17,717 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 15:55:17,720 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 15:55:17,720 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 11:55:17.719533+00:00
+2025-11-01 15:55:17,721 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 11:55:17.721025+00:00
+2025-11-01 15:55:17,724 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 15:55:17,724 - safe_zone - INFO - Database connection established
+2025-11-01 15:55:54,607 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 15:55:54,608 - safe_zone - INFO - Database connection closed
+2025-11-01 15:55:54,609 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 15:55:55,553 - safe_zone - INFO - Logging setup completed
+2025-11-01 15:55:56,305 - safe_zone - INFO - Logging setup completed
+2025-11-01 15:55:57,363 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 15:55:57,363 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 15:55:57,417 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 15:55:57,420 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 15:55:57,420 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 11:55:57.419142+00:00
+2025-11-01 15:55:57,422 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 11:55:57.421253+00:00
+2025-11-01 15:55:57,424 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 15:55:57,425 - safe_zone - INFO - Database connection established
+2025-11-01 16:00:46,698 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 16:00:46,699 - safe_zone - INFO - Database connection closed
+2025-11-01 16:00:46,700 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 16:00:47,737 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:00:48,534 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:00:49,603 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 16:00:49,604 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 16:00:49,648 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 16:00:49,652 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 16:00:49,652 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 12:00:49.650921+00:00
+2025-11-01 16:00:49,654 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 12:00:49.652646+00:00
+2025-11-01 16:00:49,656 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 16:00:49,656 - safe_zone - INFO - Database connection established
+2025-11-01 16:03:21,235 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 16:03:21,236 - safe_zone - INFO - Database connection closed
+2025-11-01 16:03:21,236 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 16:03:22,252 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:03:23,023 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:03:24,025 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 16:03:24,026 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 16:03:24,070 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 16:03:24,073 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 16:03:24,073 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 12:03:24.072536+00:00
+2025-11-01 16:03:24,076 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 12:03:24.074399+00:00
+2025-11-01 16:03:24,077 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 16:03:24,078 - safe_zone - INFO - Database connection established
+2025-11-01 16:05:00,869 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 16:05:00,869 - safe_zone - INFO - Database connection closed
+2025-11-01 16:05:00,869 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 16:05:01,823 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:05:02,571 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:05:03,581 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 16:05:03,581 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 16:05:03,626 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 16:05:03,629 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 16:05:03,629 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 12:05:03.628771+00:00
+2025-11-01 16:05:03,631 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 12:05:03.630422+00:00
+2025-11-01 16:05:03,633 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 16:05:03,634 - safe_zone - INFO - Database connection established
+2025-11-01 16:10:40,457 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 16:10:40,458 - safe_zone - INFO - Database connection closed
+2025-11-01 16:10:40,458 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 16:10:41,448 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:10:42,241 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:10:43,337 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 16:10:43,337 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 16:10:43,384 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 16:10:43,387 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 16:10:43,387 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 12:10:43.386280+00:00
+2025-11-01 16:10:43,390 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 12:10:43.388362+00:00
+2025-11-01 16:10:43,392 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 16:10:43,392 - safe_zone - INFO - Database connection established
+2025-11-01 16:14:09,312 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 16:14:09,314 - safe_zone - INFO - Database connection closed
+2025-11-01 16:14:09,315 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 16:14:10,335 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:14:11,061 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:14:12,061 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 16:14:12,061 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 16:14:12,106 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 16:14:12,110 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 16:14:12,110 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 12:14:12.108805+00:00
+2025-11-01 16:14:12,111 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 12:14:12.110616+00:00
+2025-11-01 16:14:12,113 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 16:14:12,114 - safe_zone - INFO - Database connection established
+2025-11-01 16:20:31,977 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 16:20:31,979 - safe_zone - INFO - Database connection closed
+2025-11-01 16:20:31,979 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 16:20:32,976 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:20:33,774 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:20:34,799 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 16:20:34,799 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 16:20:34,847 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 16:20:34,850 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 16:20:34,850 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 12:20:34.849686+00:00
+2025-11-01 16:20:34,852 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 12:20:34.851375+00:00
+2025-11-01 16:20:34,854 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 16:20:34,855 - safe_zone - INFO - Database connection established
+2025-11-01 16:24:11,035 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 16:24:11,036 - safe_zone - INFO - Database connection closed
+2025-11-01 16:24:11,037 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 16:24:11,038 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:24:11,878 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:24:13,143 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 16:24:13,143 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 16:24:13,190 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 16:24:13,194 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 16:24:13,194 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 12:24:13.192539+00:00
+2025-11-01 16:24:13,195 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 12:24:13.195038+00:00
+2025-11-01 16:24:13,197 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 16:24:13,198 - safe_zone - INFO - Database connection established
+2025-11-01 16:27:46,866 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 16:27:46,867 - safe_zone - INFO - Database connection closed
+2025-11-01 16:27:46,868 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 16:27:47,793 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:27:48,533 - safe_zone - INFO - Logging setup completed
+2025-11-01 16:27:49,535 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 16:27:49,536 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 16:27:49,589 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 16:27:49,592 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 16:27:49,593 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 12:27:49.591561+00:00
+2025-11-01 16:27:49,595 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 12:27:49.593652+00:00
+2025-11-01 16:27:49,597 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 16:27:49,599 - safe_zone - INFO - Database connection established
+2025-11-01 17:23:36,613 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:23:36,615 - safe_zone - INFO - Database connection closed
+2025-11-01 17:23:36,616 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:23:38,477 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:23:39,305 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:23:40,282 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:23:40,282 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:23:40,323 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:23:40,326 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:23:40,326 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:23:40.325702+00:00
+2025-11-01 17:23:40,328 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:23:40.327307+00:00
+2025-11-01 17:23:40,331 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:23:40,332 - safe_zone - INFO - Database connection established
+2025-11-01 17:24:40,719 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:24:40,719 - safe_zone - INFO - Database connection closed
+2025-11-01 17:24:40,719 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:24:41,641 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:24:42,388 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:24:43,340 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:24:43,340 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:24:43,381 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:24:43,385 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:24:43,385 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:24:43.383788+00:00
+2025-11-01 17:24:43,386 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:24:43.386034+00:00
+2025-11-01 17:24:43,388 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:24:43,388 - safe_zone - INFO - Database connection established
+2025-11-01 17:25:09,408 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:25:09,408 - safe_zone - INFO - Database connection closed
+2025-11-01 17:25:09,409 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:25:10,390 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:25:11,176 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:25:12,129 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:25:12,130 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:25:12,171 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:25:12,175 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:25:12,175 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:25:12.173402+00:00
+2025-11-01 17:25:12,176 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:25:12.175700+00:00
+2025-11-01 17:25:12,179 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:25:12,180 - safe_zone - INFO - Database connection established
+2025-11-01 17:44:30,676 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:44:30,676 - safe_zone - INFO - Database connection closed
+2025-11-01 17:44:30,676 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:44:31,730 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:44:32,480 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:44:33,448 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:44:33,448 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:44:33,489 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:44:33,492 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:44:33,492 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:44:33.491289+00:00
+2025-11-01 17:44:33,494 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:44:33.492830+00:00
+2025-11-01 17:44:33,496 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:44:33,496 - safe_zone - INFO - Database connection established
+2025-11-01 17:50:09,368 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:50:09,368 - safe_zone - INFO - Database connection closed
+2025-11-01 17:50:09,368 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:50:10,446 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:50:11,208 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:50:12,196 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:50:12,196 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:50:12,238 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:50:12,242 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:50:12,243 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:50:12.240410+00:00
+2025-11-01 17:50:12,244 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:50:12.243472+00:00
+2025-11-01 17:50:12,245 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:50:12,246 - safe_zone - INFO - Database connection established
+2025-11-01 17:52:03,493 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:52:03,493 - safe_zone - INFO - Database connection closed
+2025-11-01 17:52:03,493 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:52:04,416 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:52:05,227 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:52:06,252 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:52:06,252 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:52:06,295 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:52:06,300 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:52:06,300 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:52:06.298135+00:00
+2025-11-01 17:52:06,301 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:52:06.300609+00:00
+2025-11-01 17:52:06,302 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:52:06,303 - safe_zone - INFO - Database connection established
+2025-11-01 17:53:14,467 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:53:14,468 - safe_zone - INFO - Database connection closed
+2025-11-01 17:53:14,468 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:53:15,362 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:53:16,106 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:53:17,089 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:53:17,089 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:53:17,137 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:53:17,140 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:53:17,140 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:53:17.139666+00:00
+2025-11-01 17:53:17,143 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:53:17.141383+00:00
+2025-11-01 17:53:17,144 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:53:17,145 - safe_zone - INFO - Database connection established
+2025-11-01 17:55:54,577 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:55:54,578 - safe_zone - INFO - Database connection closed
+2025-11-01 17:55:54,578 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:55:55,485 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:55:56,226 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:55:57,320 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:55:57,321 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:55:57,364 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:55:57,367 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:55:57,368 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:55:57.366262+00:00
+2025-11-01 17:55:57,370 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:55:57.369577+00:00
+2025-11-01 17:55:57,373 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:55:57,375 - safe_zone - INFO - Database connection established
+2025-11-01 17:56:15,876 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:56:15,876 - safe_zone - INFO - Database connection closed
+2025-11-01 17:56:15,877 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:56:16,785 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:56:17,524 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:56:18,530 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:56:18,530 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:56:18,572 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:56:18,575 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:56:18,575 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:56:18.574190+00:00
+2025-11-01 17:56:18,577 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:56:18.575598+00:00
+2025-11-01 17:56:18,578 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:56:18,579 - safe_zone - INFO - Database connection established
+2025-11-01 17:58:29,608 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:58:29,608 - safe_zone - INFO - Database connection closed
+2025-11-01 17:58:29,608 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:58:30,516 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:58:31,280 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:58:32,300 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:58:32,300 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:58:32,342 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:58:32,344 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:58:32,344 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:58:32.343672+00:00
+2025-11-01 17:58:32,345 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:58:32.345022+00:00
+2025-11-01 17:58:32,347 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:58:32,348 - safe_zone - INFO - Database connection established
+2025-11-01 17:59:15,255 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 17:59:15,257 - safe_zone - INFO - Database connection closed
+2025-11-01 17:59:15,258 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 17:59:15,104 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:59:15,826 - safe_zone - INFO - Logging setup completed
+2025-11-01 17:59:16,793 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 17:59:16,793 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 17:59:16,835 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 17:59:16,839 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 17:59:16,839 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 13:59:16.837779+00:00
+2025-11-01 17:59:16,840 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 13:59:16.840165+00:00
+2025-11-01 17:59:16,842 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 17:59:16,842 - safe_zone - INFO - Database connection established
+2025-11-01 18:01:32,532 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 18:01:32,533 - safe_zone - INFO - Database connection closed
+2025-11-01 18:01:32,534 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 18:01:33,592 - safe_zone - INFO - Logging setup completed
+2025-11-01 18:01:34,359 - safe_zone - INFO - Logging setup completed
+2025-11-01 18:01:35,381 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 18:01:35,381 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 18:01:35,424 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 18:01:35,427 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 18:01:35,427 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 14:01:35.426310+00:00
+2025-11-01 18:01:35,429 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 14:01:35.428118+00:00
+2025-11-01 18:01:35,431 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 18:01:35,432 - safe_zone - INFO - Database connection established
+2025-11-01 18:04:21,533 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 18:04:21,534 - safe_zone - INFO - Database connection closed
+2025-11-01 18:04:21,534 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 18:04:22,643 - safe_zone - INFO - Logging setup completed
+2025-11-01 18:04:23,471 - safe_zone - INFO - Logging setup completed
+2025-11-01 18:04:24,592 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 18:04:24,592 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 18:04:24,644 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 18:04:24,647 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 18:04:24,647 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 14:04:24.646134+00:00
+2025-11-01 18:04:24,649 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 14:04:24.647729+00:00
+2025-11-01 18:04:24,651 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 18:04:24,652 - safe_zone - INFO - Database connection established
+2025-11-01 21:49:55,086 - safe_zone - INFO - Logging setup completed
+2025-11-01 21:49:56,218 - safe_zone - INFO - Logging setup completed
+2025-11-01 21:49:57,180 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 21:49:57,180 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 21:49:57,247 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 21:49:57,267 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 21:49:57,267 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 17:49:57.254365+00:00
+2025-11-01 21:49:57,270 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 17:49:57.267903+00:00
+2025-11-01 21:49:57,282 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 21:49:57,284 - safe_zone - INFO - Database connection established
+2025-11-01 22:01:57,175 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:01:57,175 - safe_zone - INFO - Database connection closed
+2025-11-01 22:01:57,178 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:01:58,051 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:01:58,804 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:01:59,822 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:01:59,822 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:01:59,865 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:01:59,868 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:01:59,868 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:01:59.867462+00:00
+2025-11-01 22:01:59,870 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:01:59.869193+00:00
+2025-11-01 22:01:59,872 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:01:59,872 - safe_zone - INFO - Database connection established
+2025-11-01 22:05:41,045 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:05:41,045 - safe_zone - INFO - Database connection closed
+2025-11-01 22:05:41,046 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:05:41,920 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:05:42,646 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:05:43,669 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:05:43,669 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:05:43,711 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:05:43,713 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:05:43,714 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:05:43.713151+00:00
+2025-11-01 22:05:43,715 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:05:43.714330+00:00
+2025-11-01 22:05:43,716 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:05:43,718 - safe_zone - INFO - Database connection established
+2025-11-01 22:07:11,204 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:07:11,205 - safe_zone - INFO - Database connection closed
+2025-11-01 22:07:11,205 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:07:12,062 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:07:12,784 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:07:13,742 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:07:13,742 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:07:13,783 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:07:13,786 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:07:13,786 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:07:13.785305+00:00
+2025-11-01 22:07:13,787 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:07:13.786557+00:00
+2025-11-01 22:07:13,789 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:07:13,790 - safe_zone - INFO - Database connection established
+2025-11-01 22:11:46,532 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:11:46,533 - safe_zone - INFO - Database connection closed
+2025-11-01 22:11:46,533 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:11:47,440 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:11:48,190 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:11:49,207 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:11:49,207 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:11:49,252 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:11:49,256 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:11:49,256 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:11:49.254849+00:00
+2025-11-01 22:11:49,258 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:11:49.256632+00:00
+2025-11-01 22:11:49,260 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:11:49,260 - safe_zone - INFO - Database connection established
+2025-11-01 22:31:51,842 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:31:51,845 - safe_zone - INFO - Database connection closed
+2025-11-01 22:31:51,847 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:32:00,954 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:32:08,310 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:32:09,431 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:32:09,431 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:32:09,474 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:32:09,477 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:32:09,477 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:32:09.476604+00:00
+2025-11-01 22:32:09,479 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:32:09.478284+00:00
+2025-11-01 22:32:09,481 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:32:09,482 - safe_zone - INFO - Database connection established
+2025-11-01 22:34:55,546 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:34:55,546 - safe_zone - INFO - Database connection closed
+2025-11-01 22:34:55,546 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:34:56,419 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:34:57,129 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:34:58,070 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:34:58,070 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:34:58,111 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:34:58,114 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:34:58,114 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:34:58.113229+00:00
+2025-11-01 22:34:58,115 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:34:58.114681+00:00
+2025-11-01 22:34:58,117 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:34:58,118 - safe_zone - INFO - Database connection established
+2025-11-01 22:44:06,747 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:44:06,747 - safe_zone - INFO - Database connection closed
+2025-11-01 22:44:06,748 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:44:07,638 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:44:08,374 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:44:09,344 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:44:09,344 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:44:09,385 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:44:09,388 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:44:09,388 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:44:09.387247+00:00
+2025-11-01 22:44:09,389 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:44:09.388527+00:00
+2025-11-01 22:44:09,391 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:44:09,392 - safe_zone - INFO - Database connection established
+2025-11-01 22:46:19,159 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:46:19,159 - safe_zone - INFO - Database connection closed
+2025-11-01 22:46:19,159 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:46:20,059 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:46:20,786 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:46:21,745 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:46:21,746 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:46:21,787 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:46:21,789 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:46:21,790 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:46:21.789036+00:00
+2025-11-01 22:46:21,791 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:46:21.790389+00:00
+2025-11-01 22:46:21,793 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:46:21,794 - safe_zone - INFO - Database connection established
+2025-11-01 22:49:32,921 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:49:32,921 - safe_zone - INFO - Database connection closed
+2025-11-01 22:49:32,922 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:49:33,800 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:49:34,518 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:49:35,477 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:49:35,477 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:49:35,518 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:49:35,521 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:49:35,521 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:49:35.520593+00:00
+2025-11-01 22:49:35,523 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:49:35.522033+00:00
+2025-11-01 22:49:35,524 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:49:35,525 - safe_zone - INFO - Database connection established
+2025-11-01 22:53:42,816 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:53:42,817 - safe_zone - INFO - Database connection closed
+2025-11-01 22:53:42,817 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:53:43,746 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:53:44,480 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:53:45,485 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:53:45,485 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:53:45,525 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:53:45,528 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:53:45,528 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:53:45.527244+00:00
+2025-11-01 22:53:45,529 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:53:45.528634+00:00
+2025-11-01 22:53:45,531 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:53:45,532 - safe_zone - INFO - Database connection established
+2025-11-01 22:55:09,293 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 22:55:09,293 - safe_zone - INFO - Database connection closed
+2025-11-01 22:55:09,294 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 22:55:10,229 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:59:34,154 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:59:34,937 - safe_zone - INFO - Logging setup completed
+2025-11-01 22:59:35,928 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 22:59:35,928 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 22:59:35,970 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 22:59:35,973 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 22:59:35,973 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 18:59:35.972371+00:00
+2025-11-01 22:59:35,974 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 18:59:35.973772+00:00
+2025-11-01 22:59:35,977 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 22:59:35,978 - safe_zone - INFO - Database connection established
+2025-11-01 23:00:24,718 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 23:00:24,718 - safe_zone - INFO - Database connection closed
+2025-11-01 23:00:24,719 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 23:00:25,596 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:00:26,330 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:00:27,323 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 23:00:27,323 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 23:00:27,365 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 23:00:27,368 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 23:00:27,368 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 19:00:27.367034+00:00
+2025-11-01 23:00:27,370 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 19:00:27.368722+00:00
+2025-11-01 23:00:27,372 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 23:00:27,372 - safe_zone - INFO - Database connection established
+2025-11-01 23:02:56,739 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 23:02:56,740 - safe_zone - INFO - Database connection closed
+2025-11-01 23:02:56,740 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 23:02:57,614 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:02:58,357 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:02:59,303 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 23:02:59,303 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 23:02:59,344 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 23:02:59,347 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 23:02:59,347 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 19:02:59.346374+00:00
+2025-11-01 23:02:59,348 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 19:02:59.348052+00:00
+2025-11-01 23:02:59,350 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 23:02:59,351 - safe_zone - INFO - Database connection established
+2025-11-01 23:05:09,092 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 23:05:09,092 - safe_zone - INFO - Database connection closed
+2025-11-01 23:05:09,092 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 23:05:09,991 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:05:10,743 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:05:11,800 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 23:05:11,800 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 23:05:11,842 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 23:05:11,845 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 23:05:11,845 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 19:05:11.844232+00:00
+2025-11-01 23:05:11,846 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 19:05:11.845684+00:00
+2025-11-01 23:05:11,848 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 23:05:11,849 - safe_zone - INFO - Database connection established
+2025-11-01 23:06:25,203 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 23:06:25,204 - safe_zone - INFO - Database connection closed
+2025-11-01 23:06:25,205 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 23:06:26,123 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:06:26,934 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:06:27,990 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 23:06:27,991 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 23:06:28,054 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 23:06:28,058 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 23:06:28,058 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 19:06:28.056917+00:00
+2025-11-01 23:06:28,060 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 19:06:28.058929+00:00
+2025-11-01 23:06:28,062 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 23:06:28,063 - safe_zone - INFO - Database connection established
+2025-11-01 23:08:02,343 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 23:08:02,344 - safe_zone - INFO - Database connection closed
+2025-11-01 23:08:02,344 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 23:08:03,255 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:08:04,056 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:08:05,066 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 23:08:05,066 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 23:08:05,108 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 23:08:05,111 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 23:08:05,111 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 19:08:05.110408+00:00
+2025-11-01 23:08:05,113 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 19:08:05.111875+00:00
+2025-11-01 23:08:05,115 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 23:08:05,115 - safe_zone - INFO - Database connection established
+2025-11-01 23:08:26,992 - safe_zone.database - INFO - Database connection pool closed
+2025-11-01 23:08:26,992 - safe_zone - INFO - Database connection closed
+2025-11-01 23:08:26,992 - safe_zone - INFO - Safe Zone API Server stopped
+2025-11-01 23:08:27,863 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:08:28,616 - safe_zone - INFO - Logging setup completed
+2025-11-01 23:08:29,603 - safe_zone - INFO - Starting Safe Zone API Server
+2025-11-01 23:08:29,603 - safe_zone.database - INFO - Attempting to connect to: 127.0.0.1:5433/safe_zone
+2025-11-01 23:08:29,645 - safe_zone.database - INFO - Database connection pool created successfully
+2025-11-01 23:08:29,648 - safe_zone.database - INFO - Database timezone configured: UTC
+2025-11-01 23:08:29,648 - safe_zone.database - INFO - Current database time (UTC): 2025-11-01 19:08:29.647228+00:00
+2025-11-01 23:08:29,649 - safe_zone.database - INFO - Timezone-aware timestamp: 2025-11-01 19:08:29.648644+00:00
+2025-11-01 23:08:29,651 - safe_zone.database - INFO - Timezone conversion test passed: False
+2025-11-01 23:08:29,652 - safe_zone - INFO - Database connection established

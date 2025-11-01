@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from typing import List, Optional
 from uuid import UUID
+from datetime import date
+
 from app.schemas.crisis import (
     CrisisResourceResponse,
     CrisisResourcesResponse,
@@ -12,13 +14,27 @@ from app.schemas.crisis import (
     UserCrisisPreferencesResponse,
     UserCrisisPreferencesUpdate,
     ResourceRecommendationRequest,
-    ResourceRecommendationResponse
+    ResourceRecommendationResponse,
+    # New schemas
+    SafetyPlanCreate,
+    SafetyPlanResponse,
+    SafetyPlanUpdate,
+    SafetyPlansResponse,
+    WellnessCheckinCreate,
+    WellnessCheckinResponse,
+    WellnessCheckinUpdate,
+    WellnessCheckinsResponse,
+    CrisisAlertCreate,
+    CrisisAlertResponse,
+    CrisisAlertsResponse
 )
 from app.schemas.user import User
 from app.core.security import get_current_user
 from app.crud.crisis import crisis_crud
 
 router = APIRouter()
+
+# ========== EXISTING ENDPOINTS ==========
 
 @router.get("/resources/", response_model=CrisisResourcesResponse)
 async def get_crisis_resources(
@@ -35,11 +51,11 @@ async def get_crisis_resources(
         skip = (page - 1) * limit
         resources = await crisis_crud.get_all_resources(category, geographic_scope, limit, skip)
         total = await crisis_crud.count_resources(category, geographic_scope)
-        
+
         # Get user location from preferences for personalized response
         user_preferences = await crisis_crud.get_user_crisis_preferences(current_user.id)
         user_location = user_preferences['country_code'] if user_preferences else None
-        
+
         return CrisisResourcesResponse(
             resources=[CrisisResourceResponse(**dict(resource)) for resource in resources],
             total=total,
@@ -87,13 +103,13 @@ async def get_recommended_resources(
         resources = await crisis_crud.get_recommended_resources(
             current_user.id, content, mood, category, limit
         )
-        
+
         # Determine if emergency resources are suggested
         emergency_suggested = any(
-            resource['category'] in ['suicide_prevention', 'emergency'] 
+            resource['category'] in ['suicide_prevention', 'emergency']
             for resource in resources
         )
-        
+
         # Generate reason for recommendations
         reason = None
         if content and any(keyword in content.lower() for keyword in ['suicide', 'kill myself', 'harm']):
@@ -104,11 +120,11 @@ async def get_recommended_resources(
             reason = f"Resources in the {category} category"
         else:
             reason = "General crisis support resources"
-        
+
         return ResourceRecommendationResponse(
-            recommended_resources=[CrisisResourceResponse(**dict(resource)) for resource in resources],
-            reason=reason,
-            emergency_suggested=emergency_suggested
+            resources=[CrisisResourceResponse(**dict(resource)) for resource in resources],
+            recommendations_based_on={"mood": mood, "content_analysis": bool(content)},
+            user_preferences_used=False  # Simple implementation for now
         )
     except Exception as e:
         raise HTTPException(
@@ -127,7 +143,7 @@ async def get_emergency_contacts(
         contacts = await crisis_crud.get_emergency_contacts(current_user.id)
         has_primary = any(contact['is_primary'] for contact in contacts)
         total = await crisis_crud.count_user_contacts(current_user.id)
-        
+
         return EmergencyContactsResponse(
             contacts=[EmergencyContactResponse(**dict(contact)) for contact in contacts],
             total=total,
@@ -322,4 +338,344 @@ async def update_crisis_preferences(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error updating crisis preferences: {str(e)}"
+        )
+
+# ========== NEW ENDPOINTS FOR ADDITIONAL TABLES ==========
+
+# Safety Plans Endpoints
+@router.post("/safety-plans/", response_model=SafetyPlanResponse, status_code=status.HTTP_201_CREATED)
+async def create_safety_plan(
+    plan: SafetyPlanCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Create a new safety plan
+    """
+    try:
+        result = await crisis_crud.create_safety_plan(current_user.id, plan)
+        if result:
+            return SafetyPlanResponse(**dict(result))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create safety plan"
+            )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating safety plan: {str(e)}"
+        )
+
+@router.get("/safety-plans/", response_model=SafetyPlansResponse)
+async def get_safety_plans(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get user's safety plans
+    """
+    try:
+        plans = await crisis_crud.get_safety_plans(current_user.id)
+        active_plan = await crisis_crud.get_active_safety_plan(current_user.id)
+        
+        return SafetyPlansResponse(
+            plans=[SafetyPlanResponse(**dict(plan)) for plan in plans],
+            total=len(plans),
+            active_plan=SafetyPlanResponse(**dict(active_plan)) if active_plan else None
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving safety plans: {str(e)}"
+        )
+
+@router.get("/safety-plans/{plan_id}", response_model=SafetyPlanResponse)
+async def get_safety_plan(
+    plan_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get a specific safety plan
+    """
+    try:
+        plan = await crisis_crud.get_safety_plan(UUID(plan_id), current_user.id)
+        if not plan:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Safety plan not found"
+            )
+        return SafetyPlanResponse(**dict(plan))
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving safety plan: {str(e)}"
+        )
+
+@router.put("/safety-plans/{plan_id}", response_model=SafetyPlanResponse)
+async def update_safety_plan(
+    plan_id: str,
+    plan_update: SafetyPlanUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Update a safety plan
+    """
+    try:
+        # First check if plan exists and user owns it
+        existing_plan = await crisis_crud.get_safety_plan(UUID(plan_id), current_user.id)
+        if not existing_plan:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Safety plan not found"
+            )
+
+        # Update the plan
+        updated_plan = await crisis_crud.update_safety_plan(
+            UUID(plan_id), current_user.id, plan_update
+        )
+        if updated_plan:
+            return SafetyPlanResponse(**dict(updated_plan))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to update safety plan"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error updating safety plan: {str(e)}"
+        )
+
+@router.delete("/safety-plans/{plan_id}")
+async def delete_safety_plan(
+    plan_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Delete a safety plan
+    """
+    try:
+        # First check if plan exists
+        existing_plan = await crisis_crud.get_safety_plan(UUID(plan_id), current_user.id)
+        if not existing_plan:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Safety plan not found"
+            )
+
+        # Delete the plan
+        success = await crisis_crud.delete_safety_plan(UUID(plan_id), current_user.id)
+        if success:
+            return {"message": "Safety plan deleted successfully"}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to delete safety plan"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error deleting safety plan: {str(e)}"
+        )
+
+# Wellness Checkins Endpoints
+@router.post("/wellness-checkins/", response_model=WellnessCheckinResponse, status_code=status.HTTP_201_CREATED)
+async def create_wellness_checkin(
+    checkin: WellnessCheckinCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Create a new wellness checkin
+    """
+    try:
+        result = await crisis_crud.create_wellness_checkin(current_user.id, checkin)
+        if result:
+            return WellnessCheckinResponse(**dict(result))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create wellness checkin"
+            )
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating wellness checkin: {str(e)}"
+        )
+
+@router.get("/wellness-checkins/", response_model=WellnessCheckinsResponse)
+async def get_wellness_checkins(
+    page: int = Query(1, ge=1, description="Page number"),
+    limit: int = Query(20, ge=1, le=100, description="Items per page"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get user's wellness checkins
+    """
+    try:
+        skip = (page - 1) * limit
+        checkins = await crisis_crud.get_wellness_checkins(current_user.id, limit, skip)
+        today_checkin = await crisis_crud.get_today_wellness_checkin(current_user.id)
+        
+        return WellnessCheckinsResponse(
+            checkins=[WellnessCheckinResponse(**dict(checkin)) for checkin in checkins],
+            total=len(checkins),
+            today_checkin=WellnessCheckinResponse(**dict(today_checkin)) if today_checkin else None
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving wellness checkins: {str(e)}"
+        )
+
+@router.get("/wellness-checkins/today", response_model=WellnessCheckinResponse)
+async def get_today_wellness_checkin(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get today's wellness checkin
+    """
+    try:
+        checkin = await crisis_crud.get_today_wellness_checkin(current_user.id)
+        if not checkin:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No wellness checkin found for today"
+            )
+        return WellnessCheckinResponse(**dict(checkin))
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving today's wellness checkin: {str(e)}"
+        )
+
+@router.put("/wellness-checkins/{checkin_id}", response_model=WellnessCheckinResponse)
+async def update_wellness_checkin(
+    checkin_id: str,
+    checkin_update: WellnessCheckinUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Update a wellness checkin
+    """
+    try:
+        # First check if checkin exists and user owns it
+        existing_checkin = await crisis_crud.get_wellness_checkin(UUID(checkin_id), current_user.id)
+        if not existing_checkin:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Wellness checkin not found"
+            )
+
+        # Update the checkin
+        updated_checkin = await crisis_crud.update_wellness_checkin(
+            UUID(checkin_id), current_user.id, checkin_update
+        )
+        if updated_checkin:
+            return WellnessCheckinResponse(**dict(updated_checkin))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to update wellness checkin"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error updating wellness checkin: {str(e)}"
+        )
+
+# Crisis Alerts Endpoints
+@router.post("/crisis-alerts/", response_model=CrisisAlertResponse, status_code=status.HTTP_201_CREATED)
+async def create_crisis_alert(
+    alert: CrisisAlertCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Create a new crisis alert
+    """
+    try:
+        result = await crisis_crud.create_crisis_alert(current_user.id, alert)
+        if result:
+            return CrisisAlertResponse(**dict(result))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create crisis alert"
+            )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating crisis alert: {str(e)}"
+        )
+
+@router.get("/crisis-alerts/", response_model=CrisisAlertsResponse)
+async def get_crisis_alerts(
+    page: int = Query(1, ge=1, description="Page number"),
+    limit: int = Query(20, ge=1, le=100, description="Items per page"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get user's crisis alerts
+    """
+    try:
+        skip = (page - 1) * limit
+        alerts = await crisis_crud.get_user_crisis_alerts(current_user.id, limit, skip)
+        active_alerts = await crisis_crud.get_active_crisis_alerts(current_user.id)
+        
+        return CrisisAlertsResponse(
+            alerts=[CrisisAlertResponse(**dict(alert)) for alert in alerts],
+            total=len(alerts),
+            active_alerts=[CrisisAlertResponse(**dict(alert)) for alert in active_alerts]
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving crisis alerts: {str(e)}"
+        )
+
+@router.post("/crisis-alerts/{alert_id}/resolve", response_model=CrisisAlertResponse)
+async def resolve_crisis_alert(
+    alert_id: str,
+    resolution_notes: str = None,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Mark a crisis alert as resolved
+    """
+    try:
+        # First check if alert exists and user owns it
+        existing_alert = await crisis_crud.get_crisis_alert(UUID(alert_id), current_user.id)
+        if not existing_alert:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Crisis alert not found"
+            )
+
+        # Resolve the alert
+        resolved_alert = await crisis_crud.resolve_crisis_alert(
+            UUID(alert_id), current_user.id, resolution_notes
+        )
+        if resolved_alert:
+            return CrisisAlertResponse(**dict(resolved_alert))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to resolve crisis alert"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error resolving crisis alert: {str(e)}"
         )

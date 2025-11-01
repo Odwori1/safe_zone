@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from typing import List, Optional
 from uuid import UUID
 from app.schemas.post import PostCreate, PostResponse, PostUpdate
 from app.schemas.user import User
 from app.core.security import get_current_user
 from app.crud.post import post_crud
+from app.crud.feed import get_post_feed, get_posts_count  # ADD FEED IMPORTS
 
 router = APIRouter()
 
@@ -90,6 +91,259 @@ async def read_posts(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error retrieving posts: {str(e)}"
         )
+
+# ========== FEED SYSTEM ENDPOINTS ==========
+
+@router.get("/feed/personal", response_model=List[PostResponse])
+async def get_personal_feed(
+    skip: int = Query(0, ge=0, description="Number of posts to skip"),
+    limit: int = Query(20, ge=1, le=100, description="Number of posts to return"),
+    mood: Optional[str] = Query(None, description="Filter by mood"),
+    visibility: Optional[str] = Query(None, description="Filter by visibility"),
+    content_type: Optional[str] = Query(None, description="Filter by content type"),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get personalized feed for current user
+    - Public posts + user's own posts
+    - Filter by mood, visibility, content type
+    - RLS security enforced
+    """
+    try:
+        print(f"🔍 FEED: Getting personal feed for user {current_user.id}")
+        print(f"🔍 FEED: Filters - mood={mood}, visibility={visibility}, content_type={content_type}")
+        
+        posts = await get_post_feed(
+            user_id=current_user.id,
+            skip=skip,
+            limit=limit,
+            visibility=visibility,
+            content_type=content_type,
+            mood=mood
+        )
+        
+        print(f"🔍 FEED: Retrieved {len(posts)} posts from feed system")
+        
+        # Process posts for response
+        response_posts = []
+        for post in posts:
+            post_data = dict(post)
+            if post_data.get('is_anonymous'):
+                post_data['username'] = None
+                post_data['user_avatar'] = None
+            response_posts.append(PostResponse(**post_data))
+            
+        return response_posts
+    except Exception as e:
+        print(f"❌ FEED ERROR: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving feed: {str(e)}"
+        )
+
+@router.get("/feed/stats")
+async def get_feed_stats(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get feed statistics for current user
+    """
+    try:
+        total = await get_posts_count(current_user.id)
+        return {
+            "total_available_posts": total,
+            "user_id": str(current_user.id),
+            "message": f"Found {total} posts available in your feed"
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving feed stats: {str(e)}"
+        )
+
+@router.get("/feed/discover", response_model=List[PostResponse])
+async def discover_posts(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1, le=50),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Discover new content (popular posts, trending, etc.)
+    """
+    try:
+        # For now, use the feed system but could be enhanced with algorithms
+        posts = await get_post_feed(
+            user_id=current_user.id,
+            skip=skip,
+            limit=limit,
+            visibility="public"
+        )
+        
+        response_posts = []
+        for post in posts:
+            post_data = dict(post)
+            if post_data.get('is_anonymous'):
+                post_data['username'] = None
+                post_data['user_avatar'] = None
+            response_posts.append(PostResponse(**post_data))
+            
+        return response_posts
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error discovering posts: {str(e)}"
+        )
+
+
+# ========== SAVED POSTS ENDPOINTS ==========
+
+@router.post("/{post_id}/save")
+async def save_post(
+    post_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Save a post for later
+    """
+    try:
+        # First check if post exists
+        existing_post = await post_crud.get(UUID(post_id), current_user.id)
+        if not existing_post:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Post not found"
+            )
+
+        # Check if already saved
+        already_saved = await post_crud.is_post_saved(UUID(post_id), current_user.id)
+        if already_saved:
+            return {
+                "message": "Post already saved",
+                "already_saved": True
+            }
+
+        # Save the post
+        success = await post_crud.save_post(UUID(post_id), current_user.id)
+        if success:
+            return {
+                "message": "Post saved successfully",
+                "already_saved": False
+            }
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to save post"
+            )
+
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid post ID format"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error saving post: {str(e)}"
+        )
+
+@router.post("/{post_id}/unsave")
+async def unsave_post(
+    post_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Remove a post from saved
+    """
+    try:
+        # First check if post exists
+        existing_post = await post_crud.get(UUID(post_id), current_user.id)
+        if not existing_post:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Post not found"
+            )
+
+        # Check if post is saved
+        already_saved = await post_crud.is_post_saved(UUID(post_id), current_user.id)
+        if not already_saved:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Post is not saved"
+            )
+
+        # Unsave the post
+        success = await post_crud.unsave_post(UUID(post_id), current_user.id)
+        if success:
+            return {"message": "Post removed from saved"}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to remove post from saved"
+            )
+
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid post ID format"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error unsaving post: {str(e)}"
+        )
+
+@router.get("/saved/posts", response_model=List[PostResponse])
+async def get_saved_posts(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get user's saved posts
+    """
+    try:
+        posts = await post_crud.get_saved_posts(
+            user_id=current_user.id,
+            skip=skip,
+            limit=limit
+        )
+        
+        # Process posts for response
+        response_posts = []
+        for post in posts:
+            post_data = dict(post)
+            if post_data.get('is_anonymous'):
+                post_data['username'] = None
+                post_data['user_avatar'] = None
+            response_posts.append(PostResponse(**post_data))
+            
+        return response_posts
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving saved posts: {str(e)}"
+        )
+
+@router.get("/saved/stats")
+async def get_saved_stats(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get saved posts statistics
+    """
+    try:
+        count = await post_crud.get_saved_posts_count(current_user.id)
+        return {
+            "total_saved_posts": count,
+            "user_id": str(current_user.id)
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving saved stats: {str(e)}"
+        )
+
+# ========== EXISTING POST ENDPOINTS (UNCHANGED) ==========
 
 @router.get("/{post_id}", response_model=PostResponse)
 async def read_post(
@@ -355,10 +609,10 @@ async def share_post(
 
         # Add share record
         success = await post_crud.add_share(UUID(post_id), current_user.id)
-        
+
         if success:
             share_count = await post_crud.get_share_count(UUID(post_id), current_user.id)
-            
+
             # Create a new post for the share if caption is provided (like Facebook/Twitter)
             caption = share_data.get('caption', '') if share_data else ''
             if caption:
@@ -370,10 +624,10 @@ async def share_post(
                     "is_anonymous": False,
                     "mood": original_post.get('mood')
                 }
-                
+
                 # Create the new share post
                 new_post = await post_crud.create(current_user.id, new_post_data)
-                
+
                 return {
                     "message": "Post shared with caption successfully",
                     "already_shared": False,

@@ -2,6 +2,7 @@ import asyncpg
 from typing import Optional, List
 from uuid import UUID
 from app.database.database import database
+from app.schemas.post import PostResponse  # ADD MISSING IMPORT
 
 class CRUDPost:
     async def get(self, post_id: UUID, user_id: UUID = None) -> Optional[asyncpg.Record]:
@@ -342,7 +343,6 @@ class CRUDPost:
                 post_id
             )
 
-
     async def has_user_shared(self, post_id: UUID, user_id: UUID) -> bool:
         """Check if user has shared a post"""
         async with database.pool.acquire() as conn:
@@ -389,6 +389,129 @@ class CRUDPost:
                 "SELECT COUNT(*) FROM post_shares WHERE post_id = $1",
                 post_id
             )
+
+    # ========== SAVED POSTS METHODS (ADDED TO CLASS) ==========
+
+    async def save_post(self, post_id: UUID, user_id: UUID) -> bool:
+        """Save a post for later"""
+        try:
+            # Check if post exists and user has access
+            post = await self.get(post_id, user_id)
+            if not post:
+                return False
+
+            # Check if already saved
+            already_saved = await self.is_post_saved(post_id, user_id)
+            if already_saved:
+                return True  # Already saved, consider it success
+
+            # Save the post
+            async with database.pool.acquire() as conn:
+                await conn.execute("SELECT set_current_user_id($1);", str(user_id))
+                result = await conn.execute(
+                    "INSERT INTO saved_posts (post_id, user_id) VALUES ($1, $2)",
+                    post_id, user_id
+                )
+                return "INSERT 0 1" in result
+
+        except Exception as e:
+            print(f"Error saving post: {e}")
+            return False
+
+    async def unsave_post(self, post_id: UUID, user_id: UUID) -> bool:
+        """Remove a post from saved"""
+        try:
+            async with database.pool.acquire() as conn:
+                await conn.execute("SELECT set_current_user_id($1);", str(user_id))
+                result = await conn.execute(
+                    "DELETE FROM saved_posts WHERE post_id = $1 AND user_id = $2",
+                    post_id, user_id
+                )
+                return "DELETE 1" in result
+        except Exception as e:
+            print(f"Error unsaving post: {e}")
+            return False
+
+    async def get_saved_posts(self, user_id: UUID, skip: int = 0, limit: int = 100) -> List[dict]:
+        """Get user's saved posts"""
+        try:
+            async with database.pool.acquire() as conn:
+                await conn.execute("SELECT set_current_user_id($1);", str(user_id))
+                posts = await conn.fetch(
+                    """
+                    SELECT 
+                        p.*,
+                        u.username as username,
+                        u.profile_picture as user_avatar,
+                        (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) as like_count,
+                        EXISTS(
+                            SELECT 1 FROM post_likes 
+                            WHERE post_id = p.id AND user_id = $1
+                        ) as user_has_liked,
+                        (SELECT COUNT(*) FROM post_shares WHERE post_id = p.id) as share_count,
+                        EXISTS(
+                            SELECT 1 FROM post_shares 
+                            WHERE post_id = p.id AND user_id = $1
+                        ) as user_has_shared,
+                        sp.saved_at as saved_at
+                    FROM saved_posts sp
+                    JOIN posts p ON sp.post_id = p.id
+                    LEFT JOIN users u ON p.user_id = u.id
+                    WHERE sp.user_id = $1
+                    AND p.status = 'active'
+                    AND p.moderation_status = 'approved'
+                    ORDER BY sp.saved_at DESC
+                    LIMIT $2 OFFSET $3
+                    """,
+                    user_id, limit, skip
+                )
+
+                # Convert asyncpg.Record to dict and ensure proper typing
+                result = []
+                for post in posts:
+                    post_dict = dict(post)
+                    # Ensure boolean conversion for user_has_liked
+                    post_dict['user_has_liked'] = bool(post_dict.get('user_has_liked', False))
+                    # Ensure integer conversion for like_count
+                    post_dict['like_count'] = int(post_dict.get('like_count', 0))
+                    # Ensure boolean conversion for user_has_shared
+                    post_dict['user_has_shared'] = bool(post_dict.get('user_has_shared', False))
+                    # Ensure integer conversion for share_count
+                    post_dict['share_count'] = int(post_dict.get('share_count', 0))
+                    result.append(post_dict)
+
+                return result
+        except Exception as e:
+            print(f"Error getting saved posts: {e}")
+            return []
+
+    async def is_post_saved(self, post_id: UUID, user_id: UUID) -> bool:
+        """Check if a post is saved by user"""
+        try:
+            async with database.pool.acquire() as conn:
+                await conn.execute("SELECT set_current_user_id($1);", str(user_id))
+                result = await conn.fetchval(
+                    "SELECT 1 FROM saved_posts WHERE post_id = $1 AND user_id = $2",
+                    post_id, user_id
+                )
+                return bool(result)
+        except Exception as e:
+            print(f"Error checking if post saved: {e}")
+            return False
+
+    async def get_saved_posts_count(self, user_id: UUID) -> int:
+        """Get count of user's saved posts"""
+        try:
+            async with database.pool.acquire() as conn:
+                await conn.execute("SELECT set_current_user_id($1);", str(user_id))
+                result = await conn.fetchval(
+                    "SELECT COUNT(*) FROM saved_posts WHERE user_id = $1",
+                    user_id
+                )
+                return result if result else 0
+        except Exception as e:
+            print(f"Error getting saved posts count: {e}")
+            return 0
 
 # Create instance
 post_crud = CRUDPost()

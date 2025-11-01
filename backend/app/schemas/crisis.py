@@ -1,10 +1,8 @@
-from pydantic import BaseModel, Field, field_validator, ConfigDict, HttpUrl
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import Optional, List, Dict, Any
 from uuid import UUID
-from datetime import datetime
+from datetime import datetime, date
 from enum import Enum
-from app.utils.timezone import timezone_handler
-from .base import TimeStampedSchema
 
 class ResourceCategory(str, Enum):
     """Crisis resource categories"""
@@ -16,6 +14,11 @@ class ResourceCategory(str, Enum):
     EMERGENCY = "emergency"
     INFORMATION = "information"
     SUPPORT_GROUP = "support_group"
+    HOTLINE = "hotline"
+    CRISIS_CENTER = "crisis_center"
+    LGBTQ = "lgbtq"
+    VETERAN = "veteran"
+    YOUTH = "youth"
 
 class GeographicScope(str, Enum):
     """Geographic scope of resources"""
@@ -25,7 +28,20 @@ class GeographicScope(str, Enum):
     ASIA = "asia"
     AFRICA = "africa"
     LOCAL = "local"
+    UG = "UG"
 
+class AlertType(str, Enum):
+    SOS = "sos"
+    WELLNESS_CHECK = "wellness_check"
+    SAFETY_CONCERN = "safety_concern"
+
+class SeverityLevel(str, Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+# ========== BASE SCHEMAS ==========
 class CrisisResourceBase(BaseModel):
     """Base crisis resource schema"""
     model_config = ConfigDict(from_attributes=True)
@@ -81,7 +97,7 @@ class CrisisResourceUpdate(BaseModel):
     priority: Optional[int] = Field(None, ge=1, le=10)
     tags: Optional[List[str]] = None
 
-class CrisisResourceInDB(TimeStampedSchema):
+class CrisisResourceInDB(BaseModel):
     """Crisis resource schema as stored in database"""
     model_config = ConfigDict(from_attributes=True)
 
@@ -99,11 +115,14 @@ class CrisisResourceInDB(TimeStampedSchema):
     is_active: bool
     priority: int
     tags: List[str]
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
 class CrisisResourceResponse(CrisisResourceInDB):
     """Crisis resource schema for API responses"""
     pass
 
+# ========== EMERGENCY CONTACTS SCHEMAS ==========
 class EmergencyContactBase(BaseModel):
     """Base emergency contact schema"""
     model_config = ConfigDict(from_attributes=True)
@@ -148,7 +167,7 @@ class EmergencyContactUpdate(BaseModel):
     can_receive_alerts: Optional[bool] = None
     notes: Optional[str] = Field(None, max_length=500)
 
-class EmergencyContactInDB(TimeStampedSchema):
+class EmergencyContactInDB(BaseModel):
     """Emergency contact schema as stored in database"""
     model_config = ConfigDict(from_attributes=True)
 
@@ -161,11 +180,157 @@ class EmergencyContactInDB(TimeStampedSchema):
     is_primary: bool
     can_receive_alerts: bool
     notes: Optional[str] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
 class EmergencyContactResponse(EmergencyContactInDB):
     """Emergency contact schema for API responses"""
     pass
 
+# ========== SAFETY PLANS SCHEMAS ==========
+class SafetyPlanBase(BaseModel):
+    """Base safety plan schema"""
+    model_config = ConfigDict(from_attributes=True)
+
+    plan_name: str = Field("My Safety Plan", min_length=1, max_length=200)
+    warning_signs: Optional[List[str]] = None
+    internal_coping_strategies: Optional[List[str]] = None
+    external_coping_strategies: Optional[List[str]] = None
+    social_contacts: Optional[List[str]] = None
+    professional_contacts: Optional[List[str]] = None
+    environment_safety: Optional[str] = None
+    reasons_for_living: Optional[List[str]] = None
+
+class SafetyPlanCreate(SafetyPlanBase):
+    """Schema for creating a safety plan"""
+    pass
+
+class SafetyPlanUpdate(BaseModel):
+    """Schema for updating a safety plan"""
+    model_config = ConfigDict(from_attributes=True)
+
+    plan_name: Optional[str] = Field(None, min_length=1, max_length=200)
+    warning_signs: Optional[List[str]] = None
+    internal_coping_strategies: Optional[List[str]] = None
+    external_coping_strategies: Optional[List[str]] = None
+    social_contacts: Optional[List[str]] = None
+    professional_contacts: Optional[List[str]] = None
+    environment_safety: Optional[str] = None
+    reasons_for_living: Optional[List[str]] = None
+
+class SafetyPlanInDB(BaseModel):
+    """Safety plan schema as stored in database"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    user_id: UUID
+    plan_name: str
+    warning_signs: Optional[List[str]] = None
+    internal_coping_strategies: Optional[List[str]] = None
+    external_coping_strategies: Optional[List[str]] = None
+    social_contacts: Optional[List[str]] = None
+    professional_contacts: Optional[List[str]] = None
+    environment_safety: Optional[str] = None
+    reasons_for_living: Optional[List[str]] = None
+    is_active: bool
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+class SafetyPlanResponse(SafetyPlanInDB):
+    """Safety plan schema for API responses"""
+    pass
+
+# ========== WELLNESS CHECKINS SCHEMAS ==========
+class WellnessCheckinBase(BaseModel):
+    """Base wellness checkin schema"""
+    model_config = ConfigDict(from_attributes=True)
+
+    checkin_date: date
+    mood_rating: Optional[int] = Field(None, ge=1, le=10)
+    anxiety_level: Optional[int] = Field(None, ge=1, le=10)
+    sleep_quality: Optional[int] = Field(None, ge=1, le=5)
+    safety_concerns: bool = False
+    safety_concerns_details: Optional[str] = Field(None, max_length=1000)
+    coping_strategies_used: Optional[List[str]] = None
+    support_needed: bool = False
+    support_type: Optional[str] = Field(None, max_length=100)
+    notes: Optional[str] = Field(None, max_length=2000)
+
+class WellnessCheckinCreate(WellnessCheckinBase):
+    """Schema for creating a wellness checkin"""
+    pass
+
+class WellnessCheckinUpdate(BaseModel):
+    """Schema for updating a wellness checkin"""
+    model_config = ConfigDict(from_attributes=True)
+
+    mood_rating: Optional[int] = Field(None, ge=1, le=10)
+    anxiety_level: Optional[int] = Field(None, ge=1, le=10)
+    sleep_quality: Optional[int] = Field(None, ge=1, le=5)
+    safety_concerns: Optional[bool] = None
+    safety_concerns_details: Optional[str] = Field(None, max_length=1000)
+    coping_strategies_used: Optional[List[str]] = None
+    support_needed: Optional[bool] = None
+    support_type: Optional[str] = Field(None, max_length=100)
+    notes: Optional[str] = Field(None, max_length=2000)
+
+class WellnessCheckinInDB(BaseModel):
+    """Wellness checkin schema as stored in database"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    user_id: UUID
+    checkin_date: date
+    mood_rating: Optional[int] = None
+    anxiety_level: Optional[int] = None
+    sleep_quality: Optional[int] = None
+    safety_concerns: bool
+    safety_concerns_details: Optional[str] = None
+    coping_strategies_used: Optional[List[str]] = None
+    support_needed: bool
+    support_type: Optional[str] = None
+    notes: Optional[str] = None
+    created_at: Optional[datetime] = None
+
+class WellnessCheckinResponse(WellnessCheckinInDB):
+    """Wellness checkin schema for API responses"""
+    pass
+
+# ========== CRISIS ALERTS SCHEMAS ==========
+class CrisisAlertBase(BaseModel):
+    """Base crisis alert schema"""
+    model_config = ConfigDict(from_attributes=True)
+
+    alert_type: AlertType
+    severity_level: SeverityLevel
+    message: Optional[str] = Field(None, max_length=1000)
+    location_data: Optional[Dict[str, Any]] = None
+
+class CrisisAlertCreate(CrisisAlertBase):
+    """Schema for creating a crisis alert"""
+    pass
+
+class CrisisAlertInDB(BaseModel):
+    """Crisis alert schema as stored in database"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    user_id: UUID
+    alert_type: AlertType
+    severity_level: SeverityLevel
+    message: Optional[str] = None
+    location_data: Optional[Dict[str, Any]] = None
+    is_resolved: bool
+    resolved_at: Optional[datetime] = None
+    resolved_by: Optional[UUID] = None
+    resolution_notes: Optional[str] = None
+    created_at: Optional[datetime] = None
+
+class CrisisAlertResponse(CrisisAlertInDB):
+    """Crisis alert schema for API responses"""
+    pass
+
+# ========== USER CRISIS PREFERENCES SCHEMAS ==========
 class UserCrisisPreferencesBase(BaseModel):
     """Base user crisis preferences schema"""
     model_config = ConfigDict(from_attributes=True)
@@ -190,7 +355,7 @@ class UserCrisisPreferencesUpdate(BaseModel):
     medical_information: Optional[str] = Field(None, max_length=2000)
     consent_to_contact: Optional[bool] = None
 
-class UserCrisisPreferencesInDB(TimeStampedSchema):
+class UserCrisisPreferencesInDB(BaseModel):
     """User crisis preferences schema as stored in database"""
     model_config = ConfigDict(from_attributes=True)
 
@@ -200,11 +365,22 @@ class UserCrisisPreferencesInDB(TimeStampedSchema):
     emergency_contact_instructions: Optional[str] = None
     medical_information: Optional[str] = None
     consent_to_contact: bool
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
 class UserCrisisPreferencesResponse(UserCrisisPreferencesInDB):
     """User crisis preferences schema for API responses"""
     pass
 
+# ========== RECOMMENDATION SCHEMAS ==========
+class ResourceRecommendationRequest(BaseModel):
+    """Schema for requesting resource recommendations"""
+    content: Optional[str] = Field(None, max_length=5000)
+    mood: Optional[str] = Field(None, max_length=100)
+    category: Optional[ResourceCategory] = None
+    limit: int = Field(5, ge=1, le=20)
+
+# ========== RESPONSE SCHEMAS ==========
 class CrisisResourcesResponse(BaseModel):
     """Response for crisis resources with filtering"""
     resources: List[CrisisResourceResponse]
@@ -217,15 +393,26 @@ class EmergencyContactsResponse(BaseModel):
     total: int
     has_primary: bool
 
-class ResourceRecommendationRequest(BaseModel):
-    """Request for resource recommendations"""
-    content: Optional[str] = Field(None, description="Text content to analyze for recommendations")
-    mood: Optional[str] = Field(None, description="Current mood")
-    category_filter: Optional[ResourceCategory] = None
-    limit: int = Field(5, ge=1, le=20)
+class SafetyPlansResponse(BaseModel):
+    """Response for safety plans"""
+    plans: List[SafetyPlanResponse]
+    total: int
+    active_plan: Optional[SafetyPlanResponse] = None
+
+class WellnessCheckinsResponse(BaseModel):
+    """Response for wellness checkins"""
+    checkins: List[WellnessCheckinResponse]
+    total: int
+    today_checkin: Optional[WellnessCheckinResponse] = None
+
+class CrisisAlertsResponse(BaseModel):
+    """Response for crisis alerts"""
+    alerts: List[CrisisAlertResponse]
+    total: int
+    active_alerts: List[CrisisAlertResponse]
 
 class ResourceRecommendationResponse(BaseModel):
     """Response for resource recommendations"""
-    recommended_resources: List[CrisisResourceResponse]
-    reason: Optional[str] = None
-    emergency_suggested: bool = False
+    resources: List[CrisisResourceResponse]
+    recommendations_based_on: Dict[str, Any]
+    user_preferences_used: bool
