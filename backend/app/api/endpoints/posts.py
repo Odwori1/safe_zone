@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Body
 from typing import List, Optional
 from uuid import UUID
 from app.schemas.post import PostCreate, PostResponse, PostUpdate
@@ -6,6 +6,7 @@ from app.schemas.user import User
 from app.core.security import get_current_user
 from app.crud.post import post_crud
 from app.crud.feed import get_post_feed, get_posts_count  # ADD FEED IMPORTS
+from app.database.database import database  # ADD DATABASE IMPORT
 
 router = APIRouter()
 
@@ -112,7 +113,7 @@ async def get_personal_feed(
     try:
         print(f"🔍 FEED: Getting personal feed for user {current_user.id}")
         print(f"🔍 FEED: Filters - mood={mood}, visibility={visibility}, content_type={content_type}")
-        
+
         posts = await get_post_feed(
             user_id=current_user.id,
             skip=skip,
@@ -121,9 +122,9 @@ async def get_personal_feed(
             content_type=content_type,
             mood=mood
         )
-        
+
         print(f"🔍 FEED: Retrieved {len(posts)} posts from feed system")
-        
+
         # Process posts for response
         response_posts = []
         for post in posts:
@@ -132,7 +133,7 @@ async def get_personal_feed(
                 post_data['username'] = None
                 post_data['user_avatar'] = None
             response_posts.append(PostResponse(**post_data))
-            
+
         return response_posts
     except Exception as e:
         print(f"❌ FEED ERROR: {str(e)}")
@@ -178,7 +179,7 @@ async def discover_posts(
             limit=limit,
             visibility="public"
         )
-        
+
         response_posts = []
         for post in posts:
             post_data = dict(post)
@@ -186,7 +187,7 @@ async def discover_posts(
                 post_data['username'] = None
                 post_data['user_avatar'] = None
             response_posts.append(PostResponse(**post_data))
-            
+
         return response_posts
     except Exception as e:
         raise HTTPException(
@@ -307,7 +308,7 @@ async def get_saved_posts(
             skip=skip,
             limit=limit
         )
-        
+
         # Process posts for response
         response_posts = []
         for post in posts:
@@ -316,7 +317,7 @@ async def get_saved_posts(
                 post_data['username'] = None
                 post_data['user_avatar'] = None
             response_posts.append(PostResponse(**post_data))
-            
+
         return response_posts
     except Exception as e:
         raise HTTPException(
@@ -581,15 +582,24 @@ async def unlike_post(
 @router.post("/{post_id}/share")
 async def share_post(
     post_id: str,
-    share_data: dict = None,  # Accept optional share data for caption
+    share_data: dict = Body(None),  # Accept optional share data for caption
     current_user: User = Depends(get_current_user)
 ):
     """
     Share a post with optional caption/comment
     """
     try:
-        # First check if post exists
-        original_post = await post_crud.get(UUID(post_id), current_user.id)
+        # Get the original post WITH username information using direct database query
+        async with database.pool.acquire() as conn:
+            await conn.execute("SELECT set_current_user_id($1);", str(current_user.id))
+            original_post = await conn.fetchrow("""
+                SELECT p.*,
+                       CASE WHEN p.is_anonymous THEN NULL ELSE u.username END as username
+                FROM posts p
+                LEFT JOIN users u ON p.user_id = u.id
+                WHERE p.id = $1 AND p.status != 'deleted'
+            """, UUID(post_id))
+
         if not original_post:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -616,17 +626,39 @@ async def share_post(
             # Create a new post for the share if caption is provided (like Facebook/Twitter)
             caption = share_data.get('caption', '') if share_data else ''
             if caption:
-                # Create a new post that references the original
-                new_post_data = {
-                    "content": f"{caption}\n\n🔗 Shared from @{original_post.get('username', 'user')}: {original_post.get('content', '')[:100]}...",
-                    "content_type": "text",
-                    "visibility": "public",
-                    "is_anonymous": False,
-                    "mood": original_post.get('mood')
-                }
+                # Create a proper PostCreate object instead of dictionary
+                from app.schemas.post import PostCreate, PostContentType, PostVisibility
 
-                # Create the new share post
+                # Get the original post's username properly from the database result
+                original_username = original_post.get('username')
+                print(f"🔍 SHARE: Original username: '{original_username}'")
+
+                # Create better shared post content with proper username and post ID for linking
+                if original_post.get('is_anonymous'):
+                    original_display_name = "Anonymous"
+                elif original_username:
+                    original_display_name = f"@{original_username}"
+                else:
+                    original_display_name = "user"
+
+                original_content_preview = original_post.get('content', '')[:100] + "..." if len(original_post.get('content', '')) > 100 else original_post.get('content', '')
+
+                # Include original post ID in a way that frontend can parse
+                original_post_id = str(original_post['id'])
+                new_post_content = f"{caption}\n\n🔗 Shared from {original_display_name}: {original_content_preview}\n[original_post:{original_post_id}]"
+
+                new_post_data = PostCreate(
+                    content=new_post_content,
+                    content_type=PostContentType.TEXT,
+                    visibility=PostVisibility.PUBLIC,  # Make sure it's public so it appears in feeds
+                    is_anonymous=False,
+                    mood=None  # Shared posts don't inherit mood
+                )
+
+                # Create the new share post using the CRUD method
                 new_post = await post_crud.create(current_user.id, new_post_data)
+
+                print(f"✅ SHARE: Created new shared post {new_post['id']} with content: {new_post_data.content[:100]}...")
 
                 return {
                     "message": "Post shared with caption successfully",

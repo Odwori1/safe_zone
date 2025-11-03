@@ -14,13 +14,19 @@ class MessagesCRUD:
     All operations are protected by RLS
     """
 
+    async def _record_to_dict(self, record: asyncpg.Record) -> dict:
+        """Convert asyncpg Record to dictionary for Pydantic serialization"""
+        if not record:
+            return None
+        return {key: record[key] for key in record.keys()}
+
     async def create_conversation(
         self,
         user_id: UUID,
         is_group: bool = False,
         title: Optional[str] = None,
         participant_ids: Optional[List[UUID]] = None
-    ) -> Optional[asyncpg.Record]:
+    ) -> Optional[dict]:
         """
         Create a new conversation and add participants
         RLS ensures user can only create their own conversations
@@ -28,14 +34,17 @@ class MessagesCRUD:
         async with database.pool.acquire() as conn:
             # Start transaction
             async with conn.transaction():
-                # Create conversation
+                # ✅ CRITICAL: Set user context for RLS policies
+                await conn.execute("SELECT set_config('app.current_user_id', $1, false)", str(user_id))
+                
+                # Create conversation WITH created_by field
                 conversation = await conn.fetchrow(
                     """
-                    INSERT INTO conversations (is_group, title)
-                    VALUES ($1, $2)
+                    INSERT INTO conversations (is_group, title, created_by)
+                    VALUES ($1, $2, $3)
                     RETURNING *
                     """,
-                    is_group, title
+                    is_group, title, user_id
                 )
 
                 if not conversation:
@@ -62,7 +71,7 @@ class MessagesCRUD:
                                 conversation['id'], participant_id
                             )
 
-                return conversation
+                return await self._record_to_dict(conversation)
 
     async def add_participant(
         self,
@@ -91,7 +100,7 @@ class MessagesCRUD:
         content: str,
         content_type: str = "text",
         file_metadata_id: Optional[UUID] = None
-    ) -> Optional[asyncpg.Record]:
+    ) -> Optional[dict]:
         """
         Create a new message in conversation WITH VALIDATION
         RLS ensures user can only send to conversations they participate in
@@ -99,17 +108,17 @@ class MessagesCRUD:
         # SECURITY: Input validation at application layer
         if not content or not content.strip():
             raise ValueError("Message content cannot be empty")
-        
+
         content = content.strip()
-        
+
         if len(content) > 5000:
             raise ValueError("Message content too long (max 5000 characters)")
-        
+
         if content_type not in ["text", "audio", "video", "file"]:
             raise ValueError("Invalid content type")
 
         async with database.pool.acquire() as conn:
-            return await conn.fetchrow(
+            message = await conn.fetchrow(
                 """
                 INSERT INTO messages (conversation_id, sender_id, content, content_type, file_metadata_id)
                 VALUES ($1, $2, $3, $4, $5)
@@ -117,19 +126,20 @@ class MessagesCRUD:
                 """,
                 conversation_id, sender_id, content, content_type, file_metadata_id
             )
+            return await self._record_to_dict(message) if message else None
 
     async def get_conversation_messages(
         self,
         conversation_id: UUID,
         limit: int = 50,
         offset: int = 0
-    ) -> List[asyncpg.Record]:
+    ) -> List[dict]:
         """
         Get messages from a conversation
         RLS ensures user can only access conversations they participate in
         """
         async with database.pool.acquire() as conn:
-            return await conn.fetch(
+            messages = await conn.fetch(
                 """
                 SELECT m.*, u.username
                 FROM messages m
@@ -140,21 +150,22 @@ class MessagesCRUD:
                 """,
                 conversation_id, limit, offset
             )
+            return [await self._record_to_dict(msg) for msg in messages] if messages else []
 
     async def get_user_conversations(
         self,
         user_id: UUID,
         limit: int = 20,
         offset: int = 0
-    ) -> List[asyncpg.Record]:
+    ) -> List[dict]:
         """
         Get user's conversations with last message preview
         RLS ensures user can only access their own conversations
         """
         async with database.pool.acquire() as conn:
-            return await conn.fetch(
+            conversations = await conn.fetch(
                 """
-                SELECT 
+                SELECT
                     c.*,
                     lm.content as last_message_content,
                     lm.created_at as last_message_at,
@@ -178,17 +189,18 @@ class MessagesCRUD:
                 """,
                 user_id, limit, offset
             )
+            return [await self._record_to_dict(conv) for conv in conversations] if conversations else []
 
     async def get_conversation_participants(
         self,
         conversation_id: UUID
-    ) -> List[asyncpg.Record]:
+    ) -> List[dict]:
         """
         Get participants in a conversation
         RLS ensures user can only access conversations they participate in
         """
         async with database.pool.acquire() as conn:
-            return await conn.fetch(
+            participants = await conn.fetch(
                 """
                 SELECT cp.*, u.username, u.email
                 FROM conversation_participants cp
@@ -198,6 +210,7 @@ class MessagesCRUD:
                 """,
                 conversation_id
             )
+            return [await self._record_to_dict(part) for part in participants] if participants else []
 
     async def soft_delete_message(
         self,
@@ -211,7 +224,7 @@ class MessagesCRUD:
         async with database.pool.acquire() as conn:
             result = await conn.execute(
                 """
-                UPDATE messages 
+                UPDATE messages
                 SET deleted = true, updated_at = NOW()
                 WHERE id = $1 AND sender_id = $2
                 """,
@@ -232,7 +245,7 @@ class MessagesCRUD:
         async with database.pool.acquire() as conn:
             result = await conn.execute(
                 """
-                UPDATE messages 
+                UPDATE messages
                 SET moderation_status = $1, moderated = $2, updated_at = NOW()
                 WHERE id = $3
                 """,

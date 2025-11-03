@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePostsStore } from '@/stores/posts-store';
 import { useAuth } from '@/hooks/use-auth';
 import { PostsFilter as PostsFilterType } from '@/types/posts';
 import PostsFilter from './posts-filter';
-import { ShareDialog } from './share-dialog'; // ADD IMPORT
+import ShareDialog from './share-dialog';
+import PostView from './post-view';
+import FeedSystem from './feed-system';
 import {
   Heart,
   MessageCircle,
@@ -16,14 +18,25 @@ import {
   MoreVertical,
   ChevronDown,
   ChevronUp,
-  Share2
+  Share2,
+  Bookmark,
+  BookmarkCheck
 } from 'lucide-react';
 import CommentsList from './comments-list';
 import CommentForm from './comment-form';
 
 let renderCount = 0;
 
-export default function PostsFeed() {
+interface PostsFeedProps {
+  useFeedSystem?: boolean;
+}
+
+export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
+  // If using feed system, return the FeedSystem component
+  if (useFeedSystem) {
+    return <FeedSystem />;
+  }
+
   const {
     posts,
     isLoading,
@@ -32,19 +45,26 @@ export default function PostsFeed() {
     deletePost,
     likePost,
     unlikePost,
-    sharePost
+    sharePost,
+    savePost,
+    unsavePost,
+    getPostById
   } = usePostsStore();
   const { user } = useAuth();
   const [hasLoaded, setHasLoaded] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [likingId, setLikingId] = useState<string | null>(null);
   const [sharingId, setSharingId] = useState<string | null>(null);
+  const [savingId, setSavingId] = useState<string | null>(null);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
-  
+
   // ADD STATE FOR SHARE DIALOG
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [currentSharingPost, setCurrentSharingPost] = useState<{id: string, content: string} | null>(null);
+
+  // ADD STATE FOR POST VIEW MODAL
+  const [viewingPostId, setViewingPostId] = useState<string | null>(null);
 
   const [currentFilters, setCurrentFilters] = useState<PostsFilterType>({
     skip: 0,
@@ -109,6 +129,20 @@ export default function PostsFeed() {
     }
   };
 
+  const handleSavePost = async (postId: string) => {
+    setSavingId(postId);
+    try {
+      const post = posts.find(p => p.id === postId);
+      if (post?.user_has_saved) {
+        await unsavePost(postId);
+      } else {
+        await savePost(postId);
+      }
+    } finally {
+      setSavingId(null);
+    }
+  };
+
   // UPDATED SHARE HANDLER WITH DIALOG
   const handleShareClick = (postId: string, postContent: string) => {
     const post = posts.find(p => p.id === postId);
@@ -116,22 +150,34 @@ export default function PostsFeed() {
       alert('You have already shared this post!');
       return;
     }
-    
+
     setCurrentSharingPost({ id: postId, content: postContent });
     setShareDialogOpen(true);
   };
 
-  const handleSharePost = async (caption: string) => {
+  const handleSharePost = async (caption: string, method: "platform" | "copy" = "platform") => {
     if (!currentSharingPost) return;
-    
+
     setSharingId(currentSharingPost.id);
     setShareDialogOpen(false);
-    
+
     try {
-      await sharePost(currentSharingPost.id, caption);
-      console.log('✅ Post shared successfully:', currentSharingPost.id);
+      if (method === "copy") {
+        // Handle copy link method
+        const postUrl = `${window.location.origin}/posts/${currentSharingPost.id}`;
+        await navigator.clipboard.writeText(postUrl);
+        console.log("✅ Link copied to clipboard:", currentSharingPost.id);
+
+        // Show success message
+        alert("Post link copied to clipboard!");
+      } else {
+        // Handle platform sharing with caption
+        await sharePost(currentSharingPost.id, caption);
+        console.log("✅ Post shared successfully:", currentSharingPost.id);
+      }
     } catch (error) {
-      console.error('❌ Error sharing post:', error);
+      console.error("❌ Error sharing post:", error);
+      alert(method === "copy" ? "Failed to copy link. Please try again." : "Failed to share post.");
     } finally {
       setSharingId(null);
       setCurrentSharingPost(null);
@@ -176,7 +222,48 @@ export default function PostsFeed() {
     return moodColors[mood.toLowerCase()] || 'bg-gray-100 text-gray-800';
   };
 
-  // ... (keep all the loading/error states the same as before)
+  // Function to render post content with clickable shared post links
+  const renderPostContent = (content: string, postId: string) => {
+    // Check if this is a shared post and extract original post ID
+    const originalPostMatch = content.match(/\[original_post:([a-f0-9-]+)\]/);
+    
+    if (originalPostMatch) {
+      const originalPostId = originalPostMatch[1];
+      const contentWithoutMarker = content.replace(/\[original_post:[a-f0-9-]+\]/, '');
+      
+      return (
+        <div>
+          {contentWithoutMarker.split('\n').map((line, index) => {
+            if (line.includes('Shared from')) {
+              return (
+                <div key={index} className="mt-2">
+                  {line.split('Shared from').map((part, partIndex) => {
+                    if (partIndex === 0) return part;
+                    return (
+                      <span key={partIndex}>
+                        <button
+                          onClick={() => setViewingPostId(originalPostId)}
+                          className="text-blue-600 hover:text-blue-800 hover:underline font-medium cursor-pointer"
+                        >
+                          Shared from{part}
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
+              );
+            }
+            return <div key={index}>{line}</div>;
+          })}
+        </div>
+      );
+    }
+    
+    // Regular post - just return the content
+    return content.split('\n').map((line, index) => (
+      <div key={index}>{line}</div>
+    ));
+  };
 
   return (
     <div className="space-y-6">
@@ -184,9 +271,16 @@ export default function PostsFeed() {
       <ShareDialog
         isOpen={shareDialogOpen}
         onClose={() => setShareDialogOpen(false)}
-        onShare={handleSharePost}
+        onShare={(caption, method) => handleSharePost(caption, method)}
         postContent={currentSharingPost?.content || ''}
         isLoading={sharingId !== null}
+      />
+
+      {/* POST VIEW MODAL */}
+      <PostView
+        postId={viewingPostId || ''}
+        isOpen={viewingPostId !== null}
+        onClose={() => setViewingPostId(null)}
       />
 
       {/* ADD FILTER COMPONENT HERE */}
@@ -315,7 +409,9 @@ export default function PostsFeed() {
 
               {/* Post Content */}
               <div className="px-4 py-2">
-                <p className="text-gray-800 whitespace-pre-wrap">{post.content}</p>
+                <p className="text-gray-800 whitespace-pre-wrap">
+                  {renderPostContent(post.content, post.id)}
+                </p>
 
                 {/* Mood Badge */}
                 {post.mood && (
@@ -387,9 +483,23 @@ export default function PostsFeed() {
                   </div>
 
                   {/* Save Button */}
-                  <button className="flex items-center space-x-2 text-gray-500 hover:text-purple-500 transition-colors">
-                    <span>📑</span>
-                    <span className="text-sm">Save</span>
+                  <button
+                    onClick={() => handleSavePost(post.id)}
+                    disabled={savingId === post.id}
+                    className={`flex items-center gap-2 text-sm ${
+                      post.user_has_saved
+                        ? 'text-purple-600 hover:text-purple-700'
+                        : 'text-gray-600 hover:text-gray-700'
+                    } disabled:opacity-50 transition-colors`}
+                  >
+                    {savingId === post.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : post.user_has_saved ? (
+                      <BookmarkCheck className="h-5 w-5 fill-current" />
+                    ) : (
+                      <Bookmark className="h-5 w-5" />
+                    )}
+                    <span className="font-medium">{post.user_has_saved ? 'Saved' : 'Save'}</span>
                   </button>
                 </div>
               </div>

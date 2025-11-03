@@ -1,185 +1,92 @@
 """
-Secure File Endpoints for Phase 3, Item 3 - UPDATED
-Using secure file_metadata table with RLS protection
+File Management Endpoints for Phase 3, Item 3
+Following EXACT same patterns as other endpoints
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from typing import Optional
+from typing import List, Optional
 from uuid import UUID
+import logging
 
-from app.schemas.post import FileUploadRequest, FileUploadResponse, FileAccessResponse
-from app.schemas.user import User
-from app.core.security import get_current_user
+from app.schemas.uploads import FileMetadataResponse
 from app.crud.file_metadata import file_metadata_crud
-from app.services.s3_service import s3_service
-from app.services.file_validation import file_validation
-from app.crud.post_audio import post_crud  # For post verification
+from app.core.security import get_current_user
+from app.schemas.user import User
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
-@router.post("/posts/{post_id}/presigned-upload", response_model=FileUploadResponse)
-async def generate_presigned_upload(
-    post_id: UUID,
-    upload_request: FileUploadRequest,
-    current_user: User = Depends(get_current_user)
+@router.get("/", response_model=List[FileMetadataResponse])
+async def get_user_files(
+    current_user: User = Depends(get_current_user),
+    limit: int = 50,
+    offset: int = 0
 ):
     """
-    Generate presigned URL for secure file upload to S3
-    SECURITY: Application never handles file bytes
+    Get user's uploaded files
+    SECURITY: RLS ensures user can only access their own files
     """
     try:
-        # 1. VERIFY USER OWNS POST (RLS ENFORCED)
-        post = await post_crud.get(post_id)
-        if not post or post['user_id'] != current_user.id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Post not found or access denied"
+        files = await file_metadata_crud.get_by_user(current_user.id, limit, offset)
+        return [
+            FileMetadataResponse(
+                id=file["id"],
+                file_type=file["file_type"],
+                original_filename=file["original_filename"],
+                file_size=file["file_size"],
+                mime_type=file["mime_type"],
+                duration=file["duration"],
+                upload_status=file["upload_status"],
+                created_at=file["created_at"],
+                url=f"/uploads/{file['s3_key'].split('/')[-1]}" if file["upload_status"] == "completed" else None
             )
-        
-        # 2. VALIDATE FILE UPLOAD REQUEST (SECURITY FIRST)
-        await file_validation.validate_upload_request(
-            file_type=upload_request.file_type,
-            mime_type=upload_request.mime_type,
-            file_size=upload_request.file_size,
-            duration=upload_request.duration
-        )
-        
-        # 3. GENERATE SECURE S3 KEY WITH USER ISOLATION
-        s3_key = s3_service.generate_secure_s3_key(
-            user_id=str(current_user.id),
-            post_id=str(post_id),
-            file_type=upload_request.file_type,
-            filename=upload_request.filename
-        )
-        
-        # 4. CREATE SECURE FILE METADATA RECORD (RLS PROTECTED)
-        file_data = {
-            "s3_key": s3_key,
-            "file_type": upload_request.file_type,
-            "original_filename": upload_request.filename,
-            "file_size": upload_request.file_size,
-            "mime_type": upload_request.mime_type,
-            "duration": upload_request.duration
-        }
-        
-        file_record = await file_metadata_crud.create(
-            current_user.id, post_id, file_data
-        )
-        
-        if not file_record:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Failed to create file metadata record"
-            )
-        
-        # 5. GENERATE PRESIGNED UPLOAD URL
-        presigned_url = await s3_service.generate_presigned_upload(
-            s3_key=s3_key,
-            mime_type=upload_request.mime_type,
-            file_size=upload_request.file_size
-        )
-        
-        return FileUploadResponse(
-            upload_url=presigned_url,
-            file_id=file_record["id"],
-            s3_key=s3_key,
-            expires_in=3600
-        )
-        
-    except HTTPException:
-        raise
+            for file in files
+        ]
     except Exception as e:
+        logger.error(f"Error fetching user files: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error generating upload URL: {str(e)}"
+            detail="Failed to fetch files"
         )
 
-@router.post("/{file_id}/confirm-upload")
-async def confirm_upload(
+@router.get("/{file_id}", response_model=FileMetadataResponse)
+async def get_file_metadata(
     file_id: UUID,
     current_user: User = Depends(get_current_user)
 ):
     """
-    Confirm successful file upload to S3
-    RLS ensures user can only update their own files
+    Get file metadata by ID
+    SECURITY: RLS ensures user can only access their own files
     """
     try:
-        # Verify file exists and belongs to user (RLS enforced)
         file_record = await file_metadata_crud.get_by_id(file_id)
         if not file_record:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="File not found or access denied"
+                detail="File not found"
             )
-        
-        # Update upload status to completed
-        success = await file_metadata_crud.update_upload_status(file_id, "completed")
-        
-        if not success:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Failed to confirm upload"
-            )
-        
-        # TODO: Trigger async processing (transcoding, moderation, etc.)
-        # await process_file_upload.delay(file_id)
-        
-        return {"status": "upload_confirmed", "file_id": str(file_id)}
-        
+
+        return FileMetadataResponse(
+            id=file_record["id"],
+            file_type=file_record["file_type"],
+            original_filename=file_record["original_filename"],
+            file_size=file_record["file_size"],
+            mime_type=file_record["mime_type"],
+            duration=file_record["duration"],
+            upload_status=file_record["upload_status"],
+            created_at=file_record["created_at"],
+            url=f"/uploads/{file_record['s3_key'].split('/')[-1]}" if file_record["upload_status"] == "completed" else None
+        )
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error fetching file metadata: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error confirming upload: {str(e)}"
+            detail="Failed to fetch file metadata"
         )
 
-@router.get("/{file_id}/presigned-url", response_model=FileAccessResponse)
-async def get_presigned_download(
-    file_id: UUID,
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Generate presigned URL for secure file download from S3
-    SECURITY: Application never serves files directly
-    """
-    try:
-        # RLS ensures user can only access their own files
-        file_record = await file_metadata_crud.get_by_id(file_id)
-        
-        if not file_record:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="File not found or access denied"
-            )
-        
-        # Check if upload is completed
-        if file_record['upload_status'] != 'completed':
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="File upload not completed"
-            )
-        
-        # Generate presigned download URL
-        presigned_url = await s3_service.generate_presigned_download(
-            file_record['s3_key']
-        )
-        
-        return FileAccessResponse(
-            download_url=presigned_url,
-            file_type=file_record['file_type'],
-            expires_in=900
-        )
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error generating download URL: {str(e)}"
-        )
-
-@router.get("/posts/{post_id}/files")
+@router.get("/post/{post_id}", response_model=List[FileMetadataResponse])
 async def get_post_files(
     post_id: UUID,
     file_type: Optional[str] = None,
@@ -187,39 +94,54 @@ async def get_post_files(
 ):
     """
     Get files associated with a post
-    RLS ensures user can only access their own posts' files
+    SECURITY: RLS ensures user can only access their own posts' files
     """
     try:
-        # Verify user owns the post (RLS enforced)
-        post = await post_crud.get(post_id)
-        if not post or post['user_id'] != current_user.id:
+        files = await file_metadata_crud.get_by_post(post_id, file_type)
+        return [
+            FileMetadataResponse(
+                id=file["id"],
+                file_type=file["file_type"],
+                original_filename=file["original_filename"],
+                file_size=file["file_size"],
+                mime_type=file["mime_type"],
+                duration=file["duration"],
+                upload_status=file["upload_status"],
+                created_at=file["created_at"],
+                url=f"/uploads/{file['s3_key'].split('/')[-1]}" if file["upload_status"] == "completed" else None
+            )
+            for file in files
+        ]
+    except Exception as e:
+        logger.error(f"Error fetching post files: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to fetch post files"
+        )
+
+@router.post("/{file_id}/associate/{post_id}")
+async def associate_file_with_post(
+    file_id: UUID,
+    post_id: UUID,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Associate a file with a post
+    SECURITY: RLS ensures user can only update their own files
+    """
+    try:
+        success = await file_metadata_crud.associate_with_post(file_id, post_id)
+        if not success:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Post not found or access denied"
+                detail="File not found or access denied"
             )
-        
-        # Get files for the post
-        files = await file_metadata_crud.get_by_post(post_id, file_type)
-        
-        return {
-            "post_id": str(post_id),
-            "files": [
-                {
-                    "id": str(file["id"]),
-                    "file_type": file["file_type"],
-                    "original_filename": file["original_filename"],
-                    "file_size": file["file_size"],
-                    "upload_status": file["upload_status"],
-                    "created_at": file["created_at"].isoformat() if file["created_at"] else None
-                }
-                for file in files
-            ]
-        }
-        
+        return {"message": "File associated with post successfully"}
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error associating file with post: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving post files: {str(e)}"
+            detail="Failed to associate file with post"
         )

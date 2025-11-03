@@ -13,22 +13,28 @@ class FileMetadataCRUD:
     Secure CRUD operations for file metadata
     All operations are protected by RLS
     """
-    
+
+    async def _record_to_dict(self, record: asyncpg.Record) -> dict:
+        """Convert asyncpg Record to dictionary for Pydantic serialization"""
+        if not record:
+            return None
+        return {key: record[key] for key in record.keys()}
+
     async def create(
-        self, 
-        user_id: UUID, 
-        post_id: Optional[UUID], 
+        self,
+        user_id: UUID,
+        post_id: Optional[UUID],
         file_data: dict
-    ) -> Optional[asyncpg.Record]:
+    ) -> Optional[dict]:
         """
         Create secure file metadata record
         RLS ensures user can only create their own records
         """
         async with database.pool.acquire() as conn:
-            return await conn.fetchrow(
+            file = await conn.fetchrow(
                 """
-                INSERT INTO file_metadata 
-                (user_id, post_id, s3_key, file_type, original_filename, 
+                INSERT INTO file_metadata
+                (user_id, post_id, s3_key, file_type, original_filename,
                  file_size, mime_type, duration, upload_status)
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                 RETURNING *
@@ -37,71 +43,75 @@ class FileMetadataCRUD:
                 file_data["original_filename"], file_data["file_size"],
                 file_data["mime_type"], file_data.get("duration"), "pending"
             )
-    
-    async def get_by_id(self, file_id: UUID) -> Optional[asyncpg.Record]:
+            return await self._record_to_dict(file) if file else None
+
+    async def get_by_id(self, file_id: UUID) -> Optional[dict]:
         """
         Get file metadata by ID
         RLS ensures user can only access their own files
         """
         async with database.pool.acquire() as conn:
-            return await conn.fetchrow(
+            file = await conn.fetchrow(
                 "SELECT * FROM file_metadata WHERE id = $1",
                 file_id
             )
-    
+            return await self._record_to_dict(file) if file else None
+
     async def get_by_user(
-        self, 
-        user_id: UUID, 
-        limit: int = 50, 
+        self,
+        user_id: UUID,
+        limit: int = 50,
         offset: int = 0
-    ) -> List[asyncpg.Record]:
+    ) -> List[dict]:
         """
         Get user's file metadata
         RLS ensures user can only access their own files
         """
         async with database.pool.acquire() as conn:
-            return await conn.fetch(
+            files = await conn.fetch(
                 """
-                SELECT * FROM file_metadata 
-                WHERE user_id = $1 
-                ORDER BY created_at DESC 
+                SELECT * FROM file_metadata
+                WHERE user_id = $1
+                ORDER BY created_at DESC
                 LIMIT $2 OFFSET $3
                 """,
                 user_id, limit, offset
             )
-    
+            return [await self._record_to_dict(file) for file in files] if files else []
+
     async def get_by_post(
-        self, 
-        post_id: UUID, 
+        self,
+        post_id: UUID,
         file_type: Optional[str] = None
-    ) -> List[asyncpg.Record]:
+    ) -> List[dict]:
         """
         Get file metadata for a post
         RLS ensures user can only access their own posts' files
         """
         async with database.pool.acquire() as conn:
             if file_type:
-                return await conn.fetch(
+                files = await conn.fetch(
                     """
-                    SELECT * FROM file_metadata 
+                    SELECT * FROM file_metadata
                     WHERE post_id = $1 AND file_type = $2
                     ORDER BY created_at DESC
                     """,
                     post_id, file_type
                 )
             else:
-                return await conn.fetch(
+                files = await conn.fetch(
                     """
-                    SELECT * FROM file_metadata 
+                    SELECT * FROM file_metadata
                     WHERE post_id = $1
                     ORDER BY created_at DESC
                     """,
                     post_id
                 )
-    
+            return [await self._record_to_dict(file) for file in files] if files else []
+
     async def update_upload_status(
-        self, 
-        file_id: UUID, 
+        self,
+        file_id: UUID,
         status: str
     ) -> bool:
         """
@@ -114,10 +124,10 @@ class FileMetadataCRUD:
                 status, file_id
             )
             return "UPDATE 1" in result
-    
+
     async def update_moderation_status(
-        self, 
-        file_id: UUID, 
+        self,
+        file_id: UUID,
         status: str
     ) -> bool:
         """
@@ -130,10 +140,10 @@ class FileMetadataCRUD:
                 status, file_id
             )
             return "UPDATE 1" in result
-    
+
     async def associate_with_post(
-        self, 
-        file_id: UUID, 
+        self,
+        file_id: UUID,
         post_id: UUID
     ) -> bool:
         """
@@ -146,7 +156,7 @@ class FileMetadataCRUD:
                 post_id, file_id
             )
             return "UPDATE 1" in result
-    
+
     async def delete(self, file_id: UUID) -> bool:
         """
         Delete file metadata (soft delete via status)

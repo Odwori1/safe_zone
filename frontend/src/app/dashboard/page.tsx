@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/use-auth';
 import ProtectedRoute from '@/components/auth/protected-route';
 import { PostsFeed, CreatePostForm } from '@/components/posts';
 import { MoodEntryForm, MoodHistory, MoodStatistics } from '@/components/mood';
-import { Users, BookOpen, BarChart3, Heart, Shield } from 'lucide-react';
+import { Users, BookOpen, BarChart3, Heart, Shield, Bookmark } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -172,7 +172,20 @@ export default function DashboardPage() {
                     </div>
                   </button>
 
-                  {/* CRISIS SUPPORT BUTTON - ADDED */}
+                  {/* SAVED POSTS BUTTON - NEW ADDITION */}
+                  <Link href="/dashboard/saved">
+                    <button className="w-full text-left p-3 rounded-lg border border-gray-300 hover:border-purple-500 hover:bg-purple-50 transition-colors group">
+                      <div className="flex items-center gap-3">
+                        <Bookmark className="h-5 w-5 text-purple-600 group-hover:text-purple-700" />
+                        <div>
+                          <span className="font-medium">📑 Saved Posts</span>
+                          <p className="text-sm text-gray-600 mt-1">Your bookmarked content</p>
+                        </div>
+                      </div>
+                    </button>
+                  </Link>
+
+                  {/* CRISIS SUPPORT BUTTON */}
                   <Link href="/dashboard/crisis">
                     <button className="w-full text-left p-3 rounded-lg border border-gray-300 hover:border-red-500 hover:bg-red-50 transition-colors group">
                       <div className="flex items-center gap-3">

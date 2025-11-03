@@ -1,235 +1,190 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
-from typing import Optional, Dict
-from uuid import UUID, uuid4
-import os
-import shutil
+"""
+Secure File Upload Endpoints for Phase 3, Item 3
+Following EXACT same patterns as other endpoints
+"""
 
-from app.schemas.post import AudioUploadRequest, AudioUploadResponse, VideoUploadRequest, VideoUploadResponse, FileUploadResponse
-from app.schemas.user import User
+from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List, Optional
+from uuid import UUID
+import logging
+
+from app.schemas.uploads import (
+    FileUploadCreate, FileUpload, PresignedURLResponse,
+    UploadCompleteRequest, FileMetadataResponse
+)
+from app.crud.file_metadata import file_metadata_crud
 from app.core.security import get_current_user
-from app.crud.post_audio import post_crud
+from app.schemas.user import User
 from app.utils.file_upload import file_upload_handler
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
-@router.post("/audio/upload-url", response_model=AudioUploadResponse)
-async def generate_audio_upload_url(
-    upload_request: AudioUploadRequest,
+@router.post("/presigned-url", response_model=PresignedURLResponse)
+async def generate_upload_url(
+    file_data: FileUploadCreate,
     current_user: User = Depends(get_current_user)
 ):
     """
-    Generate a URL for uploading audio files
-    Phase 3, Item 1: Audio Post Support
+    Generate upload URL for file upload
+    SECURITY: RLS ensures user can only create their own uploads
     """
     try:
-        # For now, we'll use a simple approach with local file system
-        # In Phase 3, Item 3 (S3 integration) this will be replaced with S3 presigned URLs
-
-        # Generate upload data
-        upload_data = await file_upload_handler.generate_upload_url(content_type='video', 
-            user_id=str(current_user.id),
-            filename=upload_request.filename,
-            file_type="audio/mpeg",  # Default, can be made dynamic
-            duration=upload_request.duration
-        )
-
-        # Create file upload record in database - FIXED: use dict access instead of object attributes
-        file_upload_data = {
-            "filename": upload_data["fields"]["filename"],
-            "original_filename": upload_request.filename,
-            "file_url": upload_data["url"],
-            "file_size": 0,  # Will be updated after upload
-            "mime_type": "audio/mpeg",
-            "duration": upload_request.duration
-        }
-
-        file_record = await post_crud.create_file_upload_record(current_user.id, file_upload_data)
-
-        return AudioUploadResponse(
-            upload_url=upload_data["upload_url"],
-            file_id=file_record["id"],
-            fields=upload_data["fields"],
-            url=upload_data["url"]
-        )
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error generating upload URL: {str(e)}"
-        )
-
-@router.put("/audio/{filename}")
-async def upload_audio_file(
-    filename: str,
-    file: UploadFile = File(...),
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Upload audio file to local storage
-    Phase 3, Item 1: Audio Post Support
-    Note: This will be replaced with S3 direct upload in Phase 3, Item 3
-    """
-    try:
-        # Validate file type
-        if not file.content_type or not file.content_type.startswith('audio/'):
+        # Validate file type using the existing handler
+        if file_data.file_type == 'audio':
+            content_type = 'audio'
+            if not file_upload_handler._is_valid_audio_type(file_data.mime_type):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid audio file type"
+                )
+        elif file_data.file_type == 'video':
+            content_type = 'video'
+            if not file_upload_handler._is_valid_video_type(file_data.mime_type):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid video file type"
+                )
+        else:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Only audio files are allowed"
+                detail="File type must be audio or video"
             )
 
-        # Create uploads directory if it doesn't exist
-        os.makedirs("uploads", exist_ok=True)
+        # Validate file size
+        if file_data.file_type == 'audio' and file_data.file_size > file_upload_handler.max_audio_size:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Audio file too large. Maximum size: {file_upload_handler.max_audio_size} bytes"
+            )
+        elif file_data.file_type == 'video' and file_data.file_size > file_upload_handler.max_video_size:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Video file too large. Maximum size: {file_upload_handler.max_video_size} bytes"
+            )
 
-        # Secure filename
-        safe_filename = f"{uuid4()}_{filename}"
-        file_path = os.path.join("uploads", safe_filename)
+        # Create file metadata record
+        file_metadata = {
+            "s3_key": f"uploads/{current_user.id}/{file_data.original_filename}",
+            "file_type": file_data.file_type,
+            "original_filename": file_data.original_filename,
+            "file_size": file_data.file_size,
+            "mime_type": file_data.mime_type,
+            "duration": file_data.duration
+        }
 
-        # Save file
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-
-        # Get file size
-        file_size = os.path.getsize(file_path)
-
-        # Validate file
-        await file_upload_handler.validate_audio_file(
-            file_path, file.content_type, file_size
+        file_record = await file_metadata_crud.create(
+            current_user.id, None, file_metadata
         )
 
-        # Return file info
-        return {
-            "filename": safe_filename,
-            "original_filename": filename,
-            "file_url": f"/uploads/{safe_filename}",
-            "file_size": file_size,
-            "mime_type": file.content_type,
-            "message": "File uploaded successfully"
-        }
+        if not file_record:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create upload record"
+            )
+
+        # Generate upload URL using existing handler
+        upload_data = await file_upload_handler.generate_upload_url(
+            str(current_user.id),
+            file_data.original_filename,
+            file_data.mime_type,
+            file_data.duration,
+            content_type
+        )
+
+        return PresignedURLResponse(
+            upload_id=file_record["id"],
+            presigned_url=upload_data["upload_url"],
+            s3_key=file_record["s3_key"],
+            expires_in=3600  # 1 hour
+        )
 
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error generating upload URL: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error uploading file: {str(e)}"
+            detail="Failed to generate upload URL"
         )
-    finally:
-        await file.close()
 
-@router.get("/files", response_model=list[FileUploadResponse])
-async def get_user_file_uploads(
+@router.post("/complete", response_model=FileMetadataResponse)
+async def complete_upload(
+    completion_data: UploadCompleteRequest,
     current_user: User = Depends(get_current_user)
 ):
     """
-    Get user's file uploads
-    Phase 3, Item 1: Audio Post Support
+    Mark upload as completed
+    SECURITY: RLS ensures user can only update their own uploads
     """
     try:
-        uploads = await post_crud.get_user_file_uploads(current_user.id)
-        return [FileUploadResponse(**dict(upload)) for upload in uploads]
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving file uploads: {str(e)}"
-        )
-
-@router.post("/video/upload-url", response_model=VideoUploadResponse)
-async def generate_video_upload_url(
-    upload_request: VideoUploadRequest,
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Generate a URL for uploading video files
-    Phase 3, Item 2: Video Post Support
-    """
-    try:
-        # For now, we'll use a simple approach with local file system
-        # In Phase 3, Item 3 (S3 integration) this will be replaced with S3 presigned URLs
-
-        # Generate upload data
-        upload_data = await file_upload_handler.generate_upload_url(content_type='video', 
-            user_id=str(current_user.id),
-            filename=upload_request.filename,
-            file_type="video/mp4",  # Default, can be made dynamic
-            duration=upload_request.duration
-        )
-
-        # Create file upload record in database
-        file_upload_data = {
-            "filename": upload_data["fields"]["filename"],
-            "original_filename": upload_request.filename,
-            "file_url": upload_data["url"],
-            "file_size": 0,  # Will be updated after upload
-            "mime_type": "video/mp4",
-            "duration": upload_request.duration
-        }
-
-        file_record = await post_crud.create_file_upload_record(current_user.id, file_upload_data)
-
-        return VideoUploadResponse(
-            upload_url=upload_data["upload_url"],
-            file_id=file_record["id"],
-            fields=upload_data["fields"],
-            url=upload_data["url"],
-            thumbnail_url=None  # Would be generated in production
-        )
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error generating upload URL: {str(e)}"
-        )
-
-@router.put("/video/{filename}")
-async def upload_video_file(
-    filename: str,
-    file: UploadFile = File(...),
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Upload video file to local storage
-    Phase 3, Item 2: Video Post Support
-    Note: This will be replaced with S3 direct upload in Phase 3, Item 3
-    """
-    try:
-        # Validate file type
-        if not file.content_type or not file.content_type.startswith('video/'):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Only video files are allowed"
+        if completion_data.success:
+            success = await file_metadata_crud.update_upload_status(
+                completion_data.upload_id, "completed"
+            )
+        else:
+            success = await file_metadata_crud.update_upload_status(
+                completion_data.upload_id, "failed"
             )
 
-        # Create uploads directory if it doesn't exist
-        os.makedirs("uploads", exist_ok=True)
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Upload record not found"
+            )
 
-        # Secure filename
-        safe_filename = f"{uuid4()}_{filename}"
-        file_path = os.path.join("uploads", safe_filename)
+        # Get updated file metadata
+        file_record = await file_metadata_crud.get_by_id(completion_data.upload_id)
+        if not file_record:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Upload record not found"
+            )
 
-        # Save file
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-
-        # Get file size
-        file_size = os.path.getsize(file_path)
-
-        # For now, skip video-specific validation
-        # Return file info
-        return {
-            "filename": safe_filename,
-            "original_filename": filename,
-            "file_url": f"/uploads/{safe_filename}",
-            "file_size": file_size,
-            "mime_type": file.content_type,
-            "message": "File uploaded successfully"
-        }
+        return FileMetadataResponse(
+            id=file_record["id"],
+            file_type=file_record["file_type"],
+            original_filename=file_record["original_filename"],
+            file_size=file_record["file_size"],
+            mime_type=file_record["mime_type"],
+            duration=file_record["duration"],
+            upload_status=file_record["upload_status"],
+            created_at=file_record["created_at"],
+            url=f"/uploads/{file_record['s3_key'].split('/')[-1]}"  # Use local URL for now
+        )
 
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error completing upload: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error uploading file: {str(e)}"
+            detail="Failed to complete upload"
         )
-    finally:
-        await file.close()
+
+
+@router.delete("/files/{file_id}")
+async def delete_file(
+    file_id: UUID,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Delete a file (soft delete)
+    SECURITY: RLS ensures user can only delete their own files
+    """
+    try:
+        success = await file_metadata_crud.delete(file_id)
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="File not found or access denied"
+            )
+        return {"message": "File deleted successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting file: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to delete file"
+        )

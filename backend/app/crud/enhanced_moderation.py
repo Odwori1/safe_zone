@@ -14,12 +14,18 @@ class EnhancedModerationCRUD:
     SECURITY: Uses parameterized set_config with is_local=false for session-level context
     """
 
+    async def _record_to_dict(self, record: asyncpg.Record) -> dict:
+        """Convert asyncpg Record to dictionary for Pydantic serialization"""
+        if not record:
+            return None
+        return {key: record[key] for key in record.keys()}
+
     async def create_moderation_action(
         self,
         room_id: UUID,
         action_data: Dict[str, Any],
         moderator_id: UUID
-    ) -> Optional[asyncpg.Record]:
+    ) -> Optional[dict]:
         """
         Create a moderation action with PROPER RLS context
         """
@@ -41,14 +47,14 @@ class EnhancedModerationCRUD:
                 action_data["action_type"], action_data.get("reason"),
                 action_data.get("duration_minutes")
             )
-            return action
+            return await self._record_to_dict(action) if action else None
 
     async def get_user_moderation_status(
         self,
         room_id: UUID,
         user_id: UUID,
         requesting_user_id: UUID
-    ) -> List[asyncpg.Record]:
+    ) -> List[dict]:
         """
         Get moderation status with PROPER RLS context
         """
@@ -68,7 +74,7 @@ class EnhancedModerationCRUD:
                 """,
                 room_id, user_id
             )
-            return actions
+            return [await self._record_to_dict(action) for action in actions] if actions else []
 
     async def is_user_muted(
         self,
@@ -101,7 +107,7 @@ class EnhancedModerationCRUD:
         self,
         room_id: UUID,
         requesting_user_id: UUID
-    ) -> List[asyncpg.Record]:
+    ) -> List[dict]:
         """Get room moderators with PROPER RLS context"""
         async with database.pool.acquire() as conn:
             await conn.execute(
@@ -126,13 +132,13 @@ class EnhancedModerationCRUD:
                 """,
                 room_id
             )
-            return moderators
+            return [await self._record_to_dict(mod) for mod in moderators] if moderators else []
 
     async def create_content_report(
         self,
         report_data: Dict[str, Any],
         reporter_id: UUID
-    ) -> Optional[asyncpg.Record]:
+    ) -> Optional[dict]:
         """Create content report with PROPER RLS context"""
         async with database.pool.acquire() as conn:
             await conn.execute(
@@ -150,12 +156,12 @@ class EnhancedModerationCRUD:
                 reporter_id, report_data["content_type"], report_data["content_id"],
                 report_data["reason"], report_data.get("description")
             )
-            return report
+            return await self._record_to_dict(report) if report else None
 
     async def get_user_reports(
         self,
         reporter_id: UUID
-    ) -> List[asyncpg.Record]:
+    ) -> List[dict]:
         """Get user reports with PROPER RLS context"""
         async with database.pool.acquire() as conn:
             await conn.execute(
@@ -171,16 +177,14 @@ class EnhancedModerationCRUD:
                 """,
                 reporter_id
             )
-            return reports
-
-    # Methods for promote/demote/remove/ban as previously defined...
+            return [await self._record_to_dict(report) for report in reports] if reports else []
 
     async def promote_to_moderator(
         self,
         room_id: UUID,
         target_user_id: UUID,
         promoter_id: UUID
-    ) -> Optional[asyncpg.Record]:
+    ) -> Optional[dict]:
         """Promote user to moderator with PROPER RLS context"""
         async with database.pool.acquire() as conn:
             await conn.execute(
@@ -198,14 +202,14 @@ class EnhancedModerationCRUD:
                 """,
                 room_id, target_user_id
             )
-            return updated
+            return await self._record_to_dict(updated) if updated else None
 
     async def demote_from_moderator(
         self,
         room_id: UUID,
         target_user_id: UUID,
         demoter_id: UUID
-    ) -> Optional[asyncpg.Record]:
+    ) -> Optional[dict]:
         """Demote user from moderator with PROPER RLS context"""
         async with database.pool.acquire() as conn:
             await conn.execute(
@@ -223,7 +227,7 @@ class EnhancedModerationCRUD:
                 """,
                 room_id, target_user_id
             )
-            return updated
+            return await self._record_to_dict(updated) if updated else None
 
     async def remove_user_from_room(
         self,
@@ -306,14 +310,12 @@ class EnhancedModerationCRUD:
                 print(f"Ban user error: {e}")
                 return False
 
-    # New methods for locking and unlocking rooms
-
     async def lock_room(
         self,
         room_id: UUID,
         moderator_id: UUID,
         reason: Optional[str] = None
-    ) -> Optional[asyncpg.Record]:
+    ) -> Optional[dict]:
         """Lock room to prevent new joins with PROPER RLS context"""
         async with database.pool.acquire() as conn:
             # FIX: Use set_config with is_local=false for session-level context
@@ -326,7 +328,7 @@ class EnhancedModerationCRUD:
             room = await conn.fetchrow(
                 """
                 UPDATE live_audio_rooms
-                SET is_locked = true, 
+                SET is_locked = true,
                     locked_by = $1,
                     lock_reason = $2,
                     locked_at = NOW(),
@@ -349,13 +351,13 @@ class EnhancedModerationCRUD:
                     moderator_id
                 )
 
-            return room
+            return await self._record_to_dict(room) if room else None
 
     async def unlock_room(
         self,
         room_id: UUID,
         moderator_id: UUID
-    ) -> Optional[asyncpg.Record]:
+    ) -> Optional[dict]:
         """Unlock room to allow new joins with PROPER RLS context"""
         async with database.pool.acquire() as conn:
             # FIX: Use set_config with is_local=false for session-level context
@@ -368,7 +370,7 @@ class EnhancedModerationCRUD:
             room = await conn.fetchrow(
                 """
                 UPDATE live_audio_rooms
-                SET is_locked = false, 
+                SET is_locked = false,
                     locked_by = NULL,
                     lock_reason = NULL,
                     locked_at = NULL,
@@ -391,7 +393,7 @@ class EnhancedModerationCRUD:
                     moderator_id
                 )
 
-            return room
+            return await self._record_to_dict(room) if room else None
 
 # Instantiate the class
 enhanced_moderation_crud = EnhancedModerationCRUD()
