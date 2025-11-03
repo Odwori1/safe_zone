@@ -8,7 +8,7 @@ from typing import List, Optional
 from uuid import UUID
 import logging
 
-from app.schemas.uploads import FileMetadataResponse, FileMetadataList
+from app.schemas.uploads import FileMetadataResponse
 from app.crud.file_metadata import file_metadata_crud
 from app.core.security import get_current_user
 from app.schemas.user import User

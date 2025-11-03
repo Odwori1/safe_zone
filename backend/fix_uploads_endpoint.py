@@ -1,6 +1,25 @@
+#!/usr/bin/env python3
+"""
+Temporarily modify uploads endpoint to work without S3 for development
+"""
+import os
+
+def fix_uploads_endpoint():
+    print("🔧 CREATING DEVELOPMENT UPLOADS ENDPOINT")
+    print("=" * 45)
+    
+    uploads_file = "app/api/endpoints/uploads.py"
+    
+    # Backup original file
+    if os.path.exists(uploads_file):
+        shutil.copy2(uploads_file, uploads_file + ".backup")
+        print("✅ Backed up original uploads.py")
+    
+    # Create development version of uploads endpoint
+    dev_uploads_code = '''
 from fastapi import APIRouter, Depends, HTTPException
 from app.core.security import get_current_user
-from app.schemas.uploads import PresignedUrlRequest, PresignedUrlResponse, UploadCompleteRequest
+from app.schemas.uploads import PresignedUrlRequest, PresignedUrlResponse
 import uuid
 import os
 from datetime import datetime, timedelta
@@ -17,8 +36,16 @@ async def generate_presigned_url(
     This version works without AWS S3 credentials
     """
     try:
+        # Validate file type
+        allowed_types = ["audio", "video", "image", "document"]
+        if request.file_type not in allowed_types:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"File type must be one of: {', '.join(allowed_types)}"
+            )
+        
         # Create unique file name
-        file_ext = os.path.splitext(request.original_filename)[1] or '.bin'
+        file_ext = os.path.splitext(request.original_filename)[1]
         unique_filename = f"{uuid.uuid4()}{file_ext}"
         
         # Determine upload directory
@@ -37,9 +64,10 @@ async def generate_presigned_url(
         # Create file path
         file_path = os.path.join(upload_dir, unique_filename)
         
-        # For development, return local file path
+        # For development, we return a simple success response
+        # In a real frontend, you would upload the file directly to this path
         return {
-            "presigned_url": f"/{file_path}",
+            "presigned_url": f"http://localhost:8001/{file_path}",
             "file_key": file_path,
             "method": "PUT",
             "headers": {
@@ -57,7 +85,7 @@ async def generate_presigned_url(
 
 @router.post("/complete")
 async def complete_upload(
-    request: UploadCompleteRequest,
+    upload_data: dict,
     current_user: dict = Depends(get_current_user)
 ):
     """
@@ -66,17 +94,17 @@ async def complete_upload(
     return {
         "status": "completed",
         "message": "Upload marked as complete",
-        "file_url": request.file_key
+        "file_url": upload_data.get("file_key", "")
     }
+'''
+    
+    # Write the development uploads endpoint
+    with open(uploads_file, "w") as f:
+        f.write(dev_uploads_code)
+    
+    print("✅ Created development uploads endpoint")
+    print("   This endpoint works without AWS S3 credentials")
+    print("   Returns local file paths for development")
 
-@router.get("/files")
-async def list_uploaded_files(
-    current_user: dict = Depends(get_current_user)
-):
-    """
-    List uploaded files (Development Version)
-    """
-    return {
-        "files": [],
-        "total": 0
-    }
+if __name__ == "__main__":
+    fix_uploads_endpoint()

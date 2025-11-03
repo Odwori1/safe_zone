@@ -7,7 +7,7 @@ load_dotenv()
 class Settings:
     # Database
     db_host: str = os.getenv("DB_HOST", "localhost")
-    db_port: int = int(os.getenv("DB_PORT", "5432"))
+    db_port: int = int(os.getenv("DB_PORT", "5433"))
     db_name: str = os.getenv("DB_NAME", "safe_zone")
     db_user: str = os.getenv("DB_USER", "safe_zone_user")
     db_password: str = os.getenv("DB_PASSWORD", "0791486006@safezone")  # Correct password
