@@ -80,19 +80,19 @@ export const usePostsStore = create<PostsState>((set, get) => {
   const getPostById = async (postId: string): Promise<Post> => {
     try {
       console.log('🔄 POSTS STORE: Fetching post by ID:', postId);
-      
+
       // ✅ CORRECT: Use request method with full API path
       const response = await apiClient.request(`/api/v1/posts/${postId}`);
       console.log('📥 POSTS STORE: Response status:', response.status);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: Failed to fetch post`);
       }
-      
+
       const postData: Post = await response.json();
       console.log('✅ POSTS STORE: Received post:', postData);
       return postData;
-      
+
     } catch (error) {
       console.error('❌ POSTS STORE: Error fetching post:', error);
       throw error;
@@ -166,20 +166,38 @@ export const usePostsStore = create<PostsState>((set, get) => {
       console.log('🔄 POSTS STORE: Creating post...', postData);
       set({ isLoading: true, error: null });
       try {
+        // VALIDATE: Ensure content_type is always valid for backend
+        const validatedPostData = {
+          ...postData,
+          // OVERRIDE: If content_type is invalid, force to 'text'
+          content_type: ['text', 'journal', 'audio', 'video'].includes(postData.content_type) 
+            ? postData.content_type 
+            : 'text'
+        };
+        
+        console.log('📤 POSTS STORE: Sending validated post data:', validatedPostData);
+        
         const response = await apiClient.request('/api/v1/posts/', {
           method: 'POST',
-          body: JSON.stringify(postData),
+          body: JSON.stringify(validatedPostData),
         });
+        
         console.log('📥 POSTS STORE: Create response status:', response.status);
+        
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: Failed to create post`);
+          const errorText = await response.text();
+          console.error('❌ POSTS STORE: Create error response:', errorText);
+          throw new Error(`HTTP ${response.status}: Failed to create post - ${errorText}`);
         }
+        
         const newPost: PostResponse = await response.json();
         console.log('✅ POSTS STORE: Post created successfully:', newPost.id);
+        
         set((state) => ({
           posts: [newPost, ...state.posts],
           isLoading: false
         }));
+        
         return newPost;
       } catch (error) {
         console.error('❌ POSTS STORE: Create error:', error);

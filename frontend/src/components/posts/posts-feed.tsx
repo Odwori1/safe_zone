@@ -8,6 +8,7 @@ import PostsFilter from './posts-filter';
 import ShareDialog from './share-dialog';
 import PostView from './post-view';
 import FeedSystem from './feed-system';
+import AudioPlayer from '@/components/media/audio-player'; // NEW: Audio player import
 import {
   Heart,
   MessageCircle,
@@ -20,7 +21,11 @@ import {
   ChevronUp,
   Share2,
   Bookmark,
-  BookmarkCheck
+  BookmarkCheck,
+  Play, // NEW: Video play icon
+  Pause, // NEW: Video pause icon
+  Volume2, // NEW: Volume icon
+  VolumeX // NEW: Mute icon
 } from 'lucide-react';
 import CommentsList from './comments-list';
 import CommentForm from './comment-form';
@@ -65,6 +70,10 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
 
   // ADD STATE FOR POST VIEW MODAL
   const [viewingPostId, setViewingPostId] = useState<string | null>(null);
+
+  // NEW: State for video players
+  const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
+  const [videoRefs] = useState<{ [key: string]: HTMLVideoElement | null }>({});
 
   const [currentFilters, setCurrentFilters] = useState<PostsFilterType>({
     skip: 0,
@@ -189,6 +198,28 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
     setExpandedPostId(expandedPostId === postId ? null : postId);
   };
 
+  // NEW: Video control functions
+  const toggleVideoPlayback = (postId: string) => {
+    const video = videoRefs[postId];
+    if (!video) return;
+
+    if (playingVideoId === postId) {
+      video.pause();
+      setPlayingVideoId(null);
+    } else {
+      // Pause any currently playing video
+      if (playingVideoId && videoRefs[playingVideoId]) {
+        videoRefs[playingVideoId]?.pause();
+      }
+      video.play();
+      setPlayingVideoId(postId);
+    }
+  };
+
+  const handleVideoEnd = (postId: string) => {
+    setPlayingVideoId(null);
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -226,11 +257,11 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
   const renderPostContent = (content: string, postId: string) => {
     // Check if this is a shared post and extract original post ID
     const originalPostMatch = content.match(/\[original_post:([a-f0-9-]+)\]/);
-    
+
     if (originalPostMatch) {
       const originalPostId = originalPostMatch[1];
       const contentWithoutMarker = content.replace(/\[original_post:[a-f0-9-]+\]/, '');
-      
+
       return (
         <div>
           {contentWithoutMarker.split('\n').map((line, index) => {
@@ -258,11 +289,115 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
         </div>
       );
     }
-    
+
     // Regular post - just return the content
     return content.split('\n').map((line, index) => (
       <div key={index}>{line}</div>
     ));
+  };
+
+  // NEW: Function to render media attachments
+  const renderMediaAttachments = (post: any) => {
+    // Check for audio posts
+    if (post.audio_url && post.content_type === 'audio') {
+      return (
+        <div className="mt-3">
+          <AudioPlayer
+            src={post.audio_url}
+            title="Audio post"
+          />
+        </div>
+      );
+    }
+
+    // Check for video posts
+    if (post.video_url && post.content_type === 'video') {
+      return (
+        <div className="mt-3 relative rounded-lg overflow-hidden bg-black">
+          <video
+            ref={(el) => { videoRefs[post.id] = el; }}
+            src={post.video_url}
+            className="w-full max-w-md rounded-lg"
+            onEnded={() => handleVideoEnd(post.id)}
+            onClick={() => toggleVideoPlayback(post.id)}
+          />
+          <button
+            onClick={() => toggleVideoPlayback(post.id)}
+            className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-20 transition-all"
+          >
+            {playingVideoId === post.id ? (
+              <Pause className="h-12 w-12 text-white opacity-70" />
+            ) : (
+              <Play className="h-12 w-12 text-white opacity-70" />
+            )}
+          </button>
+          {post.video_duration && (
+            <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+              {Math.floor(post.video_duration / 60)}:{(post.video_duration % 60).toString().padStart(2, '0')}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // FIXED: Check for image posts (images are text posts with image_url)
+    if (post.image_url) {
+      return (
+        <div className="mt-3">
+          <img
+            src={post.image_url}
+            alt="Post image"
+            className="max-w-full max-h-96 rounded-lg object-contain border"
+            loading="lazy"
+            onError={(e) => {
+              console.error('Failed to load image:', post.image_url);
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+          />
+        </div>
+      );
+    }
+
+    // Check for file attachments (future implementation)
+    if (post.file_attachments && post.file_attachments.length > 0) {
+      return (
+        <div className="mt-3">
+          <div className="flex flex-wrap gap-2">
+            {post.file_attachments.map((fileId: string, index: number) => (
+              <div
+                key={fileId}
+                className="px-3 py-2 bg-gray-100 rounded-lg border text-sm"
+              >
+                <span className="text-gray-600">Attachment {index + 1}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  // NEW: Function to get content type badge
+  const getContentTypeBadge = (post: any) => {
+    if (!post.content_type || post.content_type === 'text') return null;
+
+    const badgeConfig = {
+      audio: { label: '🎵 Audio', color: 'bg-blue-100 text-blue-800' },
+      video: { label: '🎬 Video', color: 'bg-purple-100 text-purple-800' },
+      image: { label: '🖼️ Image', color: 'bg-green-100 text-green-800' },
+      journal: { label: '📔 Journal', color: 'bg-orange-100 text-orange-800' }
+    };
+
+    const config = badgeConfig[post.content_type as keyof typeof badgeConfig];
+    if (!config) return null;
+
+    return (
+      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ml-2 ${config.color}`}>
+        {config.label}
+      </span>
+    );
   };
 
   return (
@@ -297,6 +432,7 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
             {posts.length} {posts.length === 1 ? 'post' : 'posts'}
             {currentFilters.mood && ` • Filtered by ${currentFilters.mood} mood`}
             {currentFilters.visibility && ` • ${currentFilters.visibility} only`}
+            {currentFilters.content_type && ` • ${currentFilters.content_type} posts`} {/* NEW: Content type filter info */}
           </p>
         </div>
         <button
@@ -318,14 +454,14 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
         <div className="bg-white rounded-lg border-2 border-dashed p-8 text-center">
           <div className="max-w-md mx-auto">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {currentFilters.mood || currentFilters.visibility ? 'No matching posts' : 'No posts yet'}
+              {currentFilters.mood || currentFilters.visibility || currentFilters.content_type ? 'No matching posts' : 'No posts yet'}
             </h3>
             <p className="text-gray-600 mb-4">
-              {currentFilters.mood || currentFilters.visibility
+              {currentFilters.mood || currentFilters.visibility || currentFilters.content_type
                 ? 'Try changing your filters to see more posts.'
                 : 'Be the first to share your thoughts and start the conversation.'}
             </p>
-            {(currentFilters.mood || currentFilters.visibility) && (
+            {(currentFilters.mood || currentFilters.visibility || currentFilters.content_type) && (
               <button
                 onClick={() => handleFilterChange({ skip: 0, limit: 100 })}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -359,9 +495,12 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-sm">
-                      {post.is_anonymous ? 'Anonymous' : post.username || 'User'}
-                    </p>
+                    <div className="flex items-center">
+                      <p className="font-medium text-sm">
+                        {post.is_anonymous ? 'Anonymous' : post.username || 'User'}
+                      </p>
+                      {getContentTypeBadge(post)}
+                    </div>
                     <p className="text-xs text-gray-500">
                       {formatDate(post.created_at)}
                       {post.visibility === 'private' && ' · 🔒 Private'}
@@ -419,6 +558,9 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
                     {post.mood}
                   </span>
                 )}
+
+                {/* NEW: Media Attachments */}
+                {renderMediaAttachments(post)}
               </div>
 
               {/* Post Footer - Actions */}

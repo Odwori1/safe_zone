@@ -3,15 +3,21 @@
 import { useState } from 'react';
 import { usePostsStore } from '@/stores/posts-store';
 import { useAuth } from '@/hooks/use-auth';
-import { 
-  Globe, 
-  Lock, 
-  Users, 
-  Eye, 
+import {
+  Globe,
+  Lock,
+  Users,
+  Eye,
   EyeOff,
   Smile,
-  Loader2
+  Loader2,
+  Paperclip,
+  X,
+  Music,
+  Video,
+  Image
 } from 'lucide-react';
+import FileUpload from '@/components/media/file-upload';
 
 const MOOD_OPTIONS = [
   { value: 'happy', label: '😊 Happy', color: 'text-yellow-600' },
@@ -25,23 +31,23 @@ const MOOD_OPTIONS = [
 ];
 
 const VISIBILITY_OPTIONS = [
-  { 
-    value: 'public', 
-    label: 'Public', 
+  {
+    value: 'public',
+    label: 'Public',
     description: 'Visible to everyone',
     icon: Globe,
     color: 'text-green-600'
   },
-  { 
-    value: 'private', 
-    label: 'Private', 
+  {
+    value: 'private',
+    label: 'Private',
     description: 'Only visible to you',
     icon: Lock,
     color: 'text-blue-600'
   },
-  { 
-    value: 'support_group', 
-    label: 'Support Group', 
+  {
+    value: 'support_group',
+    label: 'Support Group',
     description: 'Visible to support groups',
     icon: Users,
     color: 'text-purple-600'
@@ -51,7 +57,7 @@ const VISIBILITY_OPTIONS = [
 export default function CreatePostForm() {
   const { createPost, isLoading } = usePostsStore();
   const { user } = useAuth();
-  
+
   const [content, setContent] = useState('');
   const [mood, setMood] = useState('');
   const [visibility, setVisibility] = useState<'public' | 'private' | 'support_group'>('public');
@@ -59,29 +65,117 @@ export default function CreatePostForm() {
   const [showMoodPicker, setShowMoodPicker] = useState(false);
   const [charCount, setCharCount] = useState(0);
 
+  // New state for attached files
+  const [attachedFiles, setAttachedFiles] = useState<Array<{
+    fileId: string;
+    url: string;
+    fileType: string;
+    fileName: string;
+  }>>([]);
+
+  // Function to remove attached files
+  const removeAttachedFile = (fileId: string) => {
+    setAttachedFiles(prev => prev.filter(file => file.fileId !== fileId));
+  };
+
+  // FIXED: Handle file uploads - accept file parameter properly
+  const handleFileUploaded = (fileInfo: { fileId: string; url: string; fileType: string; fileName?: string }, file?: File) => {
+    // Use file.name if available, otherwise use fileInfo.fileName or a default
+    const fileName = file?.name || fileInfo.fileName || `Uploaded ${fileInfo.fileType} file`;
+
+    setAttachedFiles(prev => [...prev, {
+      fileId: fileInfo.fileId,
+      url: fileInfo.url,
+      fileType: fileInfo.fileType,
+      fileName: fileName
+    }]);
+  };
+
+  // FIXED: Updated handleSubmit to properly include file URLs in post data
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!content.trim()) return;
+
+    if (!content.trim() && attachedFiles.length === 0) return;
 
     try {
-      await createPost({
+      // FIXED: Determine content type and include proper file URLs
+      let contentType: 'text' | 'audio' | 'video' = 'text';
+      let audioUrl = null;
+      let videoUrl = null;
+      let imageUrl = null;
+
+      // FIXED: Handle multiple files and find the first media file
+      if (attachedFiles.length > 0) {
+        // Find the first image file if any
+        const imageFile = attachedFiles.find(file => file.fileType === 'image');
+        if (imageFile) {
+          imageUrl = imageFile.url;
+          contentType = 'text'; // Images are text posts with image_url
+        }
+
+        // Find the first audio file if any
+        const audioFile = attachedFiles.find(file => file.fileType === 'audio');
+        if (audioFile) {
+          audioUrl = audioFile.url;
+          contentType = 'audio';
+        }
+
+        // Find the first video file if any
+        const videoFile = attachedFiles.find(file => file.fileType === 'video');
+        if (videoFile) {
+          videoUrl = videoFile.url;
+          contentType = 'video';
+        }
+      }
+
+      console.log('📤 Creating post with:', {
         content: content.trim(),
-        content_type: 'text',
+        contentType,
+        audioUrl,
+        videoUrl,
+        imageUrl,
+        attachedFiles: attachedFiles.map(f => ({ fileId: f.fileId, url: f.url, type: f.fileType }))
+      });
+
+      // FIXED: Create proper post data with file URLs
+      const postData: any = {
+        content: content.trim(),
+        content_type: contentType,
         mood: mood || undefined,
         visibility,
         is_anonymous: isAnonymous,
-      });
+        file_attachments: attachedFiles.map(file => file.fileId),
+      };
+
+      // Add specific media URLs based on content type
+      if (audioUrl) {
+        postData.audio_url = audioUrl;
+        postData.audio_duration = null;
+      }
+
+      if (videoUrl) {
+        postData.video_url = videoUrl;
+        postData.video_duration = null;
+      }
+
+      if (imageUrl) {
+        postData.image_url = imageUrl;
+      }
+
+      console.log('🎯 Final post data being sent:', postData);
+
+      await createPost(postData);
 
       // Reset form
       setContent('');
       setMood('');
       setVisibility('public');
       setIsAnonymous(false);
+      setAttachedFiles([]);
       setCharCount(0);
-      
+      setShowMoodPicker(false);
+
     } catch (error) {
-      // Error handling is done in the store
       console.error('Failed to create post:', error);
     }
   };
@@ -98,7 +192,7 @@ export default function CreatePostForm() {
     <div className="bg-white rounded-lg border shadow-sm">
       <div className="p-6">
         <h3 className="text-lg font-semibold mb-4">Share what's on your mind</h3>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Content Textarea */}
           <div>
@@ -138,7 +232,7 @@ export default function CreatePostForm() {
                 </button>
               )}
             </div>
-            
+
             {!showMoodPicker ? (
               <button
                 type="button"
@@ -164,8 +258,8 @@ export default function CreatePostForm() {
                       setShowMoodPicker(false);
                     }}
                     className={`p-2 rounded-lg border text-sm text-center hover:border-gray-400 transition-colors ${
-                      mood === moodOption.value 
-                        ? 'border-blue-500 bg-blue-50' 
+                      mood === moodOption.value
+                        ? 'border-blue-500 bg-blue-50'
                         : 'border-gray-300'
                     }`}
                   >
@@ -221,8 +315,8 @@ export default function CreatePostForm() {
               <div>
                 <p className="font-medium text-sm">Post Anonymously</p>
                 <p className="text-xs text-gray-600">
-                  {isAnonymous 
-                    ? 'Your identity will be hidden' 
+                  {isAnonymous
+                    ? 'Your identity will be hidden'
                     : 'Your username will be visible'
                   }
                 </p>
@@ -241,6 +335,66 @@ export default function CreatePostForm() {
                 }`}
               />
             </button>
+          </div>
+
+          {/* File Attachments Section */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <Paperclip className="h-4 w-4" />
+                Attach Media (Optional)
+              </label>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+              {/* Audio Upload */}
+              <FileUpload
+                onFileUploaded={handleFileUploaded}
+                fileType="audio"
+                maxFileSize={50 * 1024 * 1024} // 50MB
+              />
+
+              {/* Video Upload */}
+              <FileUpload
+                onFileUploaded={handleFileUploaded}
+                fileType="video"
+                maxFileSize={100 * 1024 * 1024} // 100MB
+              />
+
+              {/* Image Upload */}
+              <FileUpload
+                onFileUploaded={handleFileUploaded}
+                fileType="image"
+                maxFileSize={10 * 1024 * 1024} // 10MB
+              />
+            </div>
+
+            {/* Attached Files List */}
+            {attachedFiles.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-gray-700">Attached files:</p>
+                {attachedFiles.map((file) => (
+                  <div
+                    key={file.fileId}
+                    className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border"
+                  >
+                    <div className="flex items-center gap-2">
+                      {file.fileType === 'audio' && <Music className="h-4 w-4 text-blue-600" />}
+                      {file.fileType === 'video' && <Video className="h-4 w-4 text-purple-600" />}
+                      {file.fileType === 'image' && <Image className="h-4 w-4 text-green-600" />}
+                      <span className="text-sm text-gray-700">{file.fileName}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeAttachedFile(file.fileId)}
+                      className="p-1 hover:bg-gray-200 rounded-full transition-colors"
+                    >
+                      <X className="h-3 w-3 text-gray-500" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Submit Button */}

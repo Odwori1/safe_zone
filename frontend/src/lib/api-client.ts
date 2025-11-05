@@ -9,12 +9,20 @@ class ApiClient {
     this.initializeToken();
     console.log('🔧 API Client initialized. Base URL:', this.baseURL);
     console.log('🔧 Initial token:', this.accessToken ? 'Present' : 'Missing');
+    // ADDED: Better token debugging
+    if (this.accessToken) {
+      console.log('🔧 Token preview:', this.accessToken.substring(0, 20) + '...');
+    }
   }
 
   private initializeToken() {
     if (typeof window !== 'undefined') {
       this.accessToken = localStorage.getItem('access_token');
       console.log('🔄 Token initialized from localStorage:', this.accessToken ? 'Present' : 'Missing');
+      // ADDED: Check if token exists but might be invalid
+      if (this.accessToken) {
+        console.log('🔄 Token length:', this.accessToken.length);
+      }
     }
   }
 
@@ -45,12 +53,14 @@ class ApiClient {
     if (this.accessToken) {
       headers['Authorization'] = `Bearer ${this.accessToken}`;
       console.log('🔐 Sending request with Authorization header');
+      console.log('🔐 Token preview in request:', this.accessToken.substring(0, 20) + '...');
     } else {
       console.log('⚠️ Sending request WITHOUT Authorization header');
+      console.log('⚠️ Current accessToken value:', this.accessToken);
     }
 
     console.log('📤 Making request:', options.method || 'GET', url);
-    console.log('📤 Headers:', headers);
+    console.log('📤 Headers:', Object.keys(headers));
 
     const response = await fetch(url, {
       ...options,
@@ -134,6 +144,72 @@ class ApiClient {
 
   getAccessToken(): string | null {
     return this.accessToken;
+  }
+
+  // File upload method - FIXED: Better error handling and debugging
+  async uploadFile(fileData: {
+    file_name: string;
+    original_filename: string;
+    file_size: number;
+    mime_type: string;
+    file_type: 'audio' | 'video' | 'image' | 'document';
+  }): Promise<{ upload_url: string; file_id: string }> {
+    console.log('📤 API Client: Requesting upload URL with data:', fileData);
+
+    try {
+      // ADDED: Check authentication before making request
+      if (!this.accessToken) {
+        console.error('❌ API Client: No access token available for upload');
+        throw new Error('Authentication required for file upload');
+      }
+
+      const response = await this.request('/api/v1/uploads/presigned-url', {
+        method: 'POST',
+        body: JSON.stringify(fileData),
+      });
+
+      console.log('📥 API Client: Upload URL response status:', response.status);
+
+      if (!response.ok) {
+        let errorData;
+        try {
+          errorData = await response.json();
+          console.error('❌ API Client: Upload URL request failed with JSON error:', errorData);
+        } catch (e) {
+          const errorText = await response.text();
+          console.error('❌ API Client: Upload URL request failed with text error:', errorText);
+          errorData = { detail: errorText };
+        }
+        
+        // ADDED: Specific handling for 403
+        if (response.status === 403) {
+          console.error('❌ API Client: Access forbidden - token might be invalid');
+          this.clearTokens(); // Clear invalid token
+        }
+        
+        throw new Error(`Upload URL request failed: ${response.status} - ${JSON.stringify(errorData)}`);
+      }
+
+      const backendResponse = await response.json();
+      console.log('✅ API Client: Backend response received:', backendResponse);
+
+      // Transform backend response to match frontend expectations
+      const uploadInfo = {
+        upload_url: backendResponse.presigned_url,
+        file_id: backendResponse.upload_id,
+        file_key: backendResponse.file_key,
+        method: backendResponse.method,
+        headers: backendResponse.headers,
+        expires_in: backendResponse.expires_in
+      };
+
+      console.log('🔄 API Client: Transformed upload info:', uploadInfo);
+      return uploadInfo;
+
+    } catch (error) {
+      console.error('❌ API Client: Upload URL request failed:', error);
+      throw error;
+    }
   }
 }
 

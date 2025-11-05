@@ -55,6 +55,9 @@ class PostBase(BaseModel):
     video_width: Optional[int] = Field(None, ge=1, le=3840, description="Video width in pixels")
     video_height: Optional[int] = Field(None, ge=1, le=2160, description="Video height in pixels")
 
+    # ADD IMAGE SUPPORT
+    image_url: Optional[str] = Field(None, max_length=500, description="URL to image file")
+
     @field_validator('content')
     @classmethod
     def validate_content(cls, v: str) -> str:
@@ -87,6 +90,14 @@ class PostBase(BaseModel):
             raise ValueError('Video URL is required for video posts')
         return v
 
+    # ADD IMAGE URL VALIDATOR
+    @field_validator('image_url')
+    @classmethod
+    def validate_image_url(cls, v: Optional[str], info) -> Optional[str]:
+        """Validate image URL is provided when needed"""
+        # Images are always text posts with image_url, no content_type validation needed
+        return v
+
 class PostCreate(PostBase):
     """Schema for creating a post - EXTENDED for audio and video"""
     pass
@@ -112,6 +123,9 @@ class PostUpdate(BaseModel):
     thumbnail_url: Optional[str] = Field(None, max_length=500)
     video_width: Optional[int] = Field(None, ge=1, le=3840)
     video_height: Optional[int] = Field(None, ge=1, le=2160)
+
+    # ADD IMAGE SUPPORT FOR UPDATES
+    image_url: Optional[str] = Field(None, max_length=500)
 
     @field_validator('content')
     @classmethod
@@ -147,6 +161,9 @@ class PostInDB(TimeStampedSchema):
     thumbnail_url: Optional[str] = None
     video_width: Optional[int] = None
     video_height: Optional[int] = None
+
+    # ADD IMAGE SUPPORT
+    image_url: Optional[str] = None
 
 class PostResponse(PostInDB):
     """Post schema for API responses - EXTENDED for audio and video"""
@@ -214,8 +231,6 @@ class FileUploadCreate(BaseModel):
     file_size: int = Field(..., ge=1)
     mime_type: str = Field(..., min_length=1, max_length=100)
     duration: Optional[int] = Field(None, ge=1, le=3600)
-
-
 
 # ========== PHASE 3, ITEM 3: SECURE S3 FILE SCHEMAS ==========
 

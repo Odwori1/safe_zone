@@ -232,6 +232,36 @@ class CRUDPost:
                     getattr(post_in, 'file_size', None),
                     getattr(post_in, 'mime_type', None)
                 )
+            elif hasattr(post_in, 'video_url') and post_in.video_url:
+                # Video post with additional fields - AUTO-APPROVED
+                return await conn.fetchrow(
+                    """
+                    INSERT INTO posts (user_id, content, content_type, mood, visibility, is_anonymous,
+                                     video_url, video_duration, thumbnail_url, video_width, video_height, moderation_status)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'approved')
+                    RETURNING *
+                    """,
+                    user_id, post_in.content, post_in.content_type, post_in.mood,
+                    post_in.visibility, post_in.is_anonymous,
+                    getattr(post_in, 'video_url', None),
+                    getattr(post_in, 'video_duration', None),
+                    getattr(post_in, 'thumbnail_url', None),
+                    getattr(post_in, 'video_width', None),
+                    getattr(post_in, 'video_height', None)
+                )
+            elif hasattr(post_in, 'image_url') and post_in.image_url:
+                # Image post - AUTO-APPROVED (images are text posts with image_url)
+                return await conn.fetchrow(
+                    """
+                    INSERT INTO posts (user_id, content, content_type, mood, visibility, is_anonymous,
+                                     image_url, moderation_status)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, 'approved')
+                    RETURNING *
+                    """,
+                    user_id, post_in.content, post_in.content_type, post_in.mood,
+                    post_in.visibility, post_in.is_anonymous,
+                    getattr(post_in, 'image_url', None)
+                )
             else:
                 # Regular text post - AUTO-APPROVED
                 return await conn.fetchrow(
@@ -439,18 +469,18 @@ class CRUDPost:
                 await conn.execute("SELECT set_current_user_id($1);", str(user_id))
                 posts = await conn.fetch(
                     """
-                    SELECT 
+                    SELECT
                         p.*,
                         u.username as username,
                         u.profile_picture as user_avatar,
                         (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) as like_count,
                         EXISTS(
-                            SELECT 1 FROM post_likes 
+                            SELECT 1 FROM post_likes
                             WHERE post_id = p.id AND user_id = $1
                         ) as user_has_liked,
                         (SELECT COUNT(*) FROM post_shares WHERE post_id = p.id) as share_count,
                         EXISTS(
-                            SELECT 1 FROM post_shares 
+                            SELECT 1 FROM post_shares
                             WHERE post_id = p.id AND user_id = $1
                         ) as user_has_shared,
                         sp.saved_at as saved_at

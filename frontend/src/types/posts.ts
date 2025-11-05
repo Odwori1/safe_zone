@@ -1,6 +1,6 @@
 export interface PostCreate {
   content: string;
-  content_type?: 'text' | 'journal' | 'audio' | 'video';
+  content_type: 'text' | 'journal' | 'audio' | 'video'; // REMOVED 'image' - images are 'text' with image_url
   mood?: string;
   visibility: 'public' | 'private' | 'support_group';
   is_anonymous: boolean;
@@ -8,6 +8,8 @@ export interface PostCreate {
   audio_duration?: number | null;
   video_url?: string | null;
   video_duration?: number | null;
+  image_url?: string | null; // Images use 'text' content_type with image_url
+  file_attachments?: string[];
 }
 
 export interface PostResponse {
@@ -31,13 +33,15 @@ export interface PostResponse {
   thumbnail_url: string | null;
   video_width: number | null;
   video_height: number | null;
+  image_url: string | null;
+  file_attachments: string[];
   username: string | null;
   user_avatar: string | null;
   like_count?: number;
   comment_count?: number;
   user_has_liked?: boolean;
-  share_count?: number;        // ADD THIS
-  user_has_shared?: boolean;   // ADD THIS
+  share_count?: number;
+  user_has_shared?: boolean;
 }
 
 export interface PostUpdate {
@@ -57,7 +61,6 @@ export interface PostsFilter {
   search?: string;
 }
 
-// ADD THESE NEW INTERFACES
 export interface ShareResponse {
   message: string;
   already_shared: boolean;
