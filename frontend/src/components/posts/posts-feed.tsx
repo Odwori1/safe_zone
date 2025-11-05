@@ -56,6 +56,8 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
     getPostById
   } = usePostsStore();
   const { user } = useAuth();
+
+  // State variables
   const [hasLoaded, setHasLoaded] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [likingId, setLikingId] = useState<string | null>(null);
@@ -64,15 +66,17 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
 
-  // ADD STATE FOR SHARE DIALOG
+  // SHARE DIALOG
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [currentSharingPost, setCurrentSharingPost] = useState<{id: string, content: string} | null>(null);
 
-  // ADD STATE FOR POST VIEW MODAL
+  // POST VIEW MODAL
   const [viewingPostId, setViewingPostId] = useState<string | null>(null);
 
-  // NEW: State for video players
+  // NEW: Video control states
   const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
+  const [mutedVideos, setMutedVideos] = useState<{ [key: string]: boolean }>({});
+  const [loadingVideoId, setLoadingVideoId] = useState<string | null>(null);
   const [videoRefs] = useState<{ [key: string]: HTMLVideoElement | null }>({});
 
   const [currentFilters, setCurrentFilters] = useState<PostsFilterType>({
@@ -152,7 +156,7 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
     }
   };
 
-  // UPDATED SHARE HANDLER WITH DIALOG
+  // UPDATED: Share handler with dialog
   const handleShareClick = (postId: string, postContent: string) => {
     const post = posts.find(p => p.id === postId);
     if (post?.user_has_shared) {
@@ -172,15 +176,11 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
 
     try {
       if (method === "copy") {
-        // Handle copy link method
         const postUrl = `${window.location.origin}/posts/${currentSharingPost.id}`;
         await navigator.clipboard.writeText(postUrl);
         console.log("✅ Link copied to clipboard:", currentSharingPost.id);
-
-        // Show success message
         alert("Post link copied to clipboard!");
       } else {
-        // Handle platform sharing with caption
         await sharePost(currentSharingPost.id, caption);
         console.log("✅ Post shared successfully:", currentSharingPost.id);
       }
@@ -199,27 +199,53 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
   };
 
   // NEW: Video control functions
-  const toggleVideoPlayback = (postId: string) => {
+  const toggleVideoPlayback = async (postId: string) => {
     const video = videoRefs[postId];
     if (!video) return;
 
-    if (playingVideoId === postId) {
-      video.pause();
-      setPlayingVideoId(null);
-    } else {
-      // Pause any currently playing video
-      if (playingVideoId && videoRefs[playingVideoId]) {
-        videoRefs[playingVideoId]?.pause();
+    try {
+      if (playingVideoId === postId) {
+        video.pause();
+        setPlayingVideoId(null);
+      } else {
+        setLoadingVideoId(postId);
+        if (playingVideoId && videoRefs[playingVideoId]) {
+          videoRefs[playingVideoId]?.pause();
+        }
+        await video.play();
+        setPlayingVideoId(postId);
       }
-      video.play();
-      setPlayingVideoId(postId);
+    } catch (error) {
+      console.error('Error playing video:', error);
+    } finally {
+      setLoadingVideoId(null);
     }
+  };
+
+  const toggleMuteVideo = (postId: string) => {
+    const video = videoRefs[postId];
+    if (!video) return;
+
+    video.muted = !video.muted;
+    setMutedVideos(prev => ({
+      ...prev,
+      [postId]: video.muted
+    }));
   };
 
   const handleVideoEnd = (postId: string) => {
     setPlayingVideoId(null);
+    const video = videoRefs[postId];
+    if (video) {
+      video.currentTime = 0;
+    }
   };
 
+  const handleVideoLoad = (postId: string) => {
+    setLoadingVideoId(null);
+  };
+
+  // Helper: format date
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -236,6 +262,7 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
     }
   };
 
+  // Mood color helper
   const getMoodColor = (mood: string | null) => {
     if (!mood) return 'bg-gray-100 text-gray-800';
 
@@ -253,9 +280,29 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
     return moodColors[mood.toLowerCase()] || 'bg-gray-100 text-gray-800';
   };
 
+  // ADD THIS MISSING FUNCTION:
+  const getContentTypeBadge = (post: any) => {
+    if (!post.content_type || post.content_type === 'text') return null;
+
+    const badgeConfig = {
+      audio: { label: '🎵 Audio', color: 'bg-blue-100 text-blue-800 border border-blue-200' },
+      video: { label: '🎬 Video', color: 'bg-purple-100 text-purple-800 border border-purple-200' },
+      image: { label: '🖼️ Image', color: 'bg-green-100 text-green-800 border border-green-200' },
+      journal: { label: '📔 Journal', color: 'bg-orange-100 text-orange-800 border border-orange-200' }
+    };
+
+    const config = badgeConfig[post.content_type as keyof typeof badgeConfig];
+    if (!config) return null;
+
+    return (
+      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ml-2 ${config.color}`}>
+        {config.label}
+      </span>
+    );
+  };
+
   // Function to render post content with clickable shared post links
   const renderPostContent = (content: string, postId: string) => {
-    // Check if this is a shared post and extract original post ID
     const originalPostMatch = content.match(/\[original_post:([a-f0-9-]+)\]/);
 
     if (originalPostMatch) {
@@ -289,8 +336,6 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
         </div>
       );
     }
-
-    // Regular post - just return the content
     return content.split('\n').map((line, index) => (
       <div key={index}>{line}</div>
     ));
@@ -302,40 +347,100 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
     if (post.audio_url && post.content_type === 'audio') {
       return (
         <div className="mt-3">
-          <AudioPlayer
-            src={post.audio_url}
-            title="Audio post"
-          />
+          <AudioPlayer src={post.audio_url} title="Audio post" />
         </div>
       );
     }
 
-    // Check for video posts
+    // FIXED: Check for video posts with professional styling
     if (post.video_url && post.content_type === 'video') {
       return (
-        <div className="mt-3 relative rounded-lg overflow-hidden bg-black">
-          <video
-            ref={(el) => { videoRefs[post.id] = el; }}
-            src={post.video_url}
-            className="w-full max-w-md rounded-lg"
-            onEnded={() => handleVideoEnd(post.id)}
-            onClick={() => toggleVideoPlayback(post.id)}
-          />
-          <button
-            onClick={() => toggleVideoPlayback(post.id)}
-            className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-20 transition-all"
-          >
-            {playingVideoId === post.id ? (
-              <Pause className="h-12 w-12 text-white opacity-70" />
-            ) : (
-              <Play className="h-12 w-12 text-white opacity-70" />
-            )}
-          </button>
-          {post.video_duration && (
-            <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
-              {Math.floor(post.video_duration / 60)}:{(post.video_duration % 60).toString().padStart(2, '0')}
+        <div className="mt-3">
+          <div className="relative bg-black rounded-xl overflow-hidden shadow-lg max-w-2xl mx-auto">
+            <video
+              ref={(el) => { videoRefs[post.id] = el; }}
+              src={post.video_url}
+              className="w-full h-auto max-h-96 object-contain"
+              onEnded={() => handleVideoEnd(post.id)}
+              onClick={() => toggleVideoPlayback(post.id)}
+              poster={post.thumbnail_url}
+              preload="metadata"
+            />
+            {/* Video Controls Overlay */}
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 cursor-pointer">
+              <button
+                onClick={() => toggleVideoPlayback(post.id)}
+                className="bg-black bg-opacity-60 hover:bg-opacity-80 rounded-full p-4 transition-all duration-200 transform hover:scale-110"
+              >
+                {playingVideoId === post.id ? (
+                  <Pause className="h-8 w-8 text-white" />
+                ) : (
+                  <Play className="h-8 w-8 text-white ml-1" />
+                )}
+              </button>
             </div>
-          )}
+
+            {/* Video Info Bar */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+              <div className="flex justify-between items-center">
+                {post.video_duration && (
+                  <div className="bg-black bg-opacity-70 text-white text-sm px-2 py-1 rounded">
+                    {Math.floor(post.video_duration / 60)}:{(post.video_duration % 60).toString().padStart(2, '0')}
+                  </div>
+                )}
+                {/* Video Quality Info */}
+                {(post.video_width && post.video_height) && (
+                  <div className="text-white text-sm bg-black bg-opacity-50 px-2 py-1 rounded">
+                    {post.video_width}×{post.video_height}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Loading State */}
+            {loadingVideoId === post.id && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <Loader2 className="h-8 w-8 text-white animate-spin" />
+              </div>
+            )}
+          </div>
+
+          {/* Video Controls Bar (Optional - for more controls) */}
+          <div className="flex justify-center mt-2 space-x-4">
+            <button
+              onClick={() => toggleVideoPlayback(post.id)}
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+            >
+              {playingVideoId === post.id ? (
+                <>
+                  <Pause className="h-4 w-4" />
+                  Pause
+                </>
+              ) : (
+                <>
+                  <Play className="h-4 w-4" />
+                  Play
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={() => toggleMuteVideo(post.id)}
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+            >
+              {mutedVideos[post.id] ? (
+                <>
+                  <VolumeX className="h-4 w-4" />
+                  Unmute
+                </>
+              ) : (
+                <>
+                  <Volume2 className="h-4 w-4" />
+                  Mute
+                </>
+              )}
+            </button>
+          </div>
         </div>
       );
     }
@@ -344,60 +449,23 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
     if (post.image_url) {
       return (
         <div className="mt-3">
-          <img
-            src={post.image_url}
-            alt="Post image"
-            className="max-w-full max-h-96 rounded-lg object-contain border"
-            loading="lazy"
-            onError={(e) => {
-              console.error('Failed to load image:', post.image_url);
-              (e.target as HTMLImageElement).style.display = 'none';
-            }}
-          />
-        </div>
-      );
-    }
-
-    // Check for file attachments (future implementation)
-    if (post.file_attachments && post.file_attachments.length > 0) {
-      return (
-        <div className="mt-3">
-          <div className="flex flex-wrap gap-2">
-            {post.file_attachments.map((fileId: string, index: number) => (
-              <div
-                key={fileId}
-                className="px-3 py-2 bg-gray-100 rounded-lg border text-sm"
-              >
-                <span className="text-gray-600">Attachment {index + 1}</span>
-              </div>
-            ))}
+          <div className="bg-gray-50 rounded-lg border overflow-hidden max-w-2xl mx-auto">
+            <img
+              src={post.image_url}
+              alt="Post image"
+              className="w-full h-auto max-h-96 object-contain"
+              loading="lazy"
+              onError={(e) => {
+                console.error('Failed to load image:', post.image_url);
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
           </div>
         </div>
       );
     }
 
     return null;
-  };
-
-  // NEW: Function to get content type badge
-  const getContentTypeBadge = (post: any) => {
-    if (!post.content_type || post.content_type === 'text') return null;
-
-    const badgeConfig = {
-      audio: { label: '🎵 Audio', color: 'bg-blue-100 text-blue-800' },
-      video: { label: '🎬 Video', color: 'bg-purple-100 text-purple-800' },
-      image: { label: '🖼️ Image', color: 'bg-green-100 text-green-800' },
-      journal: { label: '📔 Journal', color: 'bg-orange-100 text-orange-800' }
-    };
-
-    const config = badgeConfig[post.content_type as keyof typeof badgeConfig];
-    if (!config) return null;
-
-    return (
-      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ml-2 ${config.color}`}>
-        {config.label}
-      </span>
-    );
   };
 
   return (
@@ -432,7 +500,7 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
             {posts.length} {posts.length === 1 ? 'post' : 'posts'}
             {currentFilters.mood && ` • Filtered by ${currentFilters.mood} mood`}
             {currentFilters.visibility && ` • ${currentFilters.visibility} only`}
-            {currentFilters.content_type && ` • ${currentFilters.content_type} posts`} {/* NEW: Content type filter info */}
+            {currentFilters.content_type && ` • ${currentFilters.content_type} posts`}
           </p>
         </div>
         <button
@@ -559,7 +627,7 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
                   </span>
                 )}
 
-                {/* NEW: Media Attachments */}
+                {/* Media Attachments */}
                 {renderMediaAttachments(post)}
               </div>
 
@@ -605,7 +673,7 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
                       )}
                     </button>
 
-                    {/* Share Button - UPDATED WITH DIALOG */}
+                    {/* Share Button */}
                     <button
                       onClick={() => handleShareClick(post.id, post.content)}
                       disabled={sharingId === post.id || post.user_has_shared}
@@ -646,7 +714,7 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
                 </div>
               </div>
 
-              {/* Comments Section - Always show when expanded */}
+              {/* Comments Section */}
               {expandedPostId === post.id && (
                 <div className="border-t bg-gray-50 animate-in fade-in duration-300">
                   <div className="p-4 space-y-4">
@@ -662,7 +730,6 @@ export default function PostsFeed({ useFeedSystem = false }: PostsFeedProps) {
                       postId={post.id}
                       onCommentAdded={() => {
                         console.log('✅ New comment added, should refresh comments list');
-                        // The CommentsList component will handle refreshing automatically
                       }}
                     />
 
